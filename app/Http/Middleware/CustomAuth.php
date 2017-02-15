@@ -18,7 +18,7 @@ class CustomAuth
     public function handle($request, Closure $next)
     {
 
-        $noAuth = array('login', '/');
+        $noAuth = array('login', '/', 'browse');
         $auth = session('auth', '0');
 
         if (in_array($request->path(), $noAuth)){

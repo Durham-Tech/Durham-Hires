@@ -37,8 +37,10 @@ class Items {
     
     public function getAll() {
 
-        $cats = DB::select('select * from categories ORDER BY orderOf');
-        $catalog = DB::select('select * from catalog');
+        #$cats = DB::select('select * from categories ORDER BY orderOf');
+        $cats = \App\Category::orderBy('orderOf')->get();
+        $catalog = \App\catalog::all();
+        #$catalog = DB::select('select * from catalog');
         
         foreach ($cats as $cat){
             if(empty($cat->subCatOf)){
@@ -56,10 +58,12 @@ class Items {
         }
         
         foreach ($catalog as $item){
-            $this->all[$item->category]->all[] = new Item($item);
+            if (isset($this->all[$item->category])){
+                $this->all[$item->category]->all[] = new Item($item);
+            }
         }
 
-        // print_r($all);
+        // print_r($this->all);
 
     }
 }

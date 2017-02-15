@@ -28,5 +28,6 @@ Route::get('/admin', function(){
 });
 
 Route::get('/new', 'adminController@newItem');
+Route::post('/new', 'adminController@addItem');
 
-Route::get('/test', 'adminController@test');
+Route::get('/browse', 'publicController@browse');
