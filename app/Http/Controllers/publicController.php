@@ -14,10 +14,4 @@ class publicController extends Controller
         return view('home');
     }
 
-    public function browse(Request $request){
-        $Items = new Items;
-        $Items->getAll();
-        $data = $Items->all;
-        return view('allItems')->with(['data'=>$data]);
-    }
 }

@@ -24,10 +24,12 @@ class NewItem extends FormRequest
     public function rules()
     {
         return [
-            'description' => 'required',
+            // 'description' => 'required',
             'quantity' => 'required',
             'category' => 'required',
-            'image' => 'image'
+            'image' => 'image',
+            'dayPrice' => 'required|numeric|between:0,999.99',
+            'weekPrice' => 'required|numeric|between:0,999.99'
             //
         ];
     }

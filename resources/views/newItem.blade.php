@@ -32,7 +32,7 @@
             </div>
             <div class="form-group">
                 {{ Form::label('details', 'Details') }}
-                {!! Form::text('details', null, 
+                {!! Form::textarea('details', null, 
                 array(
                     'class'=>'form-control', 
                     'placeholder'=>'Item Details'

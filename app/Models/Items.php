@@ -16,6 +16,9 @@ class Item {
         $this->details = $item->details;
         $this->image = $item->image;
         $this->quantity = $item->quantity;
+        $this->id = $item->id;
+        $this->dayPrice = $item->dayPrice;
+        $this->weekPrice = $item->weekPrice;
     }
 }
 

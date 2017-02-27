@@ -18,18 +18,18 @@ class CustomAuth
     public function handle($request, Closure $next)
     {
 
-        $noAuth = array('login', '/', 'browse');
+        // $noAuth = array('login', '/', 'items');
         $auth = session('auth', '0');
 
-        if (in_array($request->path(), $noAuth)){
-            return $next($request);
-        } else {
+        // if (in_array($request->path(), $noAuth)){
+        //     return $next($request);
+        // } else {
             if ($auth == "1") {
                 return $next($request);
             } else {
                 session(['target' => $request->path()]);
                 return redirect()->route('login');
             }
-        }
+        // }
     }
 }

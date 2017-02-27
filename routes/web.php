@@ -14,6 +14,10 @@
 /*Route::get('/', ['as' => 'home', function () {
     return view('home');
 }]);*/
+
+Route::resource('categories','CategoryController');
+Route::resource('items','ItemController');
+
 Route::get('/', 'publicController@index');
 
 Route::get('/login', ['as'=>'login',function(){
@@ -26,8 +30,3 @@ Route::post('/logout', 'customAuth@logout');
 Route::get('/admin', function(){
    return view('test');
 });
-
-Route::get('/new', 'adminController@newItem');
-Route::post('/new', 'adminController@addItem');
-
-Route::get('/browse', 'publicController@browse');
