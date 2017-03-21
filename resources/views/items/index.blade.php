@@ -2,14 +2,15 @@
 
 @section('content')
             @if ($data)
-            <ul class="nav nav-tabs">
+
+              <ul class="nav nav-tabs">
                 @foreach($data as $category)
                     @if ($category->sub == 0)
-                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a data-toggle="tab" href="#{{$category->name}}">{{ $category->name }}</a></li>
+                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{$category->name}}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
             </ul>
-            
+
             <div class="tab-content">
                 @foreach($data as $category)
 
@@ -24,12 +25,14 @@
                         <th style="border:0px;"></th>
                         <th style="border:0px;"></th>
                         <th style="border:0px;"></th>
+                        @if ($edit == TRUE)
                         <th style="border:0px;"></th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
                 @endif
-                 
+
                 @if (!empty($category->all))
                     <td colspan="4" style="border: 0px;"><h2>{{ $category->name }}</h2></td>
                     </tbody>
@@ -37,10 +40,12 @@
                     <tr>
                         <th></th>
                         <th>Item</th>
-                        <th>Quantity Available</th>
-                        <th>Day</th>
-                        <th>Week</th>
-                        <th>Edit</th>
+                        <th>2 Day Rate</th>
+                        <th>Week Rate</th>
+                        <th>Available</th>
+                        @if ($edit == TRUE)
+                        <th></th>
+                        @endif
                     </tr>
                     </thead>
                     <tbody>
@@ -52,19 +57,43 @@
                         @endif
                         </td>
                         <td><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}'>{{ $item->description }}</a></td>
-                        <td>{{ $item->quantity }}</td>
                         <td>£{{ number_format($item->dayPrice,2) }}</td>
                         <td>£{{ number_format($item->weekPrice,2) }}</td>
-                        <td><a href='{!! action('ItemController@edit', ['items' => $item->id]) !!}'>Edit</a></td>
+                        @if ($edit == TRUE)
+                        <td>{{ $item->available }}/{{ $item->quantity }}</td>
+                        @else
+                        <td>{{ $item->quantity }}</td>
+                        @endif
+                        @if ($edit == TRUE)
+                        <td>{{ $item->booked }}</td>
+                        @endif
                     </tr>
                     @endforeach
                     </tbody>
                 @endif
-    
-                {!! ($loop->last) ? '</div>' : '' !!}
+
+                {!! ($loop->last) ? '</table></div>' : '' !!}
                 @endforeach
             </div>
-                
+
             @endif
 
+@endsection
+
+@section('scripts')
+  <script>
+    window.onload = function() {
+      if(window.location.hash) {
+        var hash = window.location.hash;
+        $('.nav-tabs a[href="' + hash + '"]').tab('show');
+      }
+    };
+
+    $('.nav-tabs a').click(function (e) {
+    e.preventDefault();
+    location.replace(e.target.hash);
+    $(this).tab('show');
+});
+
+  </script>
 @endsection

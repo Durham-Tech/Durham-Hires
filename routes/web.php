@@ -17,6 +17,8 @@
 
 Route::resource('categories','CategoryController');
 Route::resource('items','ItemController');
+Route::resource('bookings','BookingsController');
+Route::get('bookings/{id}/add', 'BookingsController@addItems');
 
 Route::get('/', 'publicController@index');
 

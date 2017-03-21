@@ -23,9 +23,8 @@ class ItemController extends Controller
     public function index()
     {
         $Items = new Items;
-        $Items->getAll();
-        $data = $Items->all;
-        return View::make('items.index')->with(['data'=>$data]);
+        $data = $Items->getAll();
+        return View::make('items.index')->with(['data'=>$data, 'edit'=>FALSE]);
     }
 
     /**
@@ -41,20 +40,20 @@ class ItemController extends Controller
         foreach ($data as $cat){
             if(empty($cat->subCatOf)){
                 $cats[$cat->id] = $cat->name;
-                
+
                 foreach ($data as $subCat){
                     if ($subCat->subCatOf == $cat->id){
                         // $all[] = array($subCat->name, TRUE);
                         $cats[$subCat->id] = '- ' . $subCat->name;
                     }
                 }
-                
+
             }
         }
 
         $old = new catalog;
         $old->quantity = 1;
-        
+
         // return View::make('items.edit')->with(['cat'=>$cats]);
         return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats]);
     }
@@ -68,13 +67,13 @@ class ItemController extends Controller
     public function store(NewItem $request)
     {
         $item = new catalog;
-        
+
         if (!empty($request->image)){
-            $imageName = $item->id . '_0.' . 
+            $imageName = $item->id . '_0.' .
                 $request->file('image')->getClientOriginalExtension();
             $item->image = $imageName;
         }
-            
+
         $item->description = $request->description;
         $item->details = $request->details;
         $item->quantity = $request->quantity;
@@ -83,7 +82,7 @@ class ItemController extends Controller
         $item->weekPrice = $request->weekPrice;
 
         $item->save();
-        
+
 
         if (!empty($request->image)){
             $request->file('image')->move(
@@ -93,7 +92,7 @@ class ItemController extends Controller
             $img = Image::make('images/catalog/' . $imageName)->resize(60, 60, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            
+
             $img->save('images/catalog/thumb_' . $imageName);
         }
 
@@ -127,19 +126,19 @@ class ItemController extends Controller
         foreach ($data as $cat){
             if(empty($cat->subCatOf)){
                 $cats[$cat->id] = $cat->name;
-                
+
                 foreach ($data as $subCat){
                     if ($subCat->subCatOf == $cat->id){
                         // $all[] = array($subCat->name, TRUE);
                         $cats[$subCat->id] = '- ' . $subCat->name;
                     }
                 }
-                
+
             }
         }
-        
+
         $old = catalog::findOrFail($id);
-        
+
         return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats]);
     }
 
@@ -153,18 +152,18 @@ class ItemController extends Controller
     public function update(NewItem $request, catalog $catalog, $id)
     {
         $cat = catalog::findOrFail($id);
-        
+
         if (!empty($request->image)){
             // if (!isset($cat->image)){
-            //     $imageName = $cat->id . '_0.' . 
+            //     $imageName = $cat->id . '_0.' .
             //         $request->file('image')->getClientOriginalExtension();
             // }
-            $imageName = $cat->id . '.' . 
+            $imageName = $cat->id . '.' .
                 $request->file('image')->getClientOriginalExtension();
             $cat->image = $imageName;
         }
-        
-            
+
+
         $cat->description = $request->description;
         $cat->details = $request->details;
         $cat->quantity = $request->quantity;
@@ -173,7 +172,7 @@ class ItemController extends Controller
         $cat->weekPrice = $request->weekPrice;
 
         $cat->save();
-        
+
 
         if (!empty($request->image)){
             $request->file('image')->move(
@@ -183,7 +182,7 @@ class ItemController extends Controller
             $img = Image::make('images/catalog/' . $imageName)->resize(60, 60, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            
+
             $img->save('images/catalog/thumb_' . $imageName);
         }
 

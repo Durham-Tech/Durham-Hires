@@ -9,6 +9,7 @@ use View;
 class CategoryController extends Controller
 {
     public function __construct() {
+        $this->middleware('login');
         $this->middleware('admin');
     }
     /**
@@ -19,22 +20,22 @@ class CategoryController extends Controller
     public function index()
     {
         $cats = [];
-        $data = \App\Category::orderBy('orderOf')->get();
+        $data = Category::orderBy('orderOf')->get();
 
         foreach ($data as $cat){
             if(empty($cat->subCatOf)){
                 $cats[$cat->id] = [$cat->name, NULL];
-                
+
                 foreach ($data as $subCat){
                     if ($subCat->subCatOf == $cat->id){
                         // $all[] = array($subCat->name, TRUE);
                         $cats[$subCat->id] = ['&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ' . $subCat->name, $cat->id];
                     }
                 }
-                
+
             }
         }
-        
+
         return view('categories.view')->with(['cats'=>$cats]);
     }
 
@@ -69,20 +70,20 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $item = new catalog;
-        
+
         if (!empty($request->image)){
-            $imageName = $item->id . '.' . 
+            $imageName = $item->id . '.' .
                 $request->file('image')->getClientOriginalExtension();
             $item->image = 'thumb_' . $imageName;
         }
-            
+
         $item->description = $request->description;
         $item->details = $request->details;
         $item->quantity = $request->quantity;
         $item->category = $request->category;
 
         $item->save();
-        
+
 
         if (!empty($request->image)){
             $request->file('image')->move(
@@ -92,7 +93,7 @@ class CategoryController extends Controller
             $img = Image::make('images/catalog/' . $imageName)->resize(60, 60, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            
+
             $img->save('images/catalog/thumb_' . $imageName);
         }
         return redirect('/items');
@@ -128,7 +129,7 @@ class CategoryController extends Controller
         }
 
         $old = Category::findOrFail($id);
-        
+
         return View::make('categories.edit')->with(['old' => $old, 'cats' => $cats]);
     }
 
@@ -143,7 +144,7 @@ class CategoryController extends Controller
     {
        $category->fill($request->all());
        $category->save();
-       
+
        return redirect('/categories');
     }
 

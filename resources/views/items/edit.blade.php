@@ -52,7 +52,16 @@
             </div>
             <div class='form-group'>
                 {{ Form::label('image', 'Image') }}
-                {{ Form::file('image', null) }}
+                <div>
+                @if (!empty($old->image))
+                {{ Html::image('images/catalog/thumb_' . $old->image) }}
+                @endif
+                
+                {{ Form::file('image',
+                array(
+                    'style' => 'display:inline;'
+                )) }}
+                </div>
             </div>
             <div class='form-group'>
                 {{ Form::label('quantity', 'Quantity avalible') }}
