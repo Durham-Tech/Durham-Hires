@@ -14,7 +14,7 @@
                 @foreach($data as $key => $booking)
                     <tr>
                         <td><a href='{!! action('BookingsController@show', ['booking' => $booking->id]) !!}'>{{ $booking->name }}</a></td>
-                        <td class='status' id='{{ $booking->status }}'>{{ $status[$booking->id] }}</td>
+                        <td class='status' id='{{ $booking->status }}'>{{ $booking->status_string }}</td>
                     </tr>
                 @endforeach
                 </tbody>

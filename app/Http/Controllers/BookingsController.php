@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Bookings;
+use App\booked_items;
 use Illuminate\Http\Request;
 use View;
 use App\Models\Items;
@@ -22,6 +24,23 @@ class BookingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private function getStatus($int){
+      switch ($int) {
+        case 0:
+          return 'Unconfirmed';
+          break;
+
+        case 1:
+          return 'Confirmed';
+          break;
+
+        default:
+          return 'Unconfirmed';
+          break;
+      }
+    }
+
     public function index()
     {
         //
@@ -29,20 +48,9 @@ class BookingsController extends Controller
         $status = [];
 
         foreach ($data as $booking) {
-          switch ($booking->status) {
-            case 0:
-              $status[$booking->id] = 'Unconfirmed';
-              break;
-
-            case 1:
-              $status[$booking->id] = 'Confirmed';
-              break;
-
-            default:
-              $status[$booking->id] = 'Unconfirmed';
-              break;
-          }
+          $booking->status_string = $this->getStatus($booking->status);
         }
+
         return View::make('bookings.index')
             ->with(['data' => $data, 'status' => $status]);
     }
@@ -92,22 +100,16 @@ class BookingsController extends Controller
     public function show($id)
     {
         $booking = Bookings::findOrFail($id);
+        $bookedItems = DB::table('booked_items')
+            ->select('description', 'number', 'dayPrice', 'weekPrice')
+            ->where('booked_items.bookingID', '=', $id)
+            ->where('booked_items.number', '!=', '0')
+            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+            ->get();
 
-        switch ($booking->status) {
-          case 0:
-            $booking->status_string = 'Unconfirmed';
-            break;
+        $booking->status_string = $this->getStatus($booking->status);
 
-          case 1:
-            $booking->status_string = 'Confirmed';
-            break;
-
-          default:
-            $booking->status_string = 'Unconfirmed';
-            break;
-        }
-
-        return View::make('bookings.view')->with(['booking' => $booking]);
+        return View::make('bookings.view')->with(['booking' => $booking, 'items' => $bookedItems]);
     }
 
     /**
@@ -146,8 +148,41 @@ class BookingsController extends Controller
 
     public function addItems($id){
       $items = new Items;
-      $data = $items->getAvalible($id);
+      $booking = Bookings::find($id);
+      $data = $items->getAvalible($booking);
 
-      return View::make('items.index')->with(['data'=>$data, 'edit'=>TRUE]);
+      return View::make('items.index')->with(['data'=>$data, 'edit'=>TRUE, 'booking'=>$booking]);
+    }
+
+    public function updateItems(Request $request, $id){
+      $items = new Items;
+      $booking = Bookings::find($id);
+      $data = $items->getAvalibleArray($booking);
+
+      $inputs = $request->input();
+      unset($inputs['_token']);
+
+      $bookedItems = booked_items::where('bookingID', $id)
+            ->get()
+            ->keyBy('item')
+            ->toArray();
+      foreach ($inputs as $item => $quantity){
+        if (isset($bookedItems[$item]) || $quantity != 0){
+        $quantity = (int)$quantity;
+          if (is_int($item) && is_int($quantity)){
+            if ($quantity <= $data[$item]->available){
+              booked_items::updateOrCreate(
+                  ['bookingID' => $id, 'item' => $item],
+                  ['number' => $quantity]
+              );
+            }
+          }
+        }
+      }
+
+      $booking->status = 0;
+      $booking->save();
+
+      return redirect()->route('bookings.show', ['id' => $id]);
     }
 }

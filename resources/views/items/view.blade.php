@@ -28,5 +28,5 @@
 @if (CAuth::checkAdmin())
 <a class="btn btn-primary" href='{!! action('ItemController@edit', ['items' => $item->id]) !!}'>Edit</a>
 @endif
-<a class="btn btn-primary" href="{{ route('items.index') }}">Back</a>
+<a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
 @endsection

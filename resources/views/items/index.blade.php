@@ -2,6 +2,9 @@
 
 @section('content')
             @if ($data)
+            @if ($edit == TRUE)
+            {!! Form::open(['url' => 'bookings/' . $booking->id . '/add']) !!}
+            @endif
 
               <ul class="nav nav-tabs">
                 @foreach($data as $category)
@@ -65,7 +68,7 @@
                         <td>{{ $item->quantity }}</td>
                         @endif
                         @if ($edit == TRUE)
-                        <td>{{ $item->booked }}</td>
+                        <td><input name="{{ $item->id }}" type="number" min="0" max="{{ $item->available }}" step="1" value="{{ $item->booked }}"/></td>
                         @endif
                     </tr>
                     @endforeach
@@ -76,6 +79,12 @@
                 @endforeach
             </div>
 
+            @if ($edit == TRUE)
+            {!! Form::submit('Save',
+            array('class'=>'btn btn-primary'
+            )) !!}
+            {!! Form::close() !!}
+            @endif
             @endif
 
 @endsection

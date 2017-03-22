@@ -17,6 +17,32 @@
             <b>Booking status: </b>
             {{ $booking->status_string }}
         </p>
+
+        @if (count($items) > 0)
+        <div id="items_table">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach ($items as $item)
+              <tr>
+                <td>{{ $item->description }}</td>
+                <td>{{ $item->number }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+        @else
+        <p id='noItems'>
+          Select edit bellow to add items to your order.
+        </p>
+        @endif
 </div>
-<a class="btn btn-primary" href="{{ route('bookings.index') }}">Back</a>
+{!! link_to_route('bookings.add', 'Edit', array($booking->id), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('bookings.index', 'Back', array(), array('class' => 'btn btn-primary')) !!}
 @endsection

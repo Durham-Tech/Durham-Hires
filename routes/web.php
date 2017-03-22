@@ -18,7 +18,9 @@
 Route::resource('categories','CategoryController');
 Route::resource('items','ItemController');
 Route::resource('bookings','BookingsController');
-Route::get('bookings/{id}/add', 'BookingsController@addItems');
+Route::get('bookings/{id}/add', 'BookingsController@addItems')
+->name('bookings.add');
+Route::post('bookings/{id}/add', 'BookingsController@updateItems');
 
 Route::get('/', 'publicController@index');
 

@@ -77,8 +77,8 @@ class Items {
 
     }
 
-    public function getAvalible($id){
-      $currentBooking = Bookings::find($id);
+    public function getAvalible($currentBooking){
+      $id = $currentBooking->id;
       $start = strtotime($currentBooking->start);
       $end = strtotime($currentBooking->end);
       $max = \App\catalog::max('id') + 1;
@@ -135,6 +135,78 @@ class Items {
           $item->available = $item->quantity - $unavalible[$item->id];
           $item->booked = isset($currentBooked[$item->id]) ? $currentBooked[$item->id]->number : 0;
         }
+      }
+
+      return $all;
+    }
+
+    public function getAllArray() {
+        $all = [];
+
+        $catalog = \App\catalog::all();
+
+        foreach ($catalog as $item){
+              $all[$item->id] = new Item($item);
+        }
+        return $all;
+    }
+
+    public function getAvalibleArray($currentBooking){
+      $id = $currentBooking->id;
+      $start = strtotime($currentBooking->start);
+      $end = strtotime($currentBooking->end);
+      $max = \App\catalog::max('id') + 1;
+      $unavalible = array_fill(0, $max, 0);
+      $times=[];
+      $timeDB = DB::table('bookings')
+          ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end'))
+          ->where('id', '!=', $id)
+          ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
+          ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
+          ->get();
+      $booked = DB::table('bookings')
+          ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end, item, number'))
+          ->where('bookings.id', '!=', $id)
+          ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
+          ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
+          ->join('booked_items', 'bookings.id', '=', 'booked_items.bookingID')
+          ->get();
+
+      $currentBooked = DB::table('booked_items')
+            ->where('bookingID', $id)
+            ->get()
+            ->keyBy('item')
+            ->toArray();
+
+      $times[] = $start;
+      foreach ($timeDB as $x){
+        if ($x->start > $start){
+          $times[] = $x->start;
+        }
+        if ($x->end < $end){
+          $times[] = $x->end;
+        }
+      }
+      $times[] = $end;
+      $times = array_unique($times);
+      sort($times);
+
+      for ($i = 0; $i < count($times) - 1; $i++){
+        $tempMax = [];
+        foreach ($booked as $x) {
+          if ($x->start <= $times[$i] && $x->end >= $times[$i + 1]){
+            $tempMax[$x->item] = isset($tempMax[$x->item]) ? $tempMax[$x->item] + $x->number : $x->number;
+          }
+        }
+        foreach ($tempMax as $item => $number) {
+          $unavalible[$item] = $unavalible[$item] < $number ? $number : $unavalible[$item];
+        }
+      }
+
+      $all = $this->getAllArray();
+      foreach ($all as $item){
+        $item->available = $item->quantity - $unavalible[$item->id];
+        $item->booked = isset($currentBooked[$item->id]) ? $currentBooked[$item->id]->number : 0;
       }
 
       return $all;
