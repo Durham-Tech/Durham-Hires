@@ -21,6 +21,7 @@ Route::resource('bookings','BookingsController');
 Route::get('bookings/{id}/add', 'BookingsController@addItems')
 ->name('bookings.add');
 Route::post('bookings/{id}/add', 'BookingsController@updateItems');
+Route::post('bookings/changestate', 'BookingsController@changeState');
 
 Route::get('/', 'publicController@index');
 

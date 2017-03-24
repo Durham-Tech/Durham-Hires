@@ -17,6 +17,9 @@ class BookingsController extends Controller
 
     public function __construct() {
         $this->middleware('login');
+        $this->middleware('admin', ['only' => ['edit', 'update', 'destroy', 'changeState']]);
+
+        $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid'];
     }
 
     /**
@@ -25,34 +28,19 @@ class BookingsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private function getStatus($int){
-      switch ($int) {
-        case 0:
-          return 'Unconfirmed';
-          break;
-
-        case 1:
-          return 'Confirmed';
-          break;
-
-        default:
-          return 'Unconfirmed';
-          break;
-      }
-    }
-
     public function index()
     {
         //
-        $data = Bookings::orderBy('id', 'DESC')->get();
-        $status = [];
-
-        foreach ($data as $booking) {
-          $booking->status_string = $this->getStatus($booking->status);
+        if (CAuth::checkAdmin()){
+          $data = Bookings::orderBy('id', 'DESC')->get();
+        } else {
+          $data = Bookings::orderBy('id', 'DESC')
+                ->where('email', '=', CAuth::user()->email)
+                ->get();
         }
 
         return View::make('bookings.index')
-            ->with(['data' => $data, 'status' => $status]);
+            ->with(['data' => $data, 'statusArray' => $this->status]);
     }
 
     /**
@@ -75,18 +63,38 @@ class BookingsController extends Controller
     {
         $booking = new Bookings;
         $booking->name = $request->name;
-        $booking->start = $request->start;
-        $booking->end = $request->end;
-        $booking->status = 0;
+        $start = strtotime($request->start)+43200;
+        $end = strtotime($request->end)+43200;
+        $booking->start = date("Y-m-d H:i:s", $start);
+        $booking->end = date("Y-m-d H:i:s", $end);
+        $days = ($end - $start)/(86400);
+        $rem = $days % 7;
+        echo $days;
+        echo $rem;
+        if ($rem > 2) {
+          $booking->twoDays = 0;
+          $booking->weeks = floor($days/7) + 1;
+        } else {
+          $booking->twoDays = 1;
+          $booking->weeks = floor($days/7);
+        }
+
         if (CAuth::checkAdmin(4)){
+          $booking->status = 1;
           $this->validate($request, [
               'email' => 'required|email'
           ]);
-            if (Common::getDetailsEmail($request->email)){
+          $details = Common::getDetailsEmail($request->email);
+            if ($details){
               $booking->email = $request->email;
+              $booking->user = $details->surname;
+              $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
             }
         } else {
-          $booking->email = CAuth::user()->email;
+          $booking->status = 0;
+          $temp = CAuth::user();
+          $booking->email = $temp->email;
+          $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
         }
         $booking->save();
     }
@@ -107,9 +115,13 @@ class BookingsController extends Controller
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
 
-        $booking->status_string = $this->getStatus($booking->status);
+        $booking->status_string = $this->status[$booking->status];
 
-        return View::make('bookings.view')->with(['booking' => $booking, 'items' => $bookedItems]);
+        if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
+          return View::make('bookings.view')->with(['booking' => $booking, 'items' => $bookedItems]);
+        } else {
+          return redirect()->route('items.index');
+        }
     }
 
     /**
@@ -120,6 +132,9 @@ class BookingsController extends Controller
      */
     public function edit($id)
     {
+        $old = Bookings::findOrFail($id);
+
+        return View::make('bookings.edit')->with(['old' => $old]);
         //
     }
 
@@ -130,9 +145,25 @@ class BookingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NewBooking $request, Bookings $booking)
     {
-        //
+      $this->validate($request, [
+          'email' => 'required|email'
+      ]);
+      $booking->name = $request->name;
+      // Need to check for colitions before changing dates!
+      // $booking->start = $request->start;
+      // $booking->end = $request->end;
+      $booking->status = 0;
+      $details = Common::getDetailsEmail($request->email);
+      if ($details){
+        $booking->email = $request->email;
+        $booking->user = $details->surname;
+        $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
+      }
+      $booking->save();
+
+       return redirect('/bookings/' . $booking->id);
     }
 
     /**
@@ -141,9 +172,10 @@ class BookingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Bookings $booking)
     {
-        //
+       $booking->delete();
+       return redirect('/bookings');
     }
 
     public function addItems($id){
@@ -151,7 +183,11 @@ class BookingsController extends Controller
       $booking = Bookings::find($id);
       $data = $items->getAvalible($booking);
 
-      return View::make('items.index')->with(['data'=>$data, 'edit'=>TRUE, 'booking'=>$booking]);
+      if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
+        return View::make('items.index')->with(['data'=>$data, 'edit'=>TRUE, 'booking'=>$booking]);
+      } else {
+        return redirect()->route('items.index');
+      }
     }
 
     public function updateItems(Request $request, $id){
@@ -159,30 +195,42 @@ class BookingsController extends Controller
       $booking = Bookings::find($id);
       $data = $items->getAvalibleArray($booking);
 
-      $inputs = $request->input();
-      unset($inputs['_token']);
+      if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
+        $inputs = $request->input();
+        unset($inputs['_token']);
 
-      $bookedItems = booked_items::where('bookingID', $id)
-            ->get()
-            ->keyBy('item')
-            ->toArray();
-      foreach ($inputs as $item => $quantity){
-        if (isset($bookedItems[$item]) || $quantity != 0){
-        $quantity = (int)$quantity;
-          if (is_int($item) && is_int($quantity)){
-            if ($quantity <= $data[$item]->available){
-              booked_items::updateOrCreate(
-                  ['bookingID' => $id, 'item' => $item],
-                  ['number' => $quantity]
-              );
+        $bookedItems = booked_items::where('bookingID', $id)
+              ->get()
+              ->keyBy('item')
+              ->toArray();
+        foreach ($inputs as $item => $quantity){
+          if (isset($bookedItems[$item]) || $quantity != 0){
+          $quantity = (int)$quantity;
+            if (is_int($item) && is_int($quantity)){
+              if ($quantity <= $data[$item]->available){
+                booked_items::updateOrCreate(
+                    ['bookingID' => $id, 'item' => $item],
+                    ['number' => $quantity]
+                );
+              }
             }
           }
         }
+
+        $booking->status = 0;
+        $booking->save();
+
+        return redirect()->route('bookings.show', ['id' => $id]);
+      } else {
+        return redirect()->route('items.index');
       }
 
-      $booking->status = 0;
-      $booking->save();
+    }
 
-      return redirect()->route('bookings.show', ['id' => $id]);
+    public function changeState(Request $request){
+      $booking = Bookings::findOrFail($request->id);
+      $booking->status = $request->status;
+      $booking->save();
+      return redirect()->route('bookings.index');
     }
 }

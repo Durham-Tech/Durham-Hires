@@ -68,7 +68,13 @@
                         <td>{{ $item->quantity }}</td>
                         @endif
                         @if ($edit == TRUE)
-                        <td><input name="{{ $item->id }}" type="number" min="0" max="{{ $item->available }}" step="1" value="{{ $item->booked }}"/></td>
+                        <td>
+                          <div class="numInput" id="spinner_{{ $item->id }}" max="{{ $item->available}}">
+                            <button type="button" {{ $item->booked === 0 ? "disabled='true'" : "" }} onclick="sub({{ $item->id }})" class="btnLess btn btn-default">-</button>
+                            <input class="form-control" {{ $item->available === 0 ? "disabled='true'" : "" }} name="{{ $item->id }}" type="text"  pattern="[0-9]+" title="Value must be an integer" value="{{ $item->booked }}"/>
+                            <button type="button" {{ $item->booked === $item->available ? "disabled='true'" : "" }} onclick="plus({{ $item->id }})" class="btnMore btn btn-default">+</button>
+                          </div>
+                        </td>
                         @endif
                     </tr>
                     @endforeach
@@ -103,6 +109,38 @@
     location.replace(e.target.hash);
     $(this).tab('show');
 });
+
+function plus(ref)
+{
+  var main = document.getElementById("spinner_" + ref);
+	var max = parseInt(main.getAttribute("max"));
+  var val = main.getElementsByTagName('input')[0];
+  var cur = parseInt(val.value);
+  var newVal = cur + 1;
+  if (cur < max){
+    val.value = newVal;
+  }
+  if (newVal == max){
+    main.getElementsByClassName('btnMore')[0].disabled = true;
+  }
+  main.getElementsByClassName('btnLess')[0].disabled = false;
+}
+
+function sub(ref)
+{
+  var main = document.getElementById("spinner_" + ref);
+	var max = parseInt(main.getAttribute("max"));
+  var val = main.getElementsByTagName('input')[0];
+  var cur = parseInt(val.value);
+  var newVal = cur - 1;
+  if (cur > 0){
+    val.value = newVal;
+  }
+  if (newVal == 0){
+    main.getElementsByClassName('btnLess')[0].disabled = true;
+  }
+  main.getElementsByClassName('btnMore')[0].disabled = false;
+}
 
   </script>
 @endsection
