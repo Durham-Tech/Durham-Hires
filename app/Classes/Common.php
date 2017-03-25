@@ -28,6 +28,15 @@ class Common{
             return False;
         }
   }
+
+  public static function calcItemCost($days, $dayCost, $weekCost){
+    $d = ceil(($days % 7)/2) * $dayCost;
+    if ($d < $weekCost){
+      return floor($days / 7) * $weekCost + $d;
+    } else {
+      return ceil($days / 7) * $weekCost;
+    }
+  }
 }
 
  ?>

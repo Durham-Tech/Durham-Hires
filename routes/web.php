@@ -18,10 +18,10 @@
 Route::resource('categories','CategoryController');
 Route::resource('items','ItemController');
 Route::resource('bookings','BookingsController');
-Route::get('bookings/{id}/add', 'BookingsController@addItems')
-->name('bookings.add');
+Route::get('bookings/{id}/add', 'BookingsController@addItems')->name('bookings.add');
 Route::post('bookings/{id}/add', 'BookingsController@updateItems');
 Route::post('bookings/changestate', 'BookingsController@changeState');
+Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')->name('bookings.submit');
 
 Route::get('/', 'publicController@index');
 

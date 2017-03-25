@@ -15,7 +15,7 @@
         </p>
         <p id='length'>
             <b>Total Days: </b>
-            {{ round((strtotime($booking->end) - strtotime($booking->start))/86400, 1)}}
+            {{ $booking->days }}
         </p>
         <p id='status'>
             <b>Booking status: </b>
@@ -39,29 +39,34 @@
               <tr>
                 <td>{{ $item->description }}</td>
                 <td>{{ $item->number }}</td>
-                <?php $cost = $item->dayPrice * $booking->twoDays + $item->weekPrice * $booking->weeks; ?>
-                <td>£{{ number_format((float)$cost, 2) }}</td>
-                <?php $sub = $cost * $item->number; $total += $sub; ?>
-                <td>£{{ number_format((float)$sub, 2) }}</td>
+                <td>£{{ number_format((float)$item->unitCost, 2) }}</td>
+                <td>£{{ number_format((float)$item->cost, 2) }}</td>
               </tr>
               @endforeach
               <tr id="totalRow">
                 <td></td>
                 <td></td>
                 <td>Total</td>
-                <td>£{{ number_format((float)$total, 2) }}</td>
+                <td>£{{ number_format((float)$booking->total, 2) }}</td>
             </tbody>
           </table>
         </div>
         @else
         <p id='noItems'>
-          Select edit bellow to add items to your order.
+          There's nothing here. Go ahead and add some items to your order.
         </p>
         @endif
 </div>
 {!! link_to_route('bookings.add', 'Add/Remove Items', array($booking->id), array('class' => 'btn btn-primary')) !!}
 @if (CAuth::checkAdmin())
 {!! link_to_route('bookings.edit', 'Edit', array($booking->id), array('class' => 'btn btn-primary')) !!}
+@elseif ($booking->status < 2)
+{!! link_to_route('bookings.submit', ($booking->status === 0) ? 'Submit' : 'Unsubmit', array($booking->id), array('class' => 'btn btn-primary')) !!}
+@endif
+@if ($booking->status == 0)
+{{ Form::open(['route' => ['bookings.destroy', $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+  <button class="btn btn-primary" type="submit">Delete</button>
+{{ Form::close() }}
 @endif
 {!! link_to_route('bookings.index', 'Back', array(), array('class' => 'btn btn-primary')) !!}
 @endsection

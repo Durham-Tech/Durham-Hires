@@ -64,10 +64,5 @@
                 array('class'=>'btn btn-primary'
                 )) !!}
         {!! Form::close() !!}
-        @if(isset($old))
-        {{ Form::open(['route' => ['bookings.destroy', $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
-            <button class="btn btn-primary" type="submit">Delete</button>
-        {{ Form::close() }}
-        @endif
                 <a class="btn btn-primary" href="{{ route('bookings.index') }}">Cancel</a>
 @endsection

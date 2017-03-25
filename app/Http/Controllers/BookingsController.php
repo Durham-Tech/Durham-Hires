@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use App\Bookings;
 use App\booked_items;
 use Illuminate\Http\Request;
@@ -11,13 +10,15 @@ use App\Models\Items;
 use App\Classes\CAuth;
 use App\Http\Requests\NewBooking;
 use App\Classes\Common;
+use App\Mail\requestConfirmation;
+use App\Mail\bookingConfirmed;
 
 class BookingsController extends Controller
 {
 
     public function __construct() {
         $this->middleware('login');
-        $this->middleware('admin', ['only' => ['edit', 'update', 'destroy', 'changeState']]);
+        $this->middleware('admin', ['only' => ['edit', 'update', 'changeState']]);
 
         $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid'];
     }
@@ -67,20 +68,10 @@ class BookingsController extends Controller
         $end = strtotime($request->end)+43200;
         $booking->start = date("Y-m-d H:i:s", $start);
         $booking->end = date("Y-m-d H:i:s", $end);
-        $days = ($end - $start)/(86400);
-        $rem = $days % 7;
-        echo $days;
-        echo $rem;
-        if ($rem > 2) {
-          $booking->twoDays = 0;
-          $booking->weeks = floor($days/7) + 1;
-        } else {
-          $booking->twoDays = 1;
-          $booking->weeks = floor($days/7);
-        }
+        $booking->days = ($end - $start)/(86400);
 
         if (CAuth::checkAdmin(4)){
-          $booking->status = 1;
+          $booking->status = 2;
           $this->validate($request, [
               'email' => 'required|email'
           ]);
@@ -97,6 +88,7 @@ class BookingsController extends Controller
           $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
         }
         $booking->save();
+        return redirect('/bookings/' . $booking->id);
     }
 
     /**
@@ -108,12 +100,18 @@ class BookingsController extends Controller
     public function show($id)
     {
         $booking = Bookings::findOrFail($id);
-        $bookedItems = DB::table('booked_items')
-            ->select('description', 'number', 'dayPrice', 'weekPrice')
+        $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $id)
             ->where('booked_items.number', '!=', '0')
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
+
+        $booking->total = 0;
+        foreach ($bookedItems as $item){
+          $item->unitCost = Common::calcItemCost($booking->days, $item->dayPrice, $item->weekPrice);
+          $item->cost = $item->unitCost * $item->number;
+          $booking->total += $item->cost;
+        }
 
         $booking->status_string = $this->status[$booking->status];
 
@@ -133,9 +131,7 @@ class BookingsController extends Controller
     public function edit($id)
     {
         $old = Bookings::findOrFail($id);
-
         return View::make('bookings.edit')->with(['old' => $old]);
-        //
     }
 
     /**
@@ -174,8 +170,10 @@ class BookingsController extends Controller
      */
     public function destroy(Bookings $booking)
     {
-       $booking->delete();
-       return redirect('/bookings');
+      if (($booking->email == CAuth::user()->email || CAuth::checkAdmin()) && $booking->status < 2){
+        $booking->delete();
+      }
+      return redirect('/bookings');
     }
 
     public function addItems($id){
@@ -183,7 +181,7 @@ class BookingsController extends Controller
       $booking = Bookings::find($id);
       $data = $items->getAvalible($booking);
 
-      if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
+      if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()){
         return View::make('items.index')->with(['data'=>$data, 'edit'=>TRUE, 'booking'=>$booking]);
       } else {
         return redirect()->route('items.index');
@@ -195,7 +193,7 @@ class BookingsController extends Controller
       $booking = Bookings::find($id);
       $data = $items->getAvalibleArray($booking);
 
-      if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
+      if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()){
         $inputs = $request->input();
         unset($inputs['_token']);
 
@@ -217,7 +215,6 @@ class BookingsController extends Controller
           }
         }
 
-        $booking->status = 0;
         $booking->save();
 
         return redirect()->route('bookings.show', ['id' => $id]);
@@ -230,7 +227,38 @@ class BookingsController extends Controller
     public function changeState(Request $request){
       $booking = Bookings::findOrFail($request->id);
       $booking->status = $request->status;
+
+      switch ($request->status){
+        case 2:
+          \Mail::to($booking->email)->send(new bookingConfirmed);
+          break;
+
+        default:
+          break;
+      }
+
       $booking->save();
+
       return redirect()->route('bookings.index');
+    }
+
+    public function submitBooking(Request $request, $id){
+      $booking = Bookings::findOrFail($id);
+      if (CAuth::user()->email == $booking->email){
+        switch ($booking->status){
+          case 0:
+            $booking->status = 1;
+            \Mail::to('test@example.com')->send(new requestConfirmation($booking->id));
+            break;
+          case 1:
+            $booking->status = 0;
+            break;
+          default:
+            break;
+        }
+        $booking->save();
+
+        return redirect()->route('bookings.show', ['id' => $id]);
+      }
     }
 }
