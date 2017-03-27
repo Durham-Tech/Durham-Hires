@@ -59,9 +59,20 @@
 </div>
 {!! link_to_route('bookings.add', 'Add/Remove Items', array($booking->id), array('class' => 'btn btn-primary')) !!}
 @if (CAuth::checkAdmin())
+
+@if ($booking->status != 4 && $booking->status != 0)
+{{ Form::open(['route' => ['bookings.updateStatus', $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
+  {{ Form::hidden('status', $booking->status + 1) }}
+  <button class="btn btn-primary" type="submit">{{ $next[$booking->status - 1]}}</button>
+{{ Form::close() }}
+@endif
+
 {!! link_to_route('bookings.edit', 'Edit', array($booking->id), array('class' => 'btn btn-primary')) !!}
+
 @elseif ($booking->status < 2)
-{!! link_to_route('bookings.submit', ($booking->status === 0) ? 'Submit' : 'Unsubmit', array($booking->id), array('class' => 'btn btn-primary')) !!}
+{{ Form::open(['route' => ['bookings.updateStatus', $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
+  <button class="btn btn-primary" type="submit">{{ ($booking->status === 0) ? 'Submit' : 'Unsubmit' }}</button>
+{{ Form::close() }}
 @endif
 @if ($booking->status == 0)
 {{ Form::open(['route' => ['bookings.destroy', $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}

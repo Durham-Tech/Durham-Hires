@@ -18,9 +18,10 @@ class BookingsController extends Controller
 
     public function __construct() {
         $this->middleware('login');
-        $this->middleware('admin', ['only' => ['edit', 'update', 'changeState']]);
+        $this->middleware('admin', ['only' => ['edit', 'update']]);
 
         $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid'];
+        $this->nextStatus = ['Confirm Booking', 'Booking Returned', 'Booking Paid'];
     }
 
     /**
@@ -33,9 +34,10 @@ class BookingsController extends Controller
     {
         //
         if (CAuth::checkAdmin()){
-          $data = Bookings::orderBy('id', 'DESC')->get();
+          $data = Bookings::orderBy('start')->get()
+                ->where('status', '!=', 4);
         } else {
-          $data = Bookings::orderBy('id', 'DESC')
+          $data = Bookings::orderBy('start', 'DESC')
                 ->where('email', '=', CAuth::user()->email)
                 ->get();
         }
@@ -116,7 +118,7 @@ class BookingsController extends Controller
         $booking->status_string = $this->status[$booking->status];
 
         if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
-          return View::make('bookings.view')->with(['booking' => $booking, 'items' => $bookedItems]);
+          return View::make('bookings.view')->with(['booking' => $booking, 'items' => $bookedItems, 'next' => $this->nextStatus]);
         } else {
           return redirect()->route('items.index');
         }
@@ -131,7 +133,31 @@ class BookingsController extends Controller
     public function edit($id)
     {
         $old = Bookings::findOrFail($id);
-        return View::make('bookings.edit')->with(['old' => $old]);
+        return View::make('bookings.edit')->with(['old' => $old, 'statusArray' => $this->status]);
+    }
+
+    private function manageStatusChange(&$booking, $status){
+      switch ($status){
+        case 2:
+          if ($booking->status <= 1){
+            \Mail::to($booking->email)->send(new bookingConfirmed);
+          }
+          break;
+        case 3:
+          if ($booking->status != 3){
+            // Generate invoice
+            //Send invoice
+          }
+          break;
+        case 4:
+          if ($booking->status != 4){
+            //Send thankyou
+          }
+          break;
+        default:
+          break;
+      }
+
     }
 
     /**
@@ -150,7 +176,11 @@ class BookingsController extends Controller
       // Need to check for colitions before changing dates!
       // $booking->start = $request->start;
       // $booking->end = $request->end;
-      $booking->status = 0;
+
+      $this->manageStatusChange($booking, $request->status);
+      $booking->status = $request->status;
+
+
       $details = Common::getDetailsEmail($request->email);
       if ($details){
         $booking->email = $request->email;
@@ -160,6 +190,31 @@ class BookingsController extends Controller
       $booking->save();
 
        return redirect('/bookings/' . $booking->id);
+    }
+
+    public function updateStatus(Request $request, Bookings $booking)
+    {
+      if (CAuth::checkAdmin(4)){
+
+        $this->manageStatusChange($booking, $request->status);
+        $booking->status = $request->status;
+
+      } elseif (CAuth::user()->email == $booking->email){
+        switch ($booking->status){
+          case 0:
+            $booking->status = 1;
+            \Mail::to('test@example.com')->send(new requestConfirmation($booking->id));
+            break;
+          case 1:
+            $booking->status = 0;
+            break;
+          default:
+            break;
+        }
+
+      }
+      $booking->save();
+      return redirect('/bookings/' . $booking->id);
     }
 
     /**
@@ -221,44 +276,6 @@ class BookingsController extends Controller
       } else {
         return redirect()->route('items.index');
       }
-
     }
 
-    public function changeState(Request $request){
-      $booking = Bookings::findOrFail($request->id);
-      $booking->status = $request->status;
-
-      switch ($request->status){
-        case 2:
-          \Mail::to($booking->email)->send(new bookingConfirmed);
-          break;
-
-        default:
-          break;
-      }
-
-      $booking->save();
-
-      return redirect()->route('bookings.index');
-    }
-
-    public function submitBooking(Request $request, $id){
-      $booking = Bookings::findOrFail($id);
-      if (CAuth::user()->email == $booking->email){
-        switch ($booking->status){
-          case 0:
-            $booking->status = 1;
-            \Mail::to('test@example.com')->send(new requestConfirmation($booking->id));
-            break;
-          case 1:
-            $booking->status = 0;
-            break;
-          default:
-            break;
-        }
-        $booking->save();
-
-        return redirect()->route('bookings.show', ['id' => $id]);
-      }
-    }
 }

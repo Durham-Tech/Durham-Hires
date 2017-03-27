@@ -22,6 +22,7 @@ Route::get('bookings/{id}/add', 'BookingsController@addItems')->name('bookings.a
 Route::post('bookings/{id}/add', 'BookingsController@updateItems');
 Route::post('bookings/changestate', 'BookingsController@changeState');
 Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')->name('bookings.submit');
+Route::patch('bookings/{booking}/updateStatus', 'BookingsController@updateStatus')->name('bookings.updateStatus');
 
 Route::get('/', 'publicController@index');
 

@@ -59,10 +59,22 @@
                     'class'=>'form-control',
                 )) }}
             </div>
+
+            @if (CAuth::checkAdmin(4) && isset($old))
+            {{ Form::select('status', $statusArray, $old->status,
+            array(
+                'class'=>'form-control',
+            )) }}
+            @endif
+
             <div class="form-group" id="buttons">
                 {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'
                 )) !!}
         {!! Form::close() !!}
-                <a class="btn btn-primary" href="{{ route('bookings.index') }}">Cancel</a>
+        @if (isset($old))
+          <a class="btn btn-primary" href="{{ route('bookings.show', [$old->id]) }}">Cancel</a>
+        @else
+          <a class="btn btn-primary" href="{{ route('bookings.index') }}">Cancel</a>
+        @endif
 @endsection

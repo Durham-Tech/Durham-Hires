@@ -13,6 +13,12 @@ class customAuth extends Controller
     //
 
     public function checkAuth(Request $request){
+
+        // $request->session()->put('auth', '1');
+        // $request->session()->put('user_data', '{"email":"jonathan.p.salmon@durham.ac.uk","username":"nwng84"}');
+        // $request->session()->put('privileges', 12);
+        // return redirect('/');
+
         $user = $request->input('user');
         $pass = $request->input('password');
         $remote_url = 'https://community.dur.ac.uk/jonathan.p.salmon/password/auth.php';
@@ -34,13 +40,13 @@ class customAuth extends Controller
             $request->session()->put('auth','1');
             $request->session()->put('user_data',$result);
             $privileges = DB::select('select privileges from admins where user = ?', [$request['user']]);
-            
+
             if (!empty($privileges)){
                 $request->session()->put('privileges',$privileges[0]->privileges);
                 echo 'true';
             }
 
-            
+
             $path = session('target', '');
             if (empty($path)){
                 return redirect('/');
