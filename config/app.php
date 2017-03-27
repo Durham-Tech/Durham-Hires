@@ -180,6 +180,10 @@ return [
         App\Providers\CAuthServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
+
+        // PDF generating Classes
+        Barryvdh\DomPDF\ServiceProvider::class,
+
     ],
 
     /*
