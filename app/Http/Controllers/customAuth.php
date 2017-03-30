@@ -14,10 +14,10 @@ class customAuth extends Controller
 
     public function checkAuth(Request $request){
 
-        $request->session()->put('auth', '1');
-        $request->session()->put('user_data', '{"email":"jonathan.p.salmon@durham.ac.uk","username":"nwng84"}');
-        $request->session()->put('privileges', 12);
-        return redirect('/');
+        // $request->session()->put('auth', '1');
+        // $request->session()->put('user_data', '{"email":"jonathan.p.salmon@durham.ac.uk","username":"nwng84"}');
+        // $request->session()->put('privileges', 12);
+        // return redirect('/');
 
         $user = $request->input('user');
         $pass = $request->input('password');

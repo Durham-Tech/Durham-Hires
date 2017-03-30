@@ -10,6 +10,7 @@ use App\Models\Items;
 use App\Classes\CAuth;
 use App\Http\Requests\NewBooking;
 use App\Classes\Common;
+use App\Classes\pdf;
 use App\Mail\requestConfirmation;
 use App\Mail\bookingConfirmed;
 
@@ -140,7 +141,7 @@ class BookingsController extends Controller
           break;
         case 3:
           if ($booking->status != 3){
-            // Generate invoice
+            pdf::createInvoice($booking->id);
             //Send invoice
           }
           break;

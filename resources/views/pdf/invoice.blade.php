@@ -16,6 +16,9 @@
         <p id='length'>
             <b>Total Days: </b>
             {{ $booking->days }}
+            @if ($booking->discDays != 0)
+            ({{$booking->discDays}} free)
+            @endif
         </p>
 
         @if (count($items) > 0)

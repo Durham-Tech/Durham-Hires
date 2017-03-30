@@ -4,7 +4,6 @@ namespace App\Classes;
 use App\Bookings;
 use App\booked_items;
 use App\Classes\Common;
-use App
 
 class pdf{
 
