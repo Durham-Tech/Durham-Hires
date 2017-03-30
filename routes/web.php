@@ -17,7 +17,9 @@
 
 Route::resource('categories','CategoryController');
 Route::resource('items','ItemController');
+Route::resource('admin','AdminController');
 Route::resource('bookings','BookingsController');
+
 Route::get('bookings/{id}/add', 'BookingsController@addItems')->name('bookings.add');
 Route::post('bookings/{id}/add', 'BookingsController@updateItems');
 Route::post('bookings/changestate', 'BookingsController@changeState');
@@ -35,7 +37,3 @@ Route::get('/login', ['as'=>'login',function(){
 
 Route::post('/login', 'customAuth@checkAuth');
 Route::post('/logout', 'customAuth@logout');
-
-Route::get('/admin', function(){
-   return view('test');
-});

@@ -83,7 +83,9 @@ class BookingsController extends Controller
               $booking->email = $request->email;
               $booking->user = $details->surname;
               $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
+              \Mail::to($booking->email)->send(new bookingConfirmed);
             }
+
         } else {
           $booking->status = 0;
           $temp = CAuth::user();
@@ -176,16 +178,23 @@ class BookingsController extends Controller
       $this->manageStatusChange($booking, $request->status);
       $booking->status = $request->status;
 
-
-      $details = Common::getDetailsEmail($request->email);
-      if ($details){
-        $booking->email = $request->email;
-        $booking->user = $details->surname;
-        $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
+      if ($booking->email != $request->email){
+        $details = Common::getDetailsEmail($request->email);
+        if ($details){
+          $booking->email = $request->email;
+          $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
+        }
       }
+
+      $booking->discDays = $request->discDays;
+      $booking->discType = $request->discType;
+      $booking->discValue = $request->discValue;
+      $booking->fineDesc = $request->fineDesc;
+      $booking->fineValue = $request->fineValue;
+
       $booking->save();
 
-       return redirect('/bookings/' . $booking->id);
+      return redirect('/bookings/' . $booking->id);
     }
 
     public function updateStatus(Request $request, Bookings $booking)

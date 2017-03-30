@@ -51,7 +51,15 @@
                 <td></td>
                 <td></td>
                 <td>Discount</td>
-                <td>£{{ number_format((float)$booking->discount, 2) }}</td>
+                <td>-£{{ number_format((float)$booking->discount, 2) }}</td>
+              </tr>
+              @endif
+              @if ($booking->fineValue != 0)
+              <tr id="fineRow">
+                <td>Fine: {{ $booking->fineDesc }}</td>
+                <td></td>
+                <td></td>
+                <td>£{{ number_format((float)$booking->fineValue, 2) }}</td>
               </tr>
               @endif
               <tr id="totalRow">

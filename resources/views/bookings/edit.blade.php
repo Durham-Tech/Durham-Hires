@@ -61,11 +61,50 @@
             </div>
 
             @if (CAuth::checkAdmin(4) && isset($old))
-            {{ Form::label('status', 'Hire Status') }}
-            {{ Form::select('status', $statusArray, $old->status,
-            array(
-                'class'=>'form-control',
-            )) }}
+            <div class='form-group'>
+                {{ Form::label('status', 'Hire Status') }}
+                {{ Form::select('status', $statusArray, $old->status,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+
+            <div class='form-group'>
+                {{ Form::label('discDays', 'Free days') }}
+                {{ Form::text('discDays', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+            <div class='form-group'>
+                {{ Form::label('discType', 'Discount type') }}
+                {{ Form::select('discType', ['Value Discount', 'Percentage Discount'], NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+            <div class='form-group'>
+                {{ Form::label('discValue', 'Discount Value') }}
+                {{ Form::text('discValue', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+
+            <div class='form-group'>
+                {{ Form::label('fineDesc', 'Fine Description') }}
+                {{ Form::text('fineDesc', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+            <div class='form-group'>
+                {{ Form::label('fineValue', 'Fine amount') }}
+                {{ Form::text('fineValue', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
             @endif
 
             <div class="form-group" id="buttons">

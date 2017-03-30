@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 use App\Bookings;
+use App\Settings;
+use App\Admin;
 
 
 class Common{
@@ -30,15 +32,6 @@ class Common{
         }
   }
 
-  public static function calcItemCost($days, $dayCost, $weekCost){
-    $d = ceil(($days % 7)/2) * $dayCost;
-    if ($d < $weekCost){
-      return floor($days / 7) * $weekCost + $d;
-    } else {
-      return ceil($days / 7) * $weekCost;
-    }
-  }
-
   public static function calcAllCosts(&$booking, &$bookedItems){
     $booking->total = 0;
     $booking->discount = 0;
@@ -47,7 +40,12 @@ class Common{
       $days = 0;
     }
     foreach ($bookedItems as $item){
-      $item->unitCost = Common::calcItemCost($days, $item->dayPrice, $item->weekPrice);
+      $d = ceil(($days % 7)/2) * $item->dayPrice;
+      if ($d < $item->weekPrice){
+        $item->unitCost = floor($days / 7) * $item->weekPrice + $d;
+      } else {
+        $item->unitCost = ceil($days / 7) * $item->weekPrice;
+      }
       $item->cost = $item->unitCost * $item->number;
       $booking->total += $item->cost;
     }
@@ -63,11 +61,18 @@ class Common{
       $booking->total = 0;
     }
 
+    $booking->total += $booking->fineValue;
+
     if ($booking->status != 4){
       $book = \App\Bookings::findOrFail($booking->id);
       $book->totalPrice = $booking->total;
       $book->save();
     }
+  }
+
+  public static function hiresEmail(){
+    $hires = Settings::where('name', 'hiresManager')->firstOrFail();
+    return Admin::where('id', $hires->value)->firstOrFail()->email;
   }
 
 }
