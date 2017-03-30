@@ -108,12 +108,7 @@ class BookingsController extends Controller
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
 
-        $booking->total = 0;
-        foreach ($bookedItems as $item){
-          $item->unitCost = Common::calcItemCost($booking->days, $item->dayPrice, $item->weekPrice);
-          $item->cost = $item->unitCost * $item->number;
-          $booking->total += $item->cost;
-        }
+        Common::calcAllCosts($booking, $bookedItems);
 
         $booking->status_string = $this->status[$booking->status];
 

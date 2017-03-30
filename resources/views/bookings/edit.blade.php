@@ -61,6 +61,7 @@
             </div>
 
             @if (CAuth::checkAdmin(4) && isset($old))
+            {{ Form::label('status', 'Hire Status') }}
             {{ Form::select('status', $statusArray, $old->status,
             array(
                 'class'=>'form-control',

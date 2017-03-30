@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Classes;
+use App\Bookings;
 
 
 class Common{
@@ -37,6 +38,38 @@ class Common{
       return ceil($days / 7) * $weekCost;
     }
   }
+
+  public static function calcAllCosts(&$booking, &$bookedItems){
+    $booking->total = 0;
+    $booking->discount = 0;
+    $days = $booking->days - $booking->discDays;
+    if ($days < 0){
+      $days = 0;
+    }
+    foreach ($bookedItems as $item){
+      $item->unitCost = Common::calcItemCost($days, $item->dayPrice, $item->weekPrice);
+      $item->cost = $item->unitCost * $item->number;
+      $booking->total += $item->cost;
+    }
+
+    if ($booking->discType == 0){
+      $booking->discount = $booking->discValue;
+    } elseif ($booking->discType == 1){
+      $booking->discount = round($booking->discValue * $booking->total / 100, 2);
+    }
+    $booking->total -= $booking->discount;
+    if ($booking->total < 0){
+      $booking->discount = $booking->discount + $booking->total;
+      $booking->total = 0;
+    }
+
+    if ($booking->status != 4){
+      $book = \App\Bookings::findOrFail($booking->id);
+      $book->totalPrice = $booking->total;
+      $book->save();
+    }
+  }
+
 }
 
  ?>

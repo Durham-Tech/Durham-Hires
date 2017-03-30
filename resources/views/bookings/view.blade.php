@@ -16,9 +16,12 @@
         <p id='length'>
             <b>Total Days: </b>
             {{ $booking->days }}
+            @if ($booking->discDays != 0)
+            ({{$booking->discDays}} free)
+            @endif
         </p>
         <p id='status'>
-            <b>Booking status: </b>
+            <b>Hire status: </b>
             {{ $booking->status_string }}
         </p>
 
@@ -43,11 +46,20 @@
                 <td>£{{ number_format((float)$item->cost, 2) }}</td>
               </tr>
               @endforeach
+              @if ($booking->discount != 0)
+              <tr id="discRow">
+                <td></td>
+                <td></td>
+                <td>Discount</td>
+                <td>£{{ number_format((float)$booking->discount, 2) }}</td>
+              </tr>
+              @endif
               <tr id="totalRow">
                 <td></td>
                 <td></td>
                 <td>Total</td>
                 <td>£{{ number_format((float)$booking->total, 2) }}</td>
+              </tr>
             </tbody>
           </table>
         </div>

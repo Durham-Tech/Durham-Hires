@@ -16,12 +16,18 @@ class pdf{
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
 
-        $booking->total = 0;
-        foreach ($bookedItems as $item){
-          $item->unitCost = Common::calcItemCost($booking->days, $item->dayPrice, $item->weekPrice);
-          $item->cost = $item->unitCost * $item->number;
-          $booking->total += $item->cost;
-        }
+        // $booking->total = 0;
+        // $days = $booking->days - $booking->discDays;
+        // if ($days < 0){
+        //   $days = 0;
+        // }
+        // foreach ($bookedItems as $item){
+        //   $item->unitCost = Common::calcItemCost($days, $item->dayPrice, $item->weekPrice);
+        //   $item->cost = $item->unitCost * $item->number;
+        //   $booking->total += $item->cost;
+        // }
+
+        Common::calcAllCosts($booking, $bookedItems);
 
         $name = 'invoice_' . $id . '.pdf';
 

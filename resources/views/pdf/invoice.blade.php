@@ -39,6 +39,14 @@
                 <td>£{{ number_format((float)$item->cost, 2) }}</td>
               </tr>
               @endforeach
+              @if ($booking->discount != 0)
+              <tr id="discRow">
+                <td></td>
+                <td></td>
+                <td>Discount</td>
+                <td>£{{ number_format((float)$booking->discount, 2) }}</td>
+              </tr>
+              @endif
               <tr id="totalRow">
                 <td></td>
                 <td></td>
