@@ -28,7 +28,7 @@ class bookingConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->from('jonathan.salmon@hotmail.co.uk')
+        return $this->replyTo('jonathan.salmon@hotmail.co.uk')
                     ->subject('Trevs Tech booking conformation')
                     ->markdown('emails.bookingConfirmed');
     }

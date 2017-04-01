@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use View;
 use App\Admin;
 use App\Settings;
 use CAuth;
 use Illuminate\Http\Request;
+use App\Http\Requests\newUser;
+use App\Classes\Common;
 
 class AdminController extends Controller
 {
@@ -20,9 +23,10 @@ class AdminController extends Controller
      */
     public function index()
     {
+      $error = session()->get('error', '');
       $users = Admin::all();
       $hires = Settings::where('name', 'hiresManager')->firstOrFail();
-      return view('admin.index')->with(['users' => $users, 'hires' => (int)$hires->value]);
+      return view('admin.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error]);
     }
 
     /**
@@ -33,6 +37,7 @@ class AdminController extends Controller
     public function create()
     {
         //
+        return View::make('admin.new');
     }
 
     /**
@@ -41,43 +46,51 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(newUser $request)
     {
         //
+        $user = new Admin;
+        $userDetails = Common::getDetailsEmail($request->email);
+        $user->email = $userDetails->email;
+        $user->user = $userDetails->username;
+        $user->privileges = 0;
+        $user->name = $userDetails->name;
+        $user->save();
+        return redirect()->route('admin.index');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Save the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
+    public function save(Request $request)
     {
-        //
+        if (!isset($request->admin)){
+          return redirect()->route('admin.index')->with(['error' => 'At least one user needs to be an admin.']);
+        }
+        $hiresCorrect = False;
+        $users = Admin::all();
+        foreach ($users as $user){
+          $priv = 0;
+          if (isset($request->treasurer[$user->id])){
+            $priv += 1;
+          }
+          if (isset($request->admin[$user->id])){
+            $priv += 4;
+            if ($request->hires == $user->id){
+              $hiresCorrect = True;
+            }
+          }
+          $user->privileges = $priv;
+          $user->save();
+        }
+        if ($hiresCorrect){
+          $hires = Settings::where('name', 'hiresManager')
+                            ->update(['value' => $request->hires]);
+        }
+        return redirect()->route('admin.index');
     }
 
     /**
@@ -89,5 +102,12 @@ class AdminController extends Controller
     public function destroy(Admin $admin)
     {
         //
+        var_dump($admin);
+        if (!($admin->privileges & 4)){
+          $admin->delete();
+          return redirect()->route('admin.index');
+        } else {
+          return redirect()->route('admin.index')->with(['error' => 'Cannot delete an admin user.']);
+        }
     }
 }

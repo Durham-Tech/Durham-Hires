@@ -26,7 +26,9 @@ class Common{
         curl_close ($ch);
 
         if ($status_code == 200 && $result != ""){
-            return json_decode($result);
+            $result = json_decode($result);
+            $result->name = ucwords(strtolower(explode(',', $result->firstnames)[0] . ' ' . $result->surname));
+            return $result;
         } else {
             return False;
         }

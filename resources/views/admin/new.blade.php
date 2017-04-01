@@ -2,19 +2,11 @@
 
 @section('content')
 
-        @if(isset($old))
-                {{ Form::model($old,
-                    array(
-                        'route' => ['categories.update', $old->id], 
-                        'method' => 'PATCH',
-                        'class' => 'form')) }}    
-        @else
             {!! Form::open(
             array(
-                'route' => 'categories.store', 
+                'route' => 'admin.store',
                 'class' => 'form')
             ) !!}
-        @endif
 
             @if (count($errors) > 0)
             <div class="alert alert-danger">
@@ -26,31 +18,20 @@
                 </ul>
             </div>
             @endif
-            
+
             <div class="form-group">
-                {{ Form::label('name', 'Name') }}
-                {{ Form::text('name', NULL, 
+                {{ Form::label('email', 'Durham Email') }}
+                {{ Form::text('email', NULL,
                 array(
-                    'class'=>'form-control', 
-                    'placeholder'=>'Category Name'
+                    'class'=>'form-control',
+                    'placeholder'=>'Durham Email'
                 )) }}
             </div>
-            <div class='form-group'>
-                {{ Form::label('subCatOf', 'Subcategory of') }}
-                {{ Form::select('subCatOf', $cats, NULL,
-                array(
-                    'class'=>'form-control', 
-                )) }}
-            </div>
+
             <div class="form-group" id="buttons">
-                {!! Form::submit('Save', 
+                {!! Form::submit('Add user',
                 array('class'=>'btn btn-primary'
                 )) !!}
         {!! Form::close() !!}
-        @if(isset($old))
-        {{ Form::open(['route' => ['categories.destroy', $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
-            <button class="btn btn-primary" type="submit">Delete</button>
-        {{ Form::close() }}
-        @endif
-                <a class="btn btn-primary" href="{{ route('categories.index') }}">Cancel</a>
+        <a class="btn btn-primary" href="{{ route('admin.index') }}">Cancel</a>
 @endsection

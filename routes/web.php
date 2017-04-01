@@ -26,6 +26,8 @@ Route::post('bookings/changestate', 'BookingsController@changeState');
 Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')->name('bookings.submit');
 Route::patch('bookings/{booking}/updateStatus', 'BookingsController@updateStatus')->name('bookings.updateStatus');
 
+Route::post('admin/save', 'AdminController@Save')->name('admin.save');
+
 Route::get('bank', 'treasurerController@index')->name('bank.index');
 Route::post('bank', 'treasurerController@submit')->name('bank.submit');
 

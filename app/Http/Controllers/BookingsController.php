@@ -82,7 +82,7 @@ class BookingsController extends Controller
             if ($details){
               $booking->email = $request->email;
               $booking->user = $details->surname;
-              $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
+              $booking->user = $details->name;
               \Mail::to($booking->email)->send(new bookingConfirmed);
             }
 
@@ -182,7 +182,7 @@ class BookingsController extends Controller
         $details = Common::getDetailsEmail($request->email);
         if ($details){
           $booking->email = $request->email;
-          $booking->user = ucwords(strtolower(explode(',', $details->firstnames)[0] . ' ' . $details->surname));
+          $booking->user = $details->name;
         }
       }
 
@@ -253,7 +253,7 @@ class BookingsController extends Controller
       $booking = Bookings::find($id);
       $data = $items->getAvalibleArray($booking);
 
-      if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()){
+      if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)){
         $inputs = $request->input();
         unset($inputs['_token']);
 

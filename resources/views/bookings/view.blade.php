@@ -77,7 +77,10 @@
         </p>
         @endif
 </div>
+@if (($booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3))
 {!! link_to_route('bookings.add', 'Add/Remove Items', array($booking->id), array('class' => 'btn btn-primary')) !!}
+@endif
+
 @if (CAuth::checkAdmin())
 
 @if ($booking->status != 4 && $booking->status != 0)
