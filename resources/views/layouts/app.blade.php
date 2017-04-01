@@ -44,7 +44,6 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ url('/') }}">Home</a></li>
                         <li><a href="{{ url('/items') }}">Catalog</a></li>
                         @if (CAuth::check())
                         <li><a href="{{ url('/bookings') }}">Bookings</a></li>
@@ -53,7 +52,7 @@
                         <li><a href="{{ url('/admin') }}">Settings</a></li>
                         @endif
                         @if (CAuth::checkAdmin(1))
-                        <li><a href="{{ url('/bank') }}">Treasurer</a></li>
+                        <li><a href="{{ url('/treasurer') }}">Treasurer</a></li>
                         @endif
                     </ul>
 

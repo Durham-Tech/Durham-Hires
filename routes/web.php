@@ -15,28 +15,36 @@
     return view('home');
 }]);*/
 
-Route::resource('categories','CategoryController');
-Route::resource('items','ItemController');
-Route::resource('admin','AdminController');
-Route::resource('bookings','BookingsController');
+Route::resource('categories', 'CategoryController');
+Route::resource('items', 'ItemController');
+Route::resource('admin', 'AdminController');
+Route::resource('bookings', 'BookingsController');
 
-Route::get('bookings/index/complete', 'BookingsController@indexComplete')->name('bookings.complete');
-Route::get('bookings/{id}/invoice', 'BookingsController@getInvoice')->name('bookings.invoice');
-Route::get('bookings/{id}/add', 'BookingsController@addItems')->name('bookings.add');
+Route::get('bookings/index/complete', 'BookingsController@indexComplete')
+          ->name('bookings.complete');
+Route::get('bookings/{id}/invoice', 'BookingsController@getInvoice')
+          ->name('bookings.invoice');
+Route::get('bookings/{id}/add', 'BookingsController@addItems')
+          ->name('bookings.add');
 Route::post('bookings/{id}/add', 'BookingsController@updateItems');
 Route::post('bookings/changestate', 'BookingsController@changeState');
-Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')->name('bookings.submit');
-Route::patch('bookings/{booking}/updateStatus', 'BookingsController@updateStatus')->name('bookings.updateStatus');
+Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')
+          ->name('bookings.submit');
+Route::patch('bookings/{booking}/updateStatus', 'BookingsController@updateStatus')
+          ->name('bookings.updateStatus');
 
-Route::post('admin/save', 'AdminController@Save')->name('admin.save');
+Route::post('admin/save', 'AdminController@Save')
+          ->name('admin.save');
 
-Route::get('bank', 'treasurerController@index')->name('bank.index');
-Route::post('bank', 'treasurerController@submit')->name('bank.submit');
+Route::get('treasurer', 'treasurerController@index')
+          ->name('bank.index');
+Route::post('treasurer', 'treasurerController@submit')
+          ->name('bank.submit');
 
 Route::get('/', 'publicController@index');
 
-Route::get('/login', ['as'=>'login',function(){
-   return view('login');
+Route::get('/login', ['as'=>'login',function () {
+    return view('login');
 }]);
 
 Route::post('/login', 'customAuth@checkAuth');

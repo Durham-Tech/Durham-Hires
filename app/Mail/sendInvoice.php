@@ -6,11 +6,14 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Bookings;
 
-class bookingConfirmed extends Mailable
+class sendInvoice extends Mailable
 {
     use Queueable, SerializesModels;
     public $id;
+    public $invoice;
+
     /**
      * Create a new message instance.
      *
@@ -20,6 +23,7 @@ class bookingConfirmed extends Mailable
     {
         //
         $this->id = $id;
+        $this->invoice = Bookings::findOrFail($id)->invoice;
     }
 
     /**
@@ -29,8 +33,8 @@ class bookingConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->replyTo('jonathan.salmon@hotmail.co.uk')
-                    ->subject('Trevs Tech booking conformation')
-                    ->markdown('emails.bookingConfirmed');
+        return $this->subject('Tech hire invoice')
+                    ->attach(base_path() . '/storage/invoices/' . $this->invoice)
+                    ->markdown('emails.sendInvoice');
     }
 }

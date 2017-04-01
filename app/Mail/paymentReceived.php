@@ -7,19 +7,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class bookingConfirmed extends Mailable
+class paymentReceived extends Mailable
 {
     use Queueable, SerializesModels;
-    public $id;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($id)
+    public function __construct()
     {
         //
-        $this->id = $id;
     }
 
     /**
@@ -29,8 +28,7 @@ class bookingConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->replyTo('jonathan.salmon@hotmail.co.uk')
-                    ->subject('Trevs Tech booking conformation')
-                    ->markdown('emails.bookingConfirmed');
+        return $this->subject('Thank you for your payment')
+                    ->markdown('emails.paymentReceived');
     }
 }

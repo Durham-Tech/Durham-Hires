@@ -13,11 +13,13 @@ use App\Classes\Common;
 use App\Classes\pdf;
 use App\Mail\requestConfirmation;
 use App\Mail\bookingConfirmed;
+use App\Mail\sendInvoice;
+use App\Mail\paymentReceived;
 
 class BookingsController extends Controller
 {
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('login');
         $this->middleware('admin', ['only' => ['edit', 'update', 'indexComplete']]);
 
@@ -34,11 +36,11 @@ class BookingsController extends Controller
     public function index()
     {
         //
-        if (CAuth::checkAdmin()){
-          $data = Bookings::orderBy('start')->get()
+        if (CAuth::checkAdmin()) {
+            $data = Bookings::orderBy('start')->get()
                 ->where('status', '!=', 4);
         } else {
-          $data = Bookings::orderBy('start', 'DESC')
+            $data = Bookings::orderBy('start', 'DESC')
                 ->where('email', '=', CAuth::user()->email)
                 ->get();
         }
@@ -83,24 +85,23 @@ class BookingsController extends Controller
         $booking->end = date("Y-m-d H:i:s", $end);
         $booking->days = ($end - $start)/(86400);
 
-        if (CAuth::checkAdmin(4)){
-          $booking->status = 2;
-          $this->validate($request, [
+        if (CAuth::checkAdmin(4)) {
+            $booking->status = 2;
+            $this->validate($request, [
               'email' => 'required|email'
           ]);
-          $details = Common::getDetailsEmail($request->email);
-            if ($details){
-              $booking->email = $request->email;
-              $booking->user = $details->surname;
-              $booking->user = $details->name;
-              \Mail::to($booking->email)->send(new bookingConfirmed);
+            $details = Common::getDetailsEmail($request->email);
+            if ($details) {
+                $booking->email = $request->email;
+                $booking->user = $details->surname;
+                $booking->user = $details->name;
+                \Mail::to($booking->email)->send(new bookingConfirmed);
             }
-
         } else {
-          $booking->status = 0;
-          $temp = CAuth::user();
-          $booking->email = $temp->email;
-          $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
+            $booking->status = 0;
+            $temp = CAuth::user();
+            $booking->email = $temp->email;
+            $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
         }
         $booking->save();
         return redirect('/bookings/' . $booking->id);
@@ -125,10 +126,15 @@ class BookingsController extends Controller
 
         $booking->status_string = $this->status[$booking->status];
 
-        if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()){
-          return View::make('bookings.view')->with(['booking' => $booking, 'items' => $bookedItems, 'next' => $this->nextStatus]);
+        if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()) {
+            return View::make('bookings.view')
+                          ->with([
+                            'booking' => $booking,
+                            'items' => $bookedItems,
+                            'next' => $this->nextStatus
+                          ]);
         } else {
-          return redirect()->route('items.index');
+            return redirect()->route('items.index');
         }
     }
 
@@ -141,31 +147,32 @@ class BookingsController extends Controller
     public function edit($id)
     {
         $old = Bookings::findOrFail($id);
-        return View::make('bookings.edit')->with(['old' => $old, 'statusArray' => $this->status]);
+        return View::make('bookings.edit')
+                      ->with(['old' => $old, 'statusArray' => $this->status]);
     }
 
-    private function manageStatusChange(&$booking, $status){
-      switch ($status){
+    private function manageStatusChange(&$booking, $status)
+    {
+        switch ($status) {
         case 2:
-          if ($booking->status <= 1){
-            \Mail::to($booking->email)->send(new bookingConfirmed);
+          if ($booking->status <= 1) {
+              \Mail::to($booking->email)->send(new bookingConfirmed($id));
           }
           break;
         case 3:
-          if ($booking->status != 3){
-            pdf::createInvoice($booking->id);
-            //Send invoice
+          if ($booking->status != 3) {
+              pdf::createInvoice($booking->id);
+              \Mail::to($booking->email)->send(new sendInvoice($booking->id));
           }
           break;
         case 4:
-          if ($booking->status != 4){
-            //Send thankyou
+          if ($booking->status != 4) {
+              \Mail::to($booking->email)->send(new paymentReceived);
           }
           break;
         default:
           break;
       }
-
     }
 
     /**
@@ -177,48 +184,47 @@ class BookingsController extends Controller
      */
     public function update(NewBooking $request, Bookings $booking)
     {
-      $this->validate($request, [
+        $this->validate($request, [
           'email' => 'required|email'
       ]);
-      $booking->name = $request->name;
+        $booking->name = $request->name;
       // Need to check for colitions before changing dates!
       // $booking->start = $request->start;
       // $booking->end = $request->end;
 
       $this->manageStatusChange($booking, $request->status);
-      $booking->status = $request->status;
+        $booking->status = $request->status;
 
-      if ($booking->email != $request->email){
-        $details = Common::getDetailsEmail($request->email);
-        if ($details){
-          $booking->email = $request->email;
-          $booking->user = $details->name;
+        if ($booking->email != $request->email) {
+            $details = Common::getDetailsEmail($request->email);
+            if ($details) {
+                $booking->email = $request->email;
+                $booking->user = $details->name;
+            }
         }
-      }
 
-      $booking->discDays = $request->discDays;
-      $booking->discType = $request->discType;
-      $booking->discValue = $request->discValue;
-      $booking->fineDesc = $request->fineDesc;
-      $booking->fineValue = $request->fineValue;
+        $booking->discDays = $request->discDays;
+        $booking->discType = $request->discType;
+        $booking->discValue = $request->discValue;
+        $booking->fineDesc = $request->fineDesc;
+        $booking->fineValue = $request->fineValue;
 
-      $booking->save();
+        $booking->save();
 
-      return redirect('/bookings/' . $booking->id);
+        return redirect('/bookings/' . $booking->id);
     }
 
     public function updateStatus(Request $request, Bookings $booking)
     {
-      if (CAuth::checkAdmin(4)){
-
-        $this->manageStatusChange($booking, $request->status);
-        $booking->status = $request->status;
-
-      } elseif (CAuth::user()->email == $booking->email){
-        switch ($booking->status){
+        if (CAuth::checkAdmin(4)) {
+            $this->manageStatusChange($booking, $request->status);
+            $booking->status = $request->status;
+        } elseif (CAuth::user()->email == $booking->email) {
+            switch ($booking->status) {
           case 0:
             $booking->status = 1;
-            \Mail::to('test@example.com')->send(new requestConfirmation($booking->id));
+            \Mail::to('test@example.com')
+                    ->send(new requestConfirmation($booking->id));
             break;
           case 1:
             $booking->status = 0;
@@ -226,10 +232,9 @@ class BookingsController extends Controller
           default:
             break;
         }
-
-      }
-      $booking->save();
-      return redirect('/bookings/' . $booking->id);
+        }
+        $booking->save();
+        return redirect('/bookings/' . $booking->id);
     }
 
     /**
@@ -240,69 +245,72 @@ class BookingsController extends Controller
      */
     public function destroy(Bookings $booking)
     {
-      if (($booking->email == CAuth::user()->email || CAuth::checkAdmin()) && $booking->status < 2){
-        $booking->delete();
-      }
-      return redirect('/bookings');
+        if (($booking->email == CAuth::user()->email || CAuth::checkAdmin()) && $booking->status < 2) {
+            $booking->delete();
+        }
+        return redirect('/bookings');
     }
 
-    public function addItems($id){
-      $items = new Items;
-      $booking = Bookings::find($id);
-      $data = $items->getAvalible($booking);
+    public function addItems($id)
+    {
+        $items = new Items;
+        $booking = Bookings::find($id);
+        $data = $items->getAvalible($booking);
 
-      if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()){
-        return View::make('items.index')->with(['data'=>$data, 'edit'=>TRUE, 'booking'=>$booking]);
-      } else {
-        return redirect()->route('items.index');
-      }
+        if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
+            return View::make('items.index')
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking]);
+        } else {
+            return redirect()->route('items.index');
+        }
     }
 
-    public function updateItems(Request $request, $id){
-      $items = new Items;
-      $booking = Bookings::find($id);
-      $data = $items->getAvalibleArray($booking);
+    public function updateItems(Request $request, $id)
+    {
+        $items = new Items;
+        $booking = Bookings::find($id);
+        $data = $items->getAvalibleArray($booking);
 
-      if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)){
-        $inputs = $request->input();
-        unset($inputs['_token']);
+        if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {
+            $inputs = $request->input();
+            unset($inputs['_token']);
 
-        $bookedItems = booked_items::where('bookingID', $id)
+            $bookedItems = booked_items::where('bookingID', $id)
               ->get()
               ->keyBy('item')
               ->toArray();
-        foreach ($inputs as $item => $quantity){
-          if (isset($bookedItems[$item]) || $quantity != 0){
-          $quantity = (int)$quantity;
-            if (is_int($item) && is_int($quantity)){
-              if ($quantity <= $data[$item]->available){
-                booked_items::updateOrCreate(
+            foreach ($inputs as $item => $quantity) {
+                if (isset($bookedItems[$item]) || $quantity != 0) {
+                    $quantity = (int)$quantity;
+                    if (is_int($item) && is_int($quantity)) {
+                        if ($quantity <= $data[$item]->available) {
+                            booked_items::updateOrCreate(
                     ['bookingID' => $id, 'item' => $item],
                     ['number' => $quantity]
                 );
-              }
+                        }
+                    }
+                }
             }
-          }
+
+            $booking->save();
+
+            return redirect()->route('bookings.show', ['id' => $id]);
+        } else {
+            return redirect()->route('items.index');
         }
-
-        $booking->save();
-
-        return redirect()->route('bookings.show', ['id' => $id]);
-      } else {
-        return redirect()->route('items.index');
-      }
     }
 
 
-    public function getInvoice($id){
-      $booking = Bookings::findOrFail($id);
-      if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin())){
-        $invoice = $booking->invoice;
-        if (!empty($invoice)){
-          $file = base_path() . '/storage/invoices/' . $invoice;
-          return response()->file($file, ['Content-Disposition' => 'inline; filename="'.$booking->invoice.'"']);
+    public function getInvoice($id)
+    {
+        $booking = Bookings::findOrFail($id);
+        if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin())) {
+            $invoice = $booking->invoice;
+            if (!empty($invoice)) {
+                $file = base_path() . '/storage/invoices/' . $invoice;
+                return response()->file($file, ['Content-Disposition' => 'inline; filename="'.$booking->invoice.'"']);
+            }
         }
-      }
     }
-
 }
