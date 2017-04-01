@@ -1,7 +1,7 @@
 @extends('bookings.layout')
 
 @php
-$active = 'current';
+$active = 'old';
 @endphp
 
 @section('page')
@@ -15,7 +15,7 @@ $active = 'current';
                         <th>Name</th>
                         <th>Email</th>
                         @endif
-                        <th>Status</th>
+                        <th>Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,8 +26,8 @@ $active = 'current';
                         <td>{{ $booking->user }}</td>
                         <td><a href="mailto:{{ $booking->email }}">{{ $booking->email }}</a></td>
                         @endif
-                        <td class='status' id='{{ $booking->status }}'>
-                          {{ $statusArray[$booking->status] }}
+                        <td>
+                          £{{ number_format((float)$booking->totalPrice, 2) }}
                         </td>
                     </tr>
                 @endforeach
@@ -36,5 +36,4 @@ $active = 'current';
 
             @endif
 
-            <a class="btn btn-primary" href="{{ route('bookings.create') }}">Add new</a>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 use View;
+use App\Http\Requests\NewCat;
 
 class CategoryController extends Controller
 {
@@ -36,7 +37,7 @@ class CategoryController extends Controller
             }
         }
 
-        return view('categories.view')->with(['cats'=>$cats]);
+        return view('settings.categories.view')->with(['cats'=>$cats]);
     }
 
     /**
@@ -57,7 +58,7 @@ class CategoryController extends Controller
             }
         }
 
-        return View::make('categories.edit')
+        return View::make('settings.categories.edit')
             ->with(['cats' => $cats]);
     }
 
@@ -67,36 +68,19 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewCat $request)
     {
-        $item = new catalog;
+      $cat = new Category;
 
-        if (!empty($request->image)){
-            $imageName = $item->id . '.' .
-                $request->file('image')->getClientOriginalExtension();
-            $item->image = 'thumb_' . $imageName;
-        }
+      $cat->name = $request->name;
+      $cat->subCatOf = $request->subCatOf;
 
-        $item->description = $request->description;
-        $item->details = $request->details;
-        $item->quantity = $request->quantity;
-        $item->category = $request->category;
+      if (isset($request->orderOf)){
+        $cat->orderOf = $request->orderOf;
+      }
 
-        $item->save();
-
-
-        if (!empty($request->image)){
-            $request->file('image')->move(
-                base_path() . '/public/images/catalog/', $imageName
-            );
-
-            $img = Image::make('images/catalog/' . $imageName)->resize(60, 60, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-
-            $img->save('images/catalog/thumb_' . $imageName);
-        }
-        return redirect('/items');
+      $cat->save();
+      return redirect('/categories');
     }
 
     /**
@@ -130,7 +114,11 @@ class CategoryController extends Controller
 
         $old = Category::findOrFail($id);
 
-        return View::make('categories.edit')->with(['old' => $old, 'cats' => $cats]);
+        if ($old->orderOf == 999){
+          $old->orderOf = '';
+        }
+
+        return View::make('settings.categories.edit')->with(['old' => $old, 'cats' => $cats]);
     }
 
     /**
@@ -140,10 +128,16 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(NewCat $request, Category $category)
     {
-       $category->fill($request->all());
-       $category->save();
+      $category->name = $request->name;
+      $category->subCatOf = $request->subCatOf;
+
+      if (isset($request->orderOf)){
+      $category->orderOf = $request->orderOf;
+      }
+
+      $category->save();
 
        return redirect('/categories');
     }

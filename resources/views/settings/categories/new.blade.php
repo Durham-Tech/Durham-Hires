@@ -1,8 +1,12 @@
-@extends('layouts.app')
+@extends('settings.layout')
 
-@section('content')
+@php
+$active = 'categories';
+@endphp
+
+@section('page')
             @if ($cats)
-                
+
                 <table class="table">
                 <thead>
                     <tr>
@@ -18,7 +22,7 @@
                     </tr>
                     @endforeach
                     </tbody>
-    
+
             @endif
 
             <a class="btn btn-primary" href="{{ route('categories.create') }}">Add new</a>

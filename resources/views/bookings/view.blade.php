@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('bookings.layout')
 
-@section('content')
+@php
+$active = 'current';
+@endphp
+
+@section('page')
 <div class="row">
         <h1 id='name'>
             {{ $booking->name }}
@@ -24,6 +28,13 @@
             <b>Hire status: </b>
             {{ $booking->status_string }}
         </p>
+        @if ($booking->status >= 3)
+        <p id='invoice'>
+            <b>Invoice: </b>
+
+            {!! link_to_route('bookings.invoice', $booking->invoice, array($booking->id)) !!}
+        </p>
+        @endif
 
         @if (count($items) > 0)
         <?php $total = 0; ?>

@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('settings.layout')
 
-@section('content')
+@php
+$active = 'admin';
+@endphp
+
+@section('page')
 
             @if (!empty($error))
             <div class="alert alert-danger">

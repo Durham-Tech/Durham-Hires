@@ -20,6 +20,8 @@ Route::resource('items','ItemController');
 Route::resource('admin','AdminController');
 Route::resource('bookings','BookingsController');
 
+Route::get('bookings/index/complete', 'BookingsController@indexComplete')->name('bookings.complete');
+Route::get('bookings/{id}/invoice', 'BookingsController@getInvoice')->name('bookings.invoice');
 Route::get('bookings/{id}/add', 'BookingsController@addItems')->name('bookings.add');
 Route::post('bookings/{id}/add', 'BookingsController@updateItems');
 Route::post('bookings/changestate', 'BookingsController@changeState');

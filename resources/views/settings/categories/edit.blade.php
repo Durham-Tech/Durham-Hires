@@ -1,17 +1,21 @@
-@extends('layouts.app')
+@extends('settings.layout')
 
-@section('content')
+@php
+$active = 'categories';
+@endphp
+
+@section('page')
 
         @if(isset($old))
                 {{ Form::model($old,
                     array(
-                        'route' => ['categories.update', $old->id], 
+                        'route' => ['categories.update', $old->id],
                         'method' => 'PATCH',
-                        'class' => 'form')) }}    
+                        'class' => 'form')) }}
         @else
             {!! Form::open(
             array(
-                'route' => 'categories.store', 
+                'route' => 'categories.store',
                 'class' => 'form')
             ) !!}
         @endif
@@ -26,12 +30,12 @@
                 </ul>
             </div>
             @endif
-            
+
             <div class="form-group">
                 {{ Form::label('name', 'Name') }}
-                {{ Form::text('name', NULL, 
+                {{ Form::text('name', NULL,
                 array(
-                    'class'=>'form-control', 
+                    'class'=>'form-control',
                     'placeholder'=>'Category Name'
                 )) }}
             </div>
@@ -39,11 +43,18 @@
                 {{ Form::label('subCatOf', 'Subcategory of') }}
                 {{ Form::select('subCatOf', $cats, NULL,
                 array(
-                    'class'=>'form-control', 
+                    'class'=>'form-control',
+                )) }}
+            </div>
+            <div class='form-group order'>
+                {{ Form::label('orderOf', 'Item order (optional)') }}
+                {{ Form::text('orderOf', NULL,
+                array(
+                    'class'=>'form-control',
                 )) }}
             </div>
             <div class="form-group" id="buttons">
-                {!! Form::submit('Save', 
+                {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'
                 )) !!}
         {!! Form::close() !!}

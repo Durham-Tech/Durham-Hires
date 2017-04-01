@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('bookings.layout')
 
-@section('content')
+@php
+$active = 'current';
+@endphp
+
+@section('page')
 
         @if(isset($old))
                 {{ Form::model($old,

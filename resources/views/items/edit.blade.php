@@ -5,18 +5,18 @@
         @if($old->id)
                 {{ Form::model($old,
                     array(
-                        'route' => ['items.update', $old->id], 
+                        'route' => ['items.update', $old->id],
                         'method' => 'PATCH',
                         'files' => true,
-                        'class' => 'form')) }}   
+                        'class' => 'form')) }}
         @else
                 {{ Form::model($old,
                     array(
-                        'route' => ['items.update', $old->id], 
+                        'route' => ['items.update', $old->id],
                         'files' => true,
-                        'class' => 'form')) }}   
+                        'class' => 'form')) }}
         @endif
-        
+
 @if (count($errors) > 0)
 <div class="alert alert-danger">
     There were some problems adding the item.<br />
@@ -29,9 +29,9 @@
 @endif
             <div class="form-group">
                 {{ Form::label('description', 'Description') }}
-                {!! Form::text('description', null, 
+                {!! Form::text('description', null,
                 array(
-                    'class'=>'form-control', 
+                    'class'=>'form-control',
                     'placeholder'=>'Item Description'
                 )) !!}
             </div>
@@ -39,14 +39,14 @@
                 {{ Form::label('category', 'Category') }}
                 {{ Form::select('category', $cat, NULL,
                 array(
-                    'class'=>'form-control', 
+                    'class'=>'form-control',
                 )) }}
             </div>
             <div class="form-group">
                 {{ Form::label('details', 'Details') }}
-                {!! Form::textarea('details', null, 
+                {!! Form::textarea('details', null,
                 array(
-                    'class'=>'form-control', 
+                    'class'=>'form-control',
                     'placeholder'=>'Item Details'
                 )) !!}
             </div>
@@ -56,27 +56,40 @@
                 @if (!empty($old->image))
                 {{ Html::image('images/catalog/thumb_' . $old->image) }}
                 @endif
-                
+
                 {{ Form::file('image',
                 array(
                     'style' => 'display:inline;'
                 )) }}
                 </div>
             </div>
-            <div class='form-group'>
+            <div class='form-group number'>
                 {{ Form::label('quantity', 'Quantity avalible') }}
                 {{ Form::number('quantity') }}
             </div>
-            <div class='form-group'>
+            <div class='form-group price'>
                 {{ Form::label('dayPrice', 'Daily cost £') }}
-                {{ Form::text('dayPrice') }}
+                {{ Form::text('dayPrice', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
             </div>
-            <div class='form-group'>
+            <div class='form-group price'>
                 {{ Form::label('weekPrice', 'Weekly cost £') }}
-                {{ Form::text('weekPrice') }}
+                {{ Form::text('weekPrice', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+            <div class='form-group order'>
+                {{ Form::label('orderOf', 'Item order (optional)') }}
+                {{ Form::text('orderOf', NULL,
+                array(
+                    'class'=>'form-control',
+                )) }}
             </div>
             <div class="form-group">
-                {!! Form::submit('Save', 
+                {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'
                 )) !!}
         {!! Form::close() !!}

@@ -19,7 +19,7 @@ class BookingsController extends Controller
 
     public function __construct() {
         $this->middleware('login');
-        $this->middleware('admin', ['only' => ['edit', 'update']]);
+        $this->middleware('admin', ['only' => ['edit', 'update', 'indexComplete']]);
 
         $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid'];
         $this->nextStatus = ['Confirm Booking', 'Booking Returned', 'Booking Paid'];
@@ -45,6 +45,16 @@ class BookingsController extends Controller
 
         return View::make('bookings.index')
             ->with(['data' => $data, 'statusArray' => $this->status]);
+    }
+
+    public function indexComplete()
+    {
+        $data = Bookings::orderBy('start', 'DESC')
+              ->where('status', '=', 4)
+              ->get();
+
+        return View::make('bookings.old')
+            ->with(['data' => $data]);
     }
 
     /**
@@ -280,6 +290,18 @@ class BookingsController extends Controller
         return redirect()->route('bookings.show', ['id' => $id]);
       } else {
         return redirect()->route('items.index');
+      }
+    }
+
+
+    public function getInvoice($id){
+      $booking = Bookings::findOrFail($id);
+      if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin())){
+        $invoice = $booking->invoice;
+        if (!empty($invoice)){
+          $file = base_path() . '/storage/invoices/' . $invoice;
+          return response()->file($file, ['Content-Disposition' => 'inline; filename="'.$booking->invoice.'"']);
+        }
       }
     }
 

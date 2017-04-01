@@ -46,10 +46,8 @@ class Items {
     public function getAll() {
         $all = [];
 
-        #$cats = DB::select('select * from categories ORDER BY orderOf');
         $cats = \App\Category::orderBy('orderOf')->get();
-        $catalog = \App\catalog::all();
-        #$catalog = DB::select('select * from catalog');
+        $catalog = \App\catalog::orderBy('orderOf')->get();
 
         foreach ($cats as $cat){
             if(empty($cat->subCatOf)){

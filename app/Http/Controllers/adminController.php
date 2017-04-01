@@ -26,7 +26,7 @@ class AdminController extends Controller
       $error = session()->get('error', '');
       $users = Admin::all();
       $hires = Settings::where('name', 'hiresManager')->firstOrFail();
-      return view('admin.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error]);
+      return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error]);
     }
 
     /**
@@ -37,7 +37,7 @@ class AdminController extends Controller
     public function create()
     {
         //
-        return View::make('admin.new');
+        return View::make('settings.users.new');
     }
 
     /**

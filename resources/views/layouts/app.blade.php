@@ -50,7 +50,7 @@
                         <li><a href="{{ url('/bookings') }}">Bookings</a></li>
                         @endif
                         @if (CAuth::checkAdmin())
-                        <li><a href="{{ url('/admin') }}">Admin</a></li>
+                        <li><a href="{{ url('/admin') }}">Settings</a></li>
                         @endif
                         @if (CAuth::checkAdmin(1))
                         <li><a href="{{ url('/bank') }}">Treasurer</a></li>
@@ -82,7 +82,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-12">
                     @yield('content')
                 </div>
             </div>

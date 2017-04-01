@@ -81,6 +81,10 @@ class ItemController extends Controller
         $item->dayPrice = $request->dayPrice;
         $item->weekPrice = $request->weekPrice;
 
+        if (isset($request->orderOf)){
+          $item->orderOf = $request->orderOf;
+        }
+
         $item->save();
 
 
@@ -139,6 +143,10 @@ class ItemController extends Controller
 
         $old = catalog::findOrFail($id);
 
+        if ($old->orderOf == 999){
+          $old->orderOf = '';
+        }
+
         return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats]);
     }
 
@@ -170,6 +178,10 @@ class ItemController extends Controller
         $cat->category = $request->category;
         $cat->dayPrice = $request->dayPrice;
         $cat->weekPrice = $request->weekPrice;
+
+        if (isset($request->orderOf)){
+          $cat->orderOf = $request->orderOf;
+        }
 
         $cat->save();
 
