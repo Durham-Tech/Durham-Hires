@@ -12,7 +12,8 @@ use App\Classes\Common;
 
 class AdminController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('login');
         $this->middleware('admin');
     }
@@ -23,10 +24,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-      $error = session()->get('error', '');
-      $users = Admin::all();
-      $hires = Settings::where('name', 'hiresManager')->firstOrFail();
-      return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error]);
+        $error = session()->get('error', '');
+        $users = Admin::all();
+        $hires = Settings::where('name', 'hiresManager')->firstOrFail();
+        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error]);
     }
 
     /**
@@ -67,27 +68,27 @@ class AdminController extends Controller
      */
     public function save(Request $request)
     {
-        if (!isset($request->admin)){
-          return redirect()->route('admin.index')->with(['error' => 'At least one user needs to be an admin.']);
+        if (!isset($request->admin)) {
+            return redirect()->route('admin.index')->with(['error' => 'At least one user needs to be an admin.']);
         }
-        $hiresCorrect = False;
+        $hiresCorrect = false;
         $users = Admin::all();
-        foreach ($users as $user){
-          $priv = 0;
-          if (isset($request->treasurer[$user->id])){
-            $priv += 1;
-          }
-          if (isset($request->admin[$user->id])){
-            $priv += 4;
-            if ($request->hires == $user->id){
-              $hiresCorrect = True;
+        foreach ($users as $user) {
+            $priv = 0;
+            if (isset($request->treasurer[$user->id])) {
+                $priv += 1;
             }
-          }
-          $user->privileges = $priv;
-          $user->save();
+            if (isset($request->admin[$user->id])) {
+                $priv += 4;
+                if ($request->hires == $user->id) {
+                    $hiresCorrect = true;
+                }
+            }
+            $user->privileges = $priv;
+            $user->save();
         }
-        if ($hiresCorrect){
-          $hires = Settings::where('name', 'hiresManager')
+        if ($hiresCorrect) {
+            $hires = Settings::where('name', 'hiresManager')
                             ->update(['value' => $request->hires]);
         }
         return redirect()->route('admin.index');
@@ -103,11 +104,11 @@ class AdminController extends Controller
     {
         //
         var_dump($admin);
-        if (!($admin->privileges & 4)){
-          $admin->delete();
-          return redirect()->route('admin.index');
+        if (!($admin->privileges & 4)) {
+            $admin->delete();
+            return redirect()->route('admin.index');
         } else {
-          return redirect()->route('admin.index')->with(['error' => 'Cannot delete an admin user.']);
+            return redirect()->route('admin.index')->with(['error' => 'Cannot delete an admin user.']);
         }
     }
 }

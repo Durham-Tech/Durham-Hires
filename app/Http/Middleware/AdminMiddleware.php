@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!CAuth::checkAdmin()){
+        if (!CAuth::checkAdmin()) {
             return redirect()->action('publicController@index');
         } else {
             return $next($request);

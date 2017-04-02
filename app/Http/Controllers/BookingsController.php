@@ -6,7 +6,7 @@ use App\Bookings;
 use App\booked_items;
 use Illuminate\Http\Request;
 use View;
-use App\Models\Items;
+use App\Classes\Items;
 use App\Classes\CAuth;
 use App\Http\Requests\NewBooking;
 use App\Classes\Common;

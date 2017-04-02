@@ -1,0 +1,7 @@
+@mixin linkOnBackground($colour) {
+    color: $colour;
+
+    &:hover {
+        color: darken($colour, 20%);
+    }
+}

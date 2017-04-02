@@ -1,9 +1,60 @@
-
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-
 // Variables
 @import "variables";
-
+@import "mixins";
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.navbar-default {
+    .navbar-nav {
+        li {
+            a {
+                @include linkOnBackground($navbar-text-colour)
+            }
+        }
+    }
+
+    .navbar-brand {
+        @include linkOnBackground($navbar-text-colour)
+    }
+}
+
+.btn {
+    border-radius: 0;
+}
+
+.nav-pills,
+.nav-tabs {
+    li {
+        a {
+            border-radius: 0;
+        }
+    }
+}
+
+.borderLeft {
+    @media (min-width: $screen-md-min) {
+        border-left: 1px solid $accent;
+    }
+}
+
+.ItemsTable {
+    th {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+}
+
+.form-control {
+    &:focus {
+        box-shadow: none;
+    }
+}

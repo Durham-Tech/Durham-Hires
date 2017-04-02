@@ -8,5 +8,5 @@ class Admin extends Model
 {
     //
     protected $guarded = ['id'];
-    public $timestamps = FALSE;
+    public $timestamps = false;
 }

@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\catalog;
 use Illuminate\Http\Request;
-use App\Models\Items;
+use App\Classes\Items;
 use View;
 use App\Http\Requests\NewItem;
 use Image;
 
 class ItemController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('login', ['except' => ['index', 'show']]);
         $this->middleware('admin', ['except' => ['index', 'show']]);
     }
@@ -24,7 +25,7 @@ class ItemController extends Controller
     {
         $Items = new Items;
         $data = $Items->getAll();
-        return View::make('items.index')->with(['data'=>$data, 'edit'=>FALSE]);
+        return View::make('items.index')->with(['data'=>$data, 'edit'=>false]);
     }
 
     /**
@@ -37,17 +38,16 @@ class ItemController extends Controller
         $cats = [];
         $data = \App\Category::orderBy('orderOf')->get();
 
-        foreach ($data as $cat){
-            if(empty($cat->subCatOf)){
+        foreach ($data as $cat) {
+            if (empty($cat->subCatOf)) {
                 $cats[$cat->id] = $cat->name;
 
-                foreach ($data as $subCat){
-                    if ($subCat->subCatOf == $cat->id){
+                foreach ($data as $subCat) {
+                    if ($subCat->subCatOf == $cat->id) {
                         // $all[] = array($subCat->name, TRUE);
                         $cats[$subCat->id] = '- ' . $subCat->name;
                     }
                 }
-
             }
         }
 
@@ -68,7 +68,7 @@ class ItemController extends Controller
     {
         $item = new catalog;
 
-        if (!empty($request->image)){
+        if (!empty($request->image)) {
             $imageName = $item->id . '_0.' .
                 $request->file('image')->getClientOriginalExtension();
             $item->image = $imageName;
@@ -81,14 +81,14 @@ class ItemController extends Controller
         $item->dayPrice = $request->dayPrice;
         $item->weekPrice = $request->weekPrice;
 
-        if (isset($request->orderOf)){
-          $item->orderOf = $request->orderOf;
+        if (isset($request->orderOf)) {
+            $item->orderOf = $request->orderOf;
         }
 
         $item->save();
 
 
-        if (!empty($request->image)){
+        if (!empty($request->image)) {
             $request->file('image')->move(
                 base_path() . '/public/images/catalog/', $imageName
             );
@@ -127,24 +127,23 @@ class ItemController extends Controller
         $cats = [];
         $data = \App\Category::orderBy('orderOf')->get();
 
-        foreach ($data as $cat){
-            if(empty($cat->subCatOf)){
+        foreach ($data as $cat) {
+            if (empty($cat->subCatOf)) {
                 $cats[$cat->id] = $cat->name;
 
-                foreach ($data as $subCat){
-                    if ($subCat->subCatOf == $cat->id){
+                foreach ($data as $subCat) {
+                    if ($subCat->subCatOf == $cat->id) {
                         // $all[] = array($subCat->name, TRUE);
                         $cats[$subCat->id] = '- ' . $subCat->name;
                     }
                 }
-
             }
         }
 
         $old = catalog::findOrFail($id);
 
-        if ($old->orderOf == 999){
-          $old->orderOf = '';
+        if ($old->orderOf == 999) {
+            $old->orderOf = '';
         }
 
         return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats]);
@@ -161,7 +160,7 @@ class ItemController extends Controller
     {
         $cat = catalog::findOrFail($id);
 
-        if (!empty($request->image)){
+        if (!empty($request->image)) {
             // if (!isset($cat->image)){
             //     $imageName = $cat->id . '_0.' .
             //         $request->file('image')->getClientOriginalExtension();
@@ -179,14 +178,14 @@ class ItemController extends Controller
         $cat->dayPrice = $request->dayPrice;
         $cat->weekPrice = $request->weekPrice;
 
-        if (isset($request->orderOf)){
-          $cat->orderOf = $request->orderOf;
+        if (isset($request->orderOf)) {
+            $cat->orderOf = $request->orderOf;
         }
 
         $cat->save();
 
 
-        if (!empty($request->image)){
+        if (!empty($request->image)) {
             $request->file('image')->move(
                 base_path() . '/public/images/catalog/', $imageName
             );

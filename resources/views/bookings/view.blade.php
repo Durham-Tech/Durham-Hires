@@ -5,7 +5,7 @@ $active = 'current';
 @endphp
 
 @section('page')
-<div class="row">
+<div>
         <h1 id='name'>
             {{ $booking->name }}
         </h1>
@@ -87,7 +87,6 @@ $active = 'current';
           There's nothing here. Go ahead and add some items to your order.
         </p>
         @endif
-</div>
 @if (($booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3))
 {!! link_to_route('bookings.add', 'Add/Remove Items', array($booking->id), array('class' => 'btn btn-primary')) !!}
 @endif
@@ -114,4 +113,5 @@ $active = 'current';
 {{ Form::close() }}
 @endif
 {!! link_to_route('bookings.index', 'Back', array(), array('class' => 'btn btn-primary')) !!}
+</div>
 @endsection

@@ -9,7 +9,8 @@ use App\Http\Requests\NewCat;
 
 class CategoryController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('login');
         $this->middleware('admin');
     }
@@ -23,17 +24,16 @@ class CategoryController extends Controller
         $cats = [];
         $data = Category::orderBy('orderOf')->get();
 
-        foreach ($data as $cat){
-            if(empty($cat->subCatOf)){
-                $cats[$cat->id] = [$cat->name, NULL];
+        foreach ($data as $cat) {
+            if (empty($cat->subCatOf)) {
+                $cats[$cat->id] = [$cat->name, null];
 
-                foreach ($data as $subCat){
-                    if ($subCat->subCatOf == $cat->id){
+                foreach ($data as $subCat) {
+                    if ($subCat->subCatOf == $cat->id) {
                         // $all[] = array($subCat->name, TRUE);
                         $cats[$subCat->id] = ['&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ' . $subCat->name, $cat->id];
                     }
                 }
-
             }
         }
 
@@ -52,8 +52,8 @@ class CategoryController extends Controller
         $data = Category::orderby('orderof')->get();
 
         $cats[''] = 'None';
-        foreach ($data as $cat){
-            if(empty($cat->subCatOf)){
+        foreach ($data as $cat) {
+            if (empty($cat->subCatOf)) {
                 $cats[$cat->id] = $cat->name;
             }
         }
@@ -70,17 +70,17 @@ class CategoryController extends Controller
      */
     public function store(NewCat $request)
     {
-      $cat = new Category;
+        $cat = new Category;
 
-      $cat->name = $request->name;
-      $cat->subCatOf = $request->subCatOf;
+        $cat->name = $request->name;
+        $cat->subCatOf = $request->subCatOf;
 
-      if (isset($request->orderOf)){
-        $cat->orderOf = $request->orderOf;
-      }
+        if (isset($request->orderOf)) {
+            $cat->orderOf = $request->orderOf;
+        }
 
-      $cat->save();
-      return redirect('/categories');
+        $cat->save();
+        return redirect('/categories');
     }
 
     /**
@@ -106,16 +106,16 @@ class CategoryController extends Controller
         $data = Category::orderBy('orderOf')->get();
 
         $cats[''] = 'None';
-        foreach ($data as $cat){
-            if(empty($cat->subCatOf)){
+        foreach ($data as $cat) {
+            if (empty($cat->subCatOf)) {
                 $cats[$cat->id] = $cat->name;
             }
         }
 
         $old = Category::findOrFail($id);
 
-        if ($old->orderOf == 999){
-          $old->orderOf = '';
+        if ($old->orderOf == 999) {
+            $old->orderOf = '';
         }
 
         return View::make('settings.categories.edit')->with(['old' => $old, 'cats' => $cats]);
@@ -130,16 +130,16 @@ class CategoryController extends Controller
      */
     public function update(NewCat $request, Category $category)
     {
-      $category->name = $request->name;
-      $category->subCatOf = $request->subCatOf;
+        $category->name = $request->name;
+        $category->subCatOf = $request->subCatOf;
 
-      if (isset($request->orderOf)){
-      $category->orderOf = $request->orderOf;
-      }
+        if (isset($request->orderOf)) {
+            $category->orderOf = $request->orderOf;
+        }
 
-      $category->save();
+        $category->save();
 
-       return redirect('/categories');
+        return redirect('/categories');
     }
 
     /**
@@ -150,7 +150,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-       $category->delete();
-       return redirect('/categories');
+        $category->delete();
+        return redirect('/categories');
     }
 }

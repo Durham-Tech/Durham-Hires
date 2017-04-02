@@ -53,11 +53,11 @@ $active = 'admin';
                 {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'
                 )) !!}
+                <a class="btn btn-primary" href="{{ route('admin.create') }}">Add new</a>
 
         {!! Form::close() !!}
             @endif
 
-            <a class="btn btn-primary" href="{{ route('admin.create') }}">Add new</a>
 @endsection
 
 @section('scripts')
