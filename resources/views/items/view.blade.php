@@ -24,10 +24,10 @@
         <p id='dayPrice'>
             <b>Weekly price: </b>£{{ number_format($item->weekPrice,2) }}
         </p>
+        @if (CAuth::checkAdmin())
+        <a class="btn btn-primary" href='{!! action('ItemController@edit', ['items' => $item->id]) !!}'>Edit</a>
+        @endif
+        <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
     </div>
 </div>
-@if (CAuth::checkAdmin())
-<a class="btn btn-primary" href='{!! action('ItemController@edit', ['items' => $item->id]) !!}'>Edit</a>
-@endif
-<a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
 @endsection

@@ -1,7 +1,7 @@
 @mixin linkOnBackground($colour) {
-    color: $colour;
+    color: $navbar-text-colour;
 
     &:hover {
-        color: darken($colour, 20%);
+        color: darken($navbar-text-colour, 20%);
     }
 }

@@ -39,18 +39,18 @@ $active = 'categories';
                     'placeholder'=>'Category Name'
                 )) }}
             </div>
-            <div class='form-group'>
-                {{ Form::label('subCatOf', 'Subcategory of') }}
+            <div class='form-group form-inline'>
+                {{ Form::label('subCatOf', 'Subcategory of: ') }}
                 {{ Form::select('subCatOf', $cats, NULL,
                 array(
                     'class'=>'form-control',
                 )) }}
             </div>
-            <div class='form-group order'>
-                {{ Form::label('orderOf', 'Item order (optional)') }}
+            <div class='form-group form-inline order'>
+                {{ Form::label('orderOf', 'Item order (optional): ') }}
                 {{ Form::text('orderOf', NULL,
                 array(
-                    'class'=>'form-control',
+                    'class'=>'form-control customNum',
                 )) }}
             </div>
             <div class="form-group" id="buttons">

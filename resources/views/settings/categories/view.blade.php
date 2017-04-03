@@ -5,6 +5,7 @@ $active = 'categories';
 @endphp
 
 @section('page')
+
             @if ($cats)
 
                 <table class="table">
@@ -25,6 +26,6 @@ $active = 'categories';
                   </table>
 
             @endif
-
             <a class="btn btn-primary" href="{{ route('categories.create') }}">Add new</a>
+
 @endsection

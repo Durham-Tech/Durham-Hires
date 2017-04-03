@@ -1,7 +1,11 @@
 @extends('bookings.layout')
 
 @php
-$active = 'current';
+if ($booking->status < 4){
+  $active = 'current';
+} else {
+  $active = 'old';
+}
 @endphp
 
 @section('page')

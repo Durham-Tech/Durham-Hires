@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="limWidth">
 
         @if($old->id)
                 {{ Form::model($old,
@@ -90,8 +91,16 @@
             </div>
             <div class="form-group">
                 {!! Form::submit('Save',
-                array('class'=>'btn btn-primary'
+                array('class'=>'btn btn-primary',
+                'name'=>'next'
                 )) !!}
+
+                @if (!isset($old->id))
+                  {!! Form::submit('Save and New',
+                  array('class'=>'btn btn-primary',
+                  'name'=>'next'
+                  )) !!}
+                @endif
         {!! Form::close() !!}
         @if(isset($old))
         {{ Form::open(['route' => ['items.destroy', $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
@@ -99,4 +108,5 @@
         {{ Form::close() }}
         @endif
         <a class="btn btn-primary" href="{{ route('items.index') }}">Cancel</a>
+      </div>
 @endsection

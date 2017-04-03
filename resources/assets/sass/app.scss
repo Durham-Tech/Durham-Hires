@@ -6,6 +6,16 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+.container .limWidth {
+    max-width: 900px;
+    margin: auto;
+}
+
+.treasurer {
+    max-width: 300px;
+    margin: auto;
+}
+
 .navbar-default {
     .navbar-nav {
         li {
@@ -20,6 +30,11 @@
     }
 }
 
+.panel-default .panel-heading {
+    background-color: $accent;
+    color: $navbar-text-colour;
+}
+
 .btn {
     border-radius: 0;
 }
@@ -29,6 +44,7 @@
     li {
         a {
             border-radius: 0;
+            font-size: 20px;
         }
     }
 }
@@ -41,14 +57,38 @@
 
 .ItemsTable {
     th {
+        font-size: 18px;
+    }
+
+    th + th + th {
         text-align: center;
     }
 
     td {
-        text-align: center;
+        &:not(.tableHeader) {
+            text-align: center;
+            height: 60px;
+            vertical-align: middle;
+        }
 
-        &:nth-child(2) {
+        &.itemTitle {
+            font-size: 16px;
             text-align: left;
+            font-weight: 580;
+        }
+
+        &:nth-child(1) {
+            width: 80px;
+            padding: 0;
+        }
+
+        &.tableHeader {
+            border: 0;
+
+            h2 {
+                font-size: 22px;
+                font-weight: bold;
+            }
         }
     }
 }
@@ -56,5 +96,40 @@
 .form-control {
     &:focus {
         box-shadow: none;
+    }
+}
+
+// Styling for custom number spinners
+.numInput {
+    > * {
+        display: block;
+        float: left;
+    }
+
+    input {
+        width: 40px;
+        text-align: center;
+        border-radius: 0;
+        border-right: 0;
+        border-left: 0;
+    }
+
+    .btnMore {
+        border-radius: 0 4px 4px 0;
+    }
+
+    .btnLess {
+        border-radius: 4px 0 0 4px;
+    }
+}
+
+// Styling for number text text inputs
+.form-group {
+    .customNum {
+        max-width: 100px;
+    }
+
+    .bg-form-group {
+        font-size: 40px;
     }
 }

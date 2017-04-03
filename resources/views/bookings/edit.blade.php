@@ -1,7 +1,11 @@
 @extends('bookings.layout')
 
 @php
-$active = 'current';
+if (isset($old)){
+  $active = 'current';
+} else {
+  $active = 'new';
+}
 @endphp
 
 @section('page')
@@ -31,6 +35,13 @@ $active = 'current';
             </div>
             @endif
 
+            <div class='form-group'>
+                {{ Form::label('', 'Set the details',
+                  array(
+                    'class'=>'bg-form-group'
+                  )
+                ) }}
+            </div>
             <div class="form-group">
                 {{ Form::label('name', 'Booking Name') }}
                 {{ Form::text('name', NULL,
@@ -65,8 +76,8 @@ $active = 'current';
             </div>
 
             @if (CAuth::checkAdmin(4) && isset($old))
-            <div class='form-group'>
-                {{ Form::label('status', 'Hire Status') }}
+            <div class='form-group form-inline'>
+                {{ Form::label('status', 'Hire Status: ') }}
                 {{ Form::select('status', $statusArray, $old->status,
                 array(
                     'class'=>'form-control',
@@ -74,39 +85,55 @@ $active = 'current';
             </div>
 
             <div class='form-group'>
-                {{ Form::label('discDays', 'Free days') }}
+                {{ Form::label('', 'Add a discount',
+                  array(
+                    'class'=>'bg-form-group'
+                  )
+                ) }}
+            </div>
+            <div class='form-group form-inline'>
+                {{ Form::label('discDays', 'Free days: ') }}
                 {{ Form::text('discDays', NULL,
                 array(
-                    'class'=>'form-control',
+                    'class'=>'form-control customNum',
                 )) }}
             </div>
-            <div class='form-group'>
-                {{ Form::label('discType', 'Discount type') }}
+            <div class='form-group form-inline'>
+                {{ Form::label('discType', 'Discount type: ') }}
                 {{ Form::select('discType', ['Value Discount', 'Percentage Discount'], NULL,
                 array(
                     'class'=>'form-control',
+                    'id'=>'discSwitch'
                 )) }}
             </div>
-            <div class='form-group'>
-                {{ Form::label('discValue', 'Discount Value') }}
+            <div class='form-group form-inline'>
+                {{ Form::label('discValue', 'Discount Value: ') }}
+                <span class="unit pound">{{ ($old->discType == 0) ? "£" : "" }}</span>
                 {{ Form::text('discValue', NULL,
                 array(
-                    'class'=>'form-control',
+                    'class'=>'form-control customNum '.(($old->discType == 0) ? "moneyInput" : ""),
+                    'id'=>'discVal',
                 )) }}
+                <span class="unit percent">{{ ($old->discType == 1) ? "%" : "" }}</span>
             </div>
 
             <div class='form-group'>
-                {{ Form::label('fineDesc', 'Fine Description') }}
+                {{ Form::label('fineDesc', 'Add a fine',
+                  array(
+                    'class'=>'bg-form-group'
+                  )
+                ) }}
                 {{ Form::text('fineDesc', NULL,
                 array(
                     'class'=>'form-control',
+                    'placeholder'=>'Details of the fine...'
                 )) }}
             </div>
-            <div class='form-group'>
-                {{ Form::label('fineValue', 'Fine amount') }}
+            <div class='form-group form-inline'>
+                {{ Form::label('fineValue', 'Fine amount: £') }}
                 {{ Form::text('fineValue', NULL,
                 array(
-                    'class'=>'form-control',
+                    'class'=>'form-control moneyInput customNum',
                 )) }}
             </div>
             @endif
@@ -121,4 +148,33 @@ $active = 'current';
         @else
           <a class="btn btn-primary" href="{{ route('bookings.index') }}">Cancel</a>
         @endif
+@endsection
+
+@section('scripts')
+<script>
+//FIXME: JavaScript not working
+function bindMoney(){
+      $('.moneyInput').change(function() {
+         var num = parseFloat($(this).val()); // get the current value of the input field.
+         $(this).val(num.toFixed(2));
+      });
+}
+function load(){
+  bindMoney();
+  $('#discSwitch').change(function() {
+     var num = parseInt($(this).val()); // get the current value of the input field.
+     if (num){
+       $('#discVal').unbind();
+       $('.percent').text('%');
+       $('.pound').text('');
+     } else {
+       $( "#discVal" ).addClass( 'moneyInput' );
+       bindMoney();
+       $('.percent').text('');
+       $('.pound').text('£');
+     }
+  });
+}
+    window.onload = load();
+</script>
 @endsection

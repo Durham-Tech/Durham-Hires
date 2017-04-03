@@ -99,8 +99,11 @@ class ItemController extends Controller
 
             $img->save('images/catalog/thumb_' . $imageName);
         }
-
-        return redirect('/items');
+        if ($request->next == 'Save and New') {
+            return redirect('/items/create');
+        } else {
+            return redirect('/items');
+        }
     }
 
     /**

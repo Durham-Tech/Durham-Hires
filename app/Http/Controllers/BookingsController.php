@@ -147,6 +147,10 @@ class BookingsController extends Controller
     public function edit($id)
     {
         $old = Bookings::findOrFail($id);
+        $old->fineValue = number_format($old->fineValue, 2);
+        if ($old->discType == 0) {
+            $old->discValue = number_format($old->discValue, 2);
+        }
         return View::make('bookings.edit')
                       ->with(['old' => $old, 'statusArray' => $this->status]);
     }

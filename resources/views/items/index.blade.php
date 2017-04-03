@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="limWidth">
             @if ($data)
             @if ($edit == TRUE)
             {!! Form::open(['url' => 'bookings/' . $booking->id . '/add']) !!}
@@ -37,7 +38,7 @@
                 @endif
 
                 @if (!empty($category->all))
-                    <td colspan="4" style="border: 0px;"><h2>{{ $category->name }}</h2></td>
+                    <td colspan="4" class="tableHeader"><h2>{{ $category->name }}</h2></td>
                     </tbody>
                     <thead>
                     <tr>
@@ -51,21 +52,21 @@
                         @endif
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="itemBlock">
                     @foreach($category->all as $item)
                     <tr>
-                        <td>
+                        <td class="itemImage">
                         @if (!empty($item->image))
                         {{ Html::image('images/catalog/thumb_' . $item->image) }}
                         @endif
                         </td>
-                        <td><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}'>{{ $item->description }}</a></td>
-                        <td>£{{ number_format($item->dayPrice,2) }}</td>
-                        <td>£{{ number_format($item->weekPrice,2) }}</td>
+                        <td class="itemTitle"><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}'>{{ $item->description }}</a></td>
+                        <td class="itemDayPrice">£{{ number_format($item->dayPrice,2) }}</td>
+                        <td class="itemWeekPrice">£{{ number_format($item->weekPrice,2) }}</td>
                         @if ($edit == TRUE)
-                        <td>{{ $item->available }}/{{ $item->quantity }}</td>
+                        <td class="itemAvalible">{{ $item->available }}/{{ $item->quantity }}</td>
                         @else
-                        <td>{{ $item->quantity }}</td>
+                        <td class="itemAvalible">{{ $item->quantity }}</td>
                         @endif
                         @if ($edit == TRUE)
                         <td>
@@ -93,6 +94,7 @@
             @endif
             @endif
 
+    </div>
 @endsection
 
 @section('scripts')

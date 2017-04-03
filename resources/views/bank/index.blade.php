@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="treasurer">
 
 @if ($success == 1)
 <div class="alert alert-success">
@@ -34,8 +35,8 @@
     </div>
     @endif
 
-  <div class="form-group">
-    {{ Form::label('ref', 'Bank Referance') }}
+  <div class="form-group form-inline">
+    {{ Form::label('ref', 'Bank Referance: ') }}
     {{ Form::text('ref', $ref,
       array(
         'class' => 'form-control'
@@ -43,11 +44,11 @@
     ) }}
   </div>
 
-  <div class='form-group'>
-      {{ Form::label('amount', 'Amount paid £') }}
+  <div class='form-group form-inline'>
+      {{ Form::label('amount', 'Amount paid: £') }}
     {{ Form::text('amount', $amount,
       array(
-        'class' => 'form-control'
+        'class' => 'form-control moneyInput'
       )
     ) }}
   </div>
@@ -59,4 +60,17 @@
   </div>
 
   {{ Form::close() }}
+</div>
+@endsection
+
+@section('scripts')
+<script>
+function bindMoney(){
+      $('.moneyInput').change(function() {
+         var num = parseFloat($(this).val()); // get the current value of the input field.
+         $(this).val(num.toFixed(2));
+      });
+}
+    window.onload = bindMoney();
+</script>
 @endsection

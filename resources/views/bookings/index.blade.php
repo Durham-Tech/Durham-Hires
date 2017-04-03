@@ -36,5 +36,7 @@ $active = 'current';
 
             @endif
 
-            <a class="btn btn-primary" href="{{ route('bookings.create') }}">Add new</a>
+            @if (!CAuth::checkAdmin(4))
+              <a class="btn btn-primary" href="{{ route('bookings.create') }}">Add new</a>
+            @endif
 @endsection
