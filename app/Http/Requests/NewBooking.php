@@ -35,15 +35,18 @@ class NewBooking extends FormRequest
             'discType' => 'integer|min:0|max:1',
             'discValue' => 'numeric|min:0',
             'fineValue' => 'numeric|min:0',
+            'status' => 'integer|min:0',
         ];
     }
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            if (CAuth::checkAdmin(4) && !Common::getDetailsEmail($this->input(['email']))) {
-                $validator->errors()->add('email', 'The email is not a valid durham email address.');
+        $validator->after(
+            function ($validator) {
+                if (CAuth::checkAdmin(4) && !Common::getDetailsEmail($this->input(['email']))) {
+                    $validator->errors()->add('email', 'The email is not a valid durham email address.');
+                }
             }
-        });
+        );
     }
 }

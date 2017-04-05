@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>Remote file for Bootstrap Modal</title>
+  <title>Item Details</title>
 </head>
 <body>
             <div class="modal-header">
@@ -22,7 +22,7 @@
             {{ $item->description }}
         </h1>
         <p id='details'>
-            {{ $item->details }}
+            {!! nl2br(strip_tags($item->details, '<br><a><b><strong><i><sub><sup>')) !!}
         </p>
         <p id='quantity'>
             <b>Available: </b>{{ $item->quantity }}

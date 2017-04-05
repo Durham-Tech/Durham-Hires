@@ -34,7 +34,7 @@ class bankIncorrect extends Mailable
     public function build()
     {
         return $this->to(Common::hiresEmail())
-                    ->subject('Hires Payment Error')
-                    ->markdown('email.bankIncorrect');
+            ->subject('Hires Payment Error')
+            ->markdown('email.bankIncorrect');
     }
 }

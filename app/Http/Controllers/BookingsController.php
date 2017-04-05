@@ -66,13 +66,14 @@ class BookingsController extends Controller
      */
     public function create()
     {
-        return View::make('bookings.edit');
+        return View::make('bookings.edit')
+                      ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]]]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(NewBooking $request)
@@ -86,16 +87,20 @@ class BookingsController extends Controller
         $booking->days = ($end - $start)/(86400);
 
         if (CAuth::checkAdmin(4)) {
-            $booking->status = 2;
-            $this->validate($request, [
-              'email' => 'required|email'
-          ]);
+            $booking->status = $request->status;
+            $this->validate(
+                $request, [
+                'email' => 'required|email'
+                ]
+            );
             $details = Common::getDetailsEmail($request->email);
             if ($details) {
                 $booking->email = $request->email;
                 $booking->user = $details->surname;
                 $booking->user = $details->name;
-                \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
+                if ($booking->status == 2) {
+                    \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
+                }
             }
         } else {
             $booking->status = 0;
@@ -110,7 +115,7 @@ class BookingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -134,11 +139,13 @@ class BookingsController extends Controller
 
         if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()) {
             return View::make('bookings.view')
-                          ->with([
-                            'booking' => $booking,
-                            'items' => $bookedItems,
-                            'next' => $this->nextStatus
-                          ]);
+                          ->with(
+                              [
+                              'booking' => $booking,
+                              'items' => $bookedItems,
+                              'next' => $this->nextStatus
+                              ]
+                          );
         } else {
             return redirect()->route('items.index');
         }
@@ -147,7 +154,7 @@ class BookingsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -172,44 +179,46 @@ class BookingsController extends Controller
     {
         switch ($status) {
         case 2:
-          if ($booking->status <= 1) {
-              \Mail::to($booking->email)->send(new bookingConfirmed($id));
-          }
-          break;
+            if ($booking->status <= 1) {
+                \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
+            }
+            break;
         case 3:
-          if ($booking->status != 3) {
-              pdf::createInvoice($booking->id);
-              \Mail::to($booking->email)->send(new sendInvoice($booking->id));
-          }
-          break;
+            if ($booking->status != 3) {
+                pdf::createInvoice($booking->id);
+                \Mail::to($booking->email)->send(new sendInvoice($booking->id));
+            }
+            break;
         case 4:
-          if ($booking->status != 4) {
-              \Mail::to($booking->email)->send(new paymentReceived);
-          }
-          break;
+            if ($booking->status != 4) {
+                \Mail::to($booking->email)->send(new paymentReceived);
+            }
+            break;
         default:
-          break;
-      }
+            break;
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
      * @return \Illuminate\Http\Response
      */
     public function update(NewBooking $request, Bookings $booking)
     {
-        $this->validate($request, [
-          'email' => 'required|email'
-      ]);
+        $this->validate(
+            $request, [
+            'email' => 'required|email'
+            ]
+        );
         $booking->name = $request->name;
-      // Need to check for colitions before changing dates!
-      // $booking->start = $request->start;
-      // $booking->end = $request->end;
+        // Need to check for colitions before changing dates!
+        // $booking->start = $request->start;
+        // $booking->end = $request->end;
 
-      $this->manageStatusChange($booking, $request->status);
+        $this->manageStatusChange($booking, $request->status);
         $booking->status = $request->status;
 
         if ($booking->email != $request->email) {
@@ -238,16 +247,16 @@ class BookingsController extends Controller
             $booking->status = $request->status;
         } elseif (CAuth::user()->email == $booking->email) {
             switch ($booking->status) {
-          case 0:
-            $booking->status = 1;
-            \Mail::send(new requestConfirmation($booking->id));
-            break;
-          case 1:
-            $booking->status = 0;
-            break;
-          default:
-            break;
-        }
+            case 0:
+                $booking->status = 1;
+                \Mail::send(new requestConfirmation($booking->id));
+                break;
+            case 1:
+                $booking->status = 0;
+                break;
+            default:
+                break;
+            }
         }
         $booking->save();
         return redirect('/bookings/' . $booking->id);
@@ -256,7 +265,7 @@ class BookingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Bookings $booking)
@@ -301,9 +310,9 @@ class BookingsController extends Controller
                     if (is_int($item) && is_int($quantity)) {
                         if ($quantity <= $data[$item]->available) {
                             booked_items::updateOrCreate(
-                    ['bookingID' => $id, 'item' => $item],
-                    ['number' => $quantity]
-                );
+                                ['bookingID' => $id, 'item' => $item],
+                                ['number' => $quantity]
+                            );
                         }
                     }
                 }

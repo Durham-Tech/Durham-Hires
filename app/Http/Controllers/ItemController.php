@@ -61,7 +61,7 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(NewItem $request)
@@ -93,9 +93,11 @@ class ItemController extends Controller
                 base_path() . '/public/images/catalog/', $imageName
             );
 
-            $img = Image::make('images/catalog/' . $imageName)->resize(60, 60, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+            $img = Image::make('images/catalog/' . $imageName)->resize(
+                60, 60, function ($constraint) {
+                    $constraint->aspectRatio();
+                }
+            );
 
             $img->save('images/catalog/thumb_' . $imageName);
         }
@@ -109,7 +111,7 @@ class ItemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\catalog  $catalog
+     * @param  \App\catalog $catalog
      * @return \Illuminate\Http\Response
      */
     public function show(catalog $catalog, $id)
@@ -122,7 +124,7 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\catalog  $catalog
+     * @param  \App\catalog $catalog
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -155,8 +157,8 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\catalog  $catalog
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\catalog             $catalog
      * @return \Illuminate\Http\Response
      */
     public function update(NewItem $request, catalog $catalog, $id)
@@ -193,9 +195,11 @@ class ItemController extends Controller
                 base_path() . '/public/images/catalog/', $imageName
             );
 
-            $img = Image::make('images/catalog/' . $imageName)->resize(60, 60, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+            $img = Image::make('images/catalog/' . $imageName)->resize(
+                60, 60, function ($constraint) {
+                    $constraint->aspectRatio();
+                }
+            );
 
             $img->save('images/catalog/thumb_' . $imageName);
         }
@@ -206,7 +210,7 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\catalog  $catalog
+     * @param  \App\catalog $catalog
      * @return \Illuminate\Http\Response
      */
     public function destroy(catalog $catalog, $id)

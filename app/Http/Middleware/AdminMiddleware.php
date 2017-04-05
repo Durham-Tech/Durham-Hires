@@ -17,7 +17,12 @@ class AdminMiddleware
     public function handle($request, Closure $next)
     {
         if (!CAuth::checkAdmin()) {
-            return redirect()->action('publicController@index');
+            if (CAuth::check()) {
+                return redirect()->action('publicController@index');
+            } else {
+                session(['target' => $request->path()]);
+                return redirect()->route('login');
+            }
         } else {
             return $next($request);
         }

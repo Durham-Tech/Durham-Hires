@@ -85,15 +85,16 @@ if (isset($old)){
                 </div> -->
             </div>
 
-            @if (CAuth::checkAdmin(4) && isset($old))
+            @if (CAuth::checkAdmin(4))
             <div class='form-group form-inline'>
                 {{ Form::label('status', 'Hire Status: ') }}
-                {{ Form::select('status', $statusArray, $old->status,
+                {{ Form::select('status', $statusArray, (isset($old)) ? $old->status : '2',
                 array(
                     'class'=>'form-control',
                 )) }}
             </div>
 
+            @if (isset($old))
             <div class='form-group'>
                 {{ Form::label('', 'Add a discount',
                   array(
@@ -151,6 +152,7 @@ if (isset($old)){
                     '@change'=>'fineUpdate',
                 )) }}
             </div>
+            @endif
             @endif
 
             <div class="form-group" id="buttons">
