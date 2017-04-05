@@ -19,7 +19,7 @@ $active = 'admin';
                 'route' => 'admin.save',
                 'class' => 'form')
             ) !!}
-                <table class="table">
+                <table class="table userTable">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -36,15 +36,15 @@ $active = 'admin';
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{!! Form::radio('hires', $user->id, ($user->id === $hires)) !!}</td>
-                        <th>
+                        <td>
                           {{ Form::checkbox('treasurer['. $user->id .']', 1, $user->privileges & 1)}}
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                           {{ Form::checkbox('admin['. $user->id .']', 1, $user->privileges & 4)}}
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                           <a href="#" class="deleteLink" data-idvalue="{{ $user->id }}">Delete</button>
-                        </th>
+                        </td>
                     </tr>
                     @endforeach
                     </tbody>

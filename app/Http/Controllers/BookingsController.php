@@ -95,7 +95,7 @@ class BookingsController extends Controller
                 $booking->email = $request->email;
                 $booking->user = $details->surname;
                 $booking->user = $details->name;
-                \Mail::to($booking->email)->send(new bookingConfirmed);
+                \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
             }
         } else {
             $booking->status = 0;
@@ -126,6 +126,12 @@ class BookingsController extends Controller
 
         $booking->status_string = $this->status[$booking->status];
 
+        $start = date_create($booking->start);
+        $booking->start = date_format($start, "d/m/Y");
+
+        $end = date_create($booking->end);
+        $booking->end = date_format($end, "d/m/Y");
+
         if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()) {
             return View::make('bookings.view')
                           ->with([
@@ -147,6 +153,13 @@ class BookingsController extends Controller
     public function edit($id)
     {
         $old = Bookings::findOrFail($id);
+
+        // $start = date_create($old->start);
+        // $old->start = date_format($start, "d/m/Y");
+        //
+        // $end = date_create($old->end);
+        // $old->end = date_format($end, "d/m/Y");
+        //
         $old->fineValue = number_format($old->fineValue, 2);
         if ($old->discType == 0) {
             $old->discValue = number_format($old->discValue, 2);
@@ -227,8 +240,7 @@ class BookingsController extends Controller
             switch ($booking->status) {
           case 0:
             $booking->status = 1;
-            \Mail::to('test@example.com')
-                    ->send(new requestConfirmation($booking->id));
+            \Mail::send(new requestConfirmation($booking->id));
             break;
           case 1:
             $booking->status = 0;

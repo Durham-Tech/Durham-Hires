@@ -9,13 +9,14 @@ if (isset($old)){
 @endphp
 
 @section('page')
+<div id="editBooking">
 
         @if(isset($old))
                 {{ Form::model($old,
                     array(
                         'route' => ['bookings.update', $old->id],
                         'method' => 'PATCH',
-                        'class' => 'form')) }}
+                        'class' => 'form bookingForm')) }}
         @else
             {!! Form::open(
             array(
@@ -60,19 +61,28 @@ if (isset($old)){
                   )) }}
               </div>
             @endif
-            <div class='form-group'>
-                {{ Form::label('start', 'Start date') }}
-                {{ Form::date('start', \Carbon\Carbon::now(),
-                array(
-                    'class'=>'form-control',
-                )) }}
+
+            <div class='form-group form-inline'>
+                {{ Form::label('start', 'Start date: ') }}
+                <vue-datepicker name="start" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
+                <!-- <div class="input-group date" id="start">
+                  {{ Form::date('start', \Carbon\Carbon::now(),
+                  array(
+                      'class'=>'form-control datepicker',
+                  )) }}
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                </div> -->
             </div>
-            <div class='form-group'>
-                {{ Form::label('end', 'End date') }}
-                {{ Form::date('end', \Carbon\Carbon::now(),
-                array(
-                    'class'=>'form-control',
-                )) }}
+            <div class='form-group form-inline'>
+                {{ Form::label('end', 'Return date: ') }}
+                <vue-datepicker name="end" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
+                <!-- <div class="input-group date" id="end">
+                  {{ Form::date('end', \Carbon\Carbon::now(),
+                  array(
+                      'class'=>'form-control',
+                  )) }}
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                </div> -->
             </div>
 
             @if (CAuth::checkAdmin(4) && isset($old))
@@ -103,18 +113,21 @@ if (isset($old)){
                 {{ Form::select('discType', ['Value Discount', 'Percentage Discount'], NULL,
                 array(
                     'class'=>'form-control',
-                    'id'=>'discSwitch'
+                    'id'=>'discSwitch',
+                    'v-model'=>'discountType',
                 )) }}
             </div>
             <div class='form-group form-inline'>
                 {{ Form::label('discValue', 'Discount Value: ') }}
-                <span class="unit pound">{{ ($old->discType == 0) ? "£" : "" }}</span>
+                <span v-text="(discountType == '0')?'£':''"></span>
                 {{ Form::text('discValue', NULL,
                 array(
                     'class'=>'form-control customNum '.(($old->discType == 0) ? "moneyInput" : ""),
                     'id'=>'discVal',
+                    'v-model'=>'disc',
+                    '@change'=>'discUpdate',
                 )) }}
-                <span class="unit percent">{{ ($old->discType == 1) ? "%" : "" }}</span>
+                <span v-text="(discountType == '1')?'%':''"></span>
             </div>
 
             <div class='form-group'>
@@ -134,6 +147,8 @@ if (isset($old)){
                 {{ Form::text('fineValue', NULL,
                 array(
                     'class'=>'form-control moneyInput customNum',
+                    'v-model'=>'fine',
+                    '@change'=>'fineUpdate',
                 )) }}
             </div>
             @endif
@@ -148,33 +163,46 @@ if (isset($old)){
         @else
           <a class="btn btn-primary" href="{{ route('bookings.index') }}">Cancel</a>
         @endif
+      </div>
 @endsection
 
 @section('scripts')
 <script>
-//FIXME: JavaScript not working
-function bindMoney(){
-      $('.moneyInput').change(function() {
-         var num = parseFloat($(this).val()); // get the current value of the input field.
-         $(this).val(num.toFixed(2));
-      });
-}
-function load(){
-  bindMoney();
-  $('#discSwitch').change(function() {
-     var num = parseInt($(this).val()); // get the current value of the input field.
-     if (num){
-       $('#discVal').unbind();
-       $('.percent').text('%');
-       $('.pound').text('');
-     } else {
-       $( "#discVal" ).addClass( 'moneyInput' );
-       bindMoney();
-       $('.percent').text('');
-       $('.pound').text('£');
-     }
-  });
-}
-    window.onload = load();
+const app = new Vue({
+    el: '#app',
+    data: {
+      @if (isset($old))
+      fine:'{{ $old->fineValue }}',
+      disc:'{{ $old->discValue }}',
+      start:'{{ $old->start }}',
+      end:'{{ $old->end }}',
+      discountType:{{ $old->discType }}
+      @else
+      start:'',
+      end:'',
+      @endif
+    },
+
+    methods: {
+      fineUpdate() {
+        this.fine = parseFloat(this.fine).toFixed(2);
+      },
+      discUpdate() {
+        if (this.discountType == '0'){
+          this.disc = parseFloat(this.disc).toFixed(2);
+        }
+      }
+    },
+    watch: {
+      start: function(val) {
+        var start = new Date(val);
+        if (start.toISOString() > this.end){
+          var temp = new Date(this.start);
+          temp.setDate(temp.getDate() + 1);
+          this.end = temp.toISOString();
+        }
+      }
+    }
+});
 </script>
 @endsection

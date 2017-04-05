@@ -18,7 +18,7 @@ if ($booking->status < 4){
             {{ $booking->start }}
         </p>
         <p id='end'>
-            <b>End date: </b>
+            <b>Return date: </b>
             {{ $booking->end }}
         </p>
         <p id='length'>

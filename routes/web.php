@@ -49,3 +49,7 @@ Route::get('/login', ['as'=>'login',function () {
 
 Route::post('/login', 'customAuth@checkAuth');
 Route::post('/logout', 'customAuth@logout');
+
+
+// Calender routes
+Route::get('/calendar23', 'CalendarController@downloadCalendar');

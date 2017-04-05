@@ -76,7 +76,6 @@ class Common
 
     public static function hiresEmail()
     {
-        $hires = Settings::where('name', 'hiresManager')->firstOrFail();
-        return Admin::where('id', $hires->value)->firstOrFail()->email;
+        return Settings::where('name', 'hiresEmail')->firstOrFail()->value;
     }
 }

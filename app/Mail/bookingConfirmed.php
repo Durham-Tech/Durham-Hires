@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Classes\Common;
 
 class bookingConfirmed extends Mailable
 {
@@ -29,7 +30,7 @@ class bookingConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->replyTo('jonathan.salmon@hotmail.co.uk')
+        return $this->replyTo(Common::hiresEmail())
                     ->subject('Trevs Tech booking conformation')
                     ->markdown('emails.bookingConfirmed');
     }

@@ -71,7 +71,7 @@ class AdminController extends Controller
         if (!isset($request->admin)) {
             return redirect()->route('admin.index')->with(['error' => 'At least one user needs to be an admin.']);
         }
-        $hiresCorrect = false;
+        $hiresEmail = '';
         $users = Admin::all();
         foreach ($users as $user) {
             $priv = 0;
@@ -81,15 +81,17 @@ class AdminController extends Controller
             if (isset($request->admin[$user->id])) {
                 $priv += 4;
                 if ($request->hires == $user->id) {
-                    $hiresCorrect = true;
+                    $hiresEmail = $user->email;
                 }
             }
             $user->privileges = $priv;
             $user->save();
         }
-        if ($hiresCorrect) {
+        if (!empty($hiresEmail)) {
             $hires = Settings::where('name', 'hiresManager')
                             ->update(['value' => $request->hires]);
+            $hires = Settings::where('name', 'hiresEmail')
+                            ->update(['value' => $hiresEmail]);
         }
         return redirect()->route('admin.index');
     }

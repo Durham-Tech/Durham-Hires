@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Treasurer;
 use App\Bookings;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Mail\bankIncorrect;
 
 class treasurerController extends Controller
 {
@@ -41,6 +42,9 @@ class treasurerController extends Controller
         if ($success == 1) {
             return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success]);
         } else {
+            if ($request->attempt == 2) {
+                \Mail::send(new bankIncorrect($request->ref, $request->amount));
+            }
             return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success]);
         }
     }

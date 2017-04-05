@@ -1,14 +1,23 @@
-<!-- TODO: Make into dialog popup  -->
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Remote file for Bootstrap Modal</title>
+</head>
+<body>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                 <h4 class="modal-title">{{ $item->description }}</h4>
+            </div>			<!-- /modal-header -->
+            <div class="modal-body">
 
-@section('content')
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-5">
         @if (!empty($item->image))
             {{ Html::image('images/catalog/' . $item->image, $item->description, array( 'class' => 'img-responsive' )) }}
         @endif
     </div>
-    <div class="col-md-8">
+    <div class="col-sm-7">
         <h1 id='description'>
             {{ $item->description }}
         </h1>
@@ -27,7 +36,7 @@
         @if (CAuth::checkAdmin())
         <a class="btn btn-primary" href='{!! action('ItemController@edit', ['items' => $item->id]) !!}'>Edit</a>
         @endif
-        <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
     </div>
 </div>
-@endsection
+</body>
+</html>

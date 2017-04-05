@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Bookings;
+use App\Classes\Common;
 
 class sendInvoice extends Mailable
 {
@@ -34,6 +35,7 @@ class sendInvoice extends Mailable
     public function build()
     {
         return $this->subject('Tech hire invoice')
+                    ->replyTo(Common::hiresEmail())
                     ->attach(base_path() . '/storage/invoices/' . $this->invoice)
                     ->markdown('emails.sendInvoice');
     }

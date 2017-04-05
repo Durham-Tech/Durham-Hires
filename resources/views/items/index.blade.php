@@ -60,7 +60,7 @@
                         {{ Html::image('images/catalog/thumb_' . $item->image) }}
                         @endif
                         </td>
-                        <td class="itemTitle"><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}'>{{ $item->description }}</a></td>
+                        <td class="itemTitle"><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">{{ $item->description }}</a></td>
                         <td class="itemDayPrice">£{{ number_format($item->dayPrice,2) }}</td>
                         <td class="itemWeekPrice">£{{ number_format($item->weekPrice,2) }}</td>
                         @if ($edit == TRUE)
@@ -95,6 +95,15 @@
             @endif
 
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /.modal -->
+
 @endsection
 
 @section('scripts')
@@ -105,6 +114,10 @@
         $('.nav-tabs a[href="' + hash + '"]').tab('show');
       }
     };
+
+    $('#myModal').on('hide.bs.modal', function(e) {
+	$(this).removeData('bs.modal');
+});
 
     $('.nav-tabs a').click(function (e) {
     e.preventDefault();

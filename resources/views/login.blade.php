@@ -1,21 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading">Login</div>
-        <div class="panel-body">
+    <div class="">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                 {{ csrf_field() }}
 
-                        <input id="email" type="text" class="form-control" name="user" value="{{ old('email') }}" required autofocus>
+              <div class="login">
+                <h1>Login</h1>
+                <div class="form-group">
+                  <input placeholder="Durham Username" id="email" type="text" class="form-control" name="user" value="{{ old('email') }}" required autofocus>
+                </div>
 
-                        <input id="password" type="password" class="form-control" name="password" required>
+                <div class="form-group">
+                  <input placeholder="Password" id="password" type="password" class="form-control" name="password" required>
+                </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            Login
-                        </button>
+                <button type="submit" class="btn btn-primary">
+                    Login
+                </button>
 
+              </div>
             </form>
-        </div>
     </div>
 @endsection

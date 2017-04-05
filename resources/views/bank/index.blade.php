@@ -7,13 +7,20 @@
 <div class="alert alert-success">
   <strong>Success!</strong> Thank you - the payment is correct.
 </div>
-@elseif ($success == 2)
+@endif
+@if ($attempt == 2)
+@if ($success == 2)
 <div class="alert alert-warning">
-  <strong>Warning!</strong> Something doesn't match-up. Please check and try again.
+  Something doesn't match-up. Please check and try again.
 </div>
 @elseif ($success == 3)
 <div class="alert alert-warning">
-  <strong>Warning!</strong> The referance doesn't match-up. Please check and try again.
+  The referance doesn't match-up. Please check and try again.
+</div>
+@endif
+@elseif ($attempt > 2)
+<div class="alert alert-warning">
+  Something's still not right, the hires manager has been informed and will sort it.
 </div>
 @endif
 

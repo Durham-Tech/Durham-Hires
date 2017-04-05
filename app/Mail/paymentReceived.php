@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Classes\Common;
 
 class paymentReceived extends Mailable
 {
@@ -28,7 +29,8 @@ class paymentReceived extends Mailable
      */
     public function build()
     {
-        return $this->subject('Thank you for your payment')
+        return $this->replyTo(Common::hiresEmail())
+                    ->subject('Thank you for your payment')
                     ->markdown('emails.paymentReceived');
     }
 }

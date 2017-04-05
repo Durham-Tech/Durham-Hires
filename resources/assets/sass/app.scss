@@ -3,6 +3,7 @@
 // Variables
 @import "variables";
 @import "mixins";
+@import "bootstrap-datepicker3";
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
@@ -49,12 +50,6 @@
     }
 }
 
-.borderLeft {
-    @media (min-width: $screen-md-min) {
-        border-left: 1px solid $accent;
-    }
-}
-
 .ItemsTable {
     th {
         font-size: 18px;
@@ -90,6 +85,16 @@
                 font-weight: bold;
             }
         }
+    }
+}
+
+.userTable {
+    th + th + th {
+        text-align: center;
+    }
+
+    td+td+td {
+        text-align: center;
     }
 }
 
@@ -131,5 +136,42 @@
 
     .bg-form-group {
         font-size: 40px;
+    }
+}
+
+// Styling for vue-datepicker
+.form-group .datepicker {
+    display: inline-block;
+
+    input {
+        width: 300px;
+    }
+
+    .calendar {
+        span.cell.selected {
+            background: $accent;
+            color: $navbar-text-colour;
+        }
+
+        .cell:not(.blank):not(.disabled).day:hover {
+            border: 1px solid $accent;
+
+        }
+    }
+}
+
+// Login styling
+.login {
+    max-width: 700px;
+    margin: auto;
+}
+@media (min-width: $screen-md-min) {
+    .borderLeft {
+        border-left: 1px solid $accent;
+    }
+}
+@media (min-width: $screen-sm-min) {
+    .modal-dialog {
+        width: 700px;
     }
 }

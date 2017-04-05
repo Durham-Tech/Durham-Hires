@@ -7,21 +7,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Classes\Common;
-use App\Classes\CAuth;
 
-class requestConfirmation extends Mailable
+class bankIncorrect extends Mailable
 {
     use Queueable, SerializesModels;
-    public $id;
+    public $ref;
+    public $amount;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($id)
+    public function __construct($ref, $amount)
     {
         //
-        $this->id = $id;
+        $this->ref = $ref;
+        $this->amount = $amount;
     }
 
     /**
@@ -32,8 +34,7 @@ class requestConfirmation extends Mailable
     public function build()
     {
         return $this->to(Common::hiresEmail())
-                    ->replyTo(CAuth::user()->email)
-                    ->subject('New hire request')
-                    ->markdown('emails.requestConfirmation');
+                    ->subject('Hires Payment Error')
+                    ->markdown('email.bankIncorrect');
     }
 }
