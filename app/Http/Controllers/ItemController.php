@@ -68,12 +68,6 @@ class ItemController extends Controller
     {
         $item = new catalog;
 
-        if (!empty($request->image)) {
-            $imageName = $item->id . '_0.' .
-                $request->file('image')->getClientOriginalExtension();
-            $item->image = $imageName;
-        }
-
         $item->description = $request->description;
         $item->details = $request->details;
         $item->quantity = $request->quantity;
@@ -89,17 +83,23 @@ class ItemController extends Controller
 
 
         if (!empty($request->image)) {
+            $imageName = $item->id . '.' .
+                $request->file('image')->getClientOriginalExtension();
+
             $request->file('image')->move(
                 base_path() . '/public/images/catalog/', $imageName
             );
 
             $img = Image::make('images/catalog/' . $imageName)->resize(
-                60, 60, function ($constraint) {
+                54, 54, function ($constraint) {
                     $constraint->aspectRatio();
                 }
             );
 
             $img->save('images/catalog/thumb_' . $imageName);
+
+            $item->image = $imageName;
+            $item->save();
         }
         if ($request->next == 'Save and New') {
             return redirect('/items/create');
@@ -196,7 +196,7 @@ class ItemController extends Controller
             );
 
             $img = Image::make('images/catalog/' . $imageName)->resize(
-                60, 60, function ($constraint) {
+                54, 54, function ($constraint) {
                     $constraint->aspectRatio();
                 }
             );

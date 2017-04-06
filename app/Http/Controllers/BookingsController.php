@@ -180,6 +180,8 @@ class BookingsController extends Controller
         switch ($status) {
         case 2:
             if ($booking->status <= 1) {
+                $items = new Items;
+                $items->correctDuplicateBookings($booking);
                 \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
             }
             break;
@@ -318,7 +320,10 @@ class BookingsController extends Controller
                 }
             }
 
-            $booking->save();
+            if ($booking->status >= 2) {
+                $booking->save();
+                $items->correctDuplicateBookings($booking);
+            }
 
             return redirect()->route('bookings.show', ['id' => $id]);
         } else {

@@ -4,6 +4,7 @@ namespace App\Classes;
 use DB;
 use \App\booked_items;
 use App\Bookings;
+use App\Mail\itemRemoved;
 
 class Item
 {
@@ -42,6 +43,20 @@ class Category
         $this->id = $id;
         $this->name = $name;
         $this->sub = $sub;
+    }
+}
+
+class ErrorList
+{
+    public $id = [];
+    public $name = [];
+    public $number = [];
+
+    public function addError($id, $name, $number)
+    {
+        $this->id[] = $id;
+        $this->name[] = $name;
+        $this->number[] = $number;
     }
 }
 
@@ -89,12 +104,14 @@ class Items
         $timeDB = DB::table('bookings')
           ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end'))
           ->where('id', '!=', $id)
+          ->where('status', '>=', 2)
           ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
           ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
           ->get();
         $booked = DB::table('bookings')
           ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end, item, number'))
           ->where('bookings.id', '!=', $id)
+          ->where('status', '>=', 2)
           ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
           ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
           ->join('booked_items', 'bookings.id', '=', 'booked_items.bookingID')
@@ -165,12 +182,14 @@ class Items
         $timeDB = DB::table('bookings')
           ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end'))
           ->where('id', '!=', $id)
+          ->where('status', '>=', 2)
           ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
           ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
           ->get();
         $booked = DB::table('bookings')
           ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end, item, number'))
           ->where('bookings.id', '!=', $id)
+          ->where('status', '>=', 2)
           ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
           ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
           ->join('booked_items', 'bookings.id', '=', 'booked_items.bookingID')
@@ -214,5 +233,95 @@ class Items
         }
 
         return $all;
+    }
+
+    private function correctDuplicateHelper($currentBooking, $all)
+    {
+        $errors = new ErrorList;
+        $id = $currentBooking->id;
+        $start = strtotime($currentBooking->start);
+        $end = strtotime($currentBooking->end);
+        $max = \App\catalog::max('id') + 1;
+        $unavalible = array_fill(0, $max, 0);
+        $times=[];
+        $timeDB = DB::table('bookings')
+          ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end'))
+          ->where('id', '!=', $id)
+          ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
+          ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
+          ->get();
+        $booked = DB::table('bookings')
+          ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end, item, number'))
+          ->where('bookings.id', '!=', $id)
+          ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
+          ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
+          ->join('booked_items', 'bookings.id', '=', 'booked_items.bookingID')
+          ->get();
+
+        $currentBooked = DB::table('booked_items')
+            ->where('bookingID', $id)
+            ->get()
+            ->keyBy('item')
+            ->toArray();
+
+        $times[] = $start;
+        foreach ($timeDB as $x) {
+            if ($x->start > $start) {
+                $times[] = $x->start;
+            }
+            if ($x->end < $end) {
+                $times[] = $x->end;
+            }
+        }
+        $times[] = $end;
+        $times = array_unique($times);
+        sort($times);
+
+        for ($i = 0; $i < count($times) - 1; $i++) {
+            $tempMax = [];
+            foreach ($booked as $x) {
+                if ($x->start <= $times[$i] && $x->end >= $times[$i + 1]) {
+                    $tempMax[$x->item] = isset($tempMax[$x->item]) ? $tempMax[$x->item] + $x->number : $x->number;
+                }
+            }
+            foreach ($tempMax as $item => $number) {
+                $unavalible[$item] = $unavalible[$item] < $number ? $number : $unavalible[$item];
+            }
+        }
+
+        foreach ($all as $item) {
+            if (isset($currentBooked[$item->id])) {
+                $available = $item->quantity - $unavalible[$item->id] - $currentBooked[$item->id]->number;
+                if ($available < 0) {
+                    $errors->addError($item->id, $item->description, -$available);
+                    booked_items::updateOrCreate(
+                        ['bookingID' => $id, 'item' => $item->id],
+                        ['number' => $currentBooked[$item->id]->number + $available]
+                    );
+                }
+            }
+        }
+
+        if (!empty($errors->id)) {
+            \Mail::to($currentBooking->email)->send(new itemRemoved($id, $errors));
+        }
+
+    }
+
+    public function correctDuplicateBookings($currentBooking)
+    {
+            $all = $this->getAllArray();
+            $id = $currentBooking->id;
+            $start = strtotime($currentBooking->start);
+            $end = strtotime($currentBooking->end);
+            $allBookings = DB::table('bookings')
+            ->where('id', '!=', $id)
+            ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
+            ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
+            ->get();
+
+        foreach ($allBookings as $booking){
+            $this->correctDuplicateHelper($booking, $all);
+        }
     }
 }

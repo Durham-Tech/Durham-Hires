@@ -8,22 +8,22 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Classes\Common;
 
-class bankIncorrect extends Mailable
+class itemRemoved extends Mailable
 {
     use Queueable, SerializesModels;
-    public $ref;
-    public $amount;
+    public $id;
+    public $errorList;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($ref, $amount)
+    public function __construct($id, $errorList)
     {
         //
-        $this->ref = $ref;
-        $this->amount = $amount;
+        $this->id = $id;
+        $this->errorList = $errorList;
     }
 
     /**
@@ -33,8 +33,8 @@ class bankIncorrect extends Mailable
      */
     public function build()
     {
-        return $this->to(Common::hiresEmail())
-            ->subject('Hires Payment Error')
-            ->markdown('emails.bankIncorrect');
+        return $this->subject('Items Unavailable - Tech Hire')
+            ->replyTo(Common::hiresEmail())
+            ->markdown('emails.itemRemoved');
     }
 }
