@@ -235,7 +235,7 @@ class Items
         return $all;
     }
 
-    private function correctDuplicateHelper($currentBooking, $all)
+    private function correctDuplicateHelper($currentBooking, $all, $changedId)
     {
         $errors = new ErrorList;
         $id = $currentBooking->id;
@@ -247,12 +247,14 @@ class Items
         $timeDB = DB::table('bookings')
           ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end'))
           ->where('id', '!=', $id)
+          ->whereRaw("(status >= 2 OR bookings.id = " . $changedId . ")")
           ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
           ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
           ->get();
         $booked = DB::table('bookings')
           ->select(DB::raw('bookings.id, UNIX_TIMESTAMP(start) as start, UNIX_TIMESTAMP(end) as end, item, number'))
           ->where('bookings.id', '!=', $id)
+          ->whereRaw("(status >= 2 OR bookings.id = " . $changedId . ")")
           ->whereRaw("UNIX_TIMESTAMP(start) < " . $end)
           ->whereRaw("UNIX_TIMESTAMP(end) > " . $start)
           ->join('booked_items', 'bookings.id', '=', 'booked_items.bookingID')
@@ -321,7 +323,7 @@ class Items
             ->get();
 
         foreach ($allBookings as $booking){
-            $this->correctDuplicateHelper($booking, $all);
+            $this->correctDuplicateHelper($booking, $all, $id);
         }
     }
 }
