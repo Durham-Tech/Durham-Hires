@@ -14,8 +14,10 @@ class Common
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $remote_url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,
-           http_build_query(array('email' => $email)));
+        curl_setopt(
+            $ch, CURLOPT_POSTFIELDS,
+            http_build_query(array('email' => $email))
+        );
         curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
@@ -37,7 +39,7 @@ class Common
 
     public static function calcAllCosts(&$booking, &$bookedItems)
     {
-        $booking->total = 0;
+        $booking->subTotal = 0;
         $booking->discount = 0;
         $days = $booking->days - $booking->discDays;
         if ($days < 0) {
@@ -51,21 +53,30 @@ class Common
                 $item->unitCost = ceil($days / 7) * $item->weekPrice;
             }
             $item->cost = $item->unitCost * $item->number;
-            $booking->total += $item->cost;
+            $booking->subTotal += $item->cost;
         }
 
         if ($booking->discType == 0) {
             $booking->discount = $booking->discValue;
         } elseif ($booking->discType == 1) {
-            $booking->discount = round($booking->discValue * $booking->total / 100, 2);
+            $booking->discount = round($booking->discValue * $booking->subTotal / 100, 2);
         }
-        $booking->total -= $booking->discount;
-        if ($booking->total < 0) {
-            $booking->discount = $booking->discount + $booking->total;
-            $booking->total = 0;
+        $booking->subTotal -= $booking->discount;
+        if ($booking->subTotal < 0) {
+            $booking->discount = $booking->discount + $booking->subTotal;
+            $booking->subTotal = 0;
         }
 
-        $booking->total += $booking->fineValue;
+        $booking->subTotal += $booking->fineValue;
+
+        if ($booking->vat == 1) {
+            $booking->vatValue = $booking->subTotal * 0.2;
+        } else {
+            $booking->vatValue = 0;
+        }
+
+        $booking->total = $booking->subTotal + $booking->vatValue;
+
 
         if ($booking->status != 4) {
             $book = \App\Bookings::findOrFail($booking->id);

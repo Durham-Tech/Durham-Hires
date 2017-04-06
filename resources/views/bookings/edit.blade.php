@@ -85,6 +85,14 @@ if (isset($old)){
                 </div> -->
             </div>
 
+            <div class='form-group form-inline'>
+                {{ Form::label('vat', 'VAT Rate: ') }}
+                {{ Form::select('vat', [0 => '0% VAT', 1 => '20% VAT'], (isset($old)) ? $old->status : '0',
+                array(
+                    'class'=>'form-control',
+                )) }}
+            </div>
+
             @if (CAuth::checkAdmin(4))
             <div class='form-group form-inline'>
                 {{ Form::label('status', 'Hire Status: ') }}

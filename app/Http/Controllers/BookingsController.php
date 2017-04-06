@@ -85,6 +85,7 @@ class BookingsController extends Controller
         $booking->start = date("Y-m-d H:i:s", $start);
         $booking->end = date("Y-m-d H:i:s", $end);
         $booking->days = ($end - $start)/(86400);
+        $booking->vat = $request->vat;
 
         if (CAuth::checkAdmin(4)) {
             $booking->status = $request->status;
@@ -216,6 +217,7 @@ class BookingsController extends Controller
             ]
         );
         $booking->name = $request->name;
+        $booking->vat = $request->vat;
         // Need to check for colitions before changing dates!
         // $booking->start = $request->start;
         // $booking->end = $request->end;

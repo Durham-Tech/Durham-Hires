@@ -6,9 +6,16 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
-.container .limWidth {
-    max-width: 900px;
-    margin: auto;
+#app {
+    > .container {
+        padding-bottom: 15px;
+
+        .limWidth {
+            max-width: 900px;
+            margin: auto;
+        }
+
+    }
 }
 
 .treasurer {

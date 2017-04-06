@@ -58,6 +58,18 @@
                 <td>£{{ number_format((float)$booking->fineValue, 2) }}</td>
               </tr>
               @endif
+              <tr id="subTotal">
+                <td></td>
+                <td></td>
+                <td>Subtotal</td>
+                <td>£{{ number_format((float)$booking->subTotal, 2) }}</td>
+              </tr>
+              <tr id="vatRow">
+                <td></td>
+                <td></td>
+                <td>VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</td>
+                <td>£{{ number_format((float)$booking->vatValue, 2) }}</td>
+              </tr>
               <tr id="totalRow">
                 <td></td>
                 <td></td>
