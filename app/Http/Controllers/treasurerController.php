@@ -30,7 +30,7 @@ class treasurerController extends Controller
                               ->where('status', 3)
                               ->firstOrFail();
 
-            if ($request->amount == $booking->totalPrice) {
+            if ($request->amount == round($booking->totalPrice, 2)) {
                 $booking->status = 4;
                 $booking->save();
                 $success = 1;

@@ -19,6 +19,7 @@ Route::resource('categories', 'CategoryController');
 Route::resource('items', 'ItemController');
 Route::resource('admin', 'AdminController');
 Route::resource('bookings', 'BookingsController');
+Route::resource('template', 'TemplateController');
 
 Route::get('bookings/index/complete', 'BookingsController@indexComplete')
           ->name('bookings.complete');
@@ -43,9 +44,11 @@ Route::post('treasurer', 'treasurerController@submit')
 
 Route::get('/', 'publicController@index');
 
-Route::get('/login', ['as'=>'login',function () {
-    return view('login');
-}]);
+Route::get(
+    '/login', ['as'=>'login',function () {
+        return view('login');
+    }]
+);
 
 Route::post('/login', 'customAuth@checkAuth');
 Route::post('/logout', 'customAuth@logout');

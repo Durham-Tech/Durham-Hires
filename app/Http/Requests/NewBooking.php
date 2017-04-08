@@ -30,12 +30,12 @@ class NewBooking extends FormRequest
             'name' => 'required',
             'start' => 'required|date',
             'end' => 'required|date|after:start',
-            // 'end' => 'required|date|after_or_equal:start',
             'discDays' => 'integer|min:0',
             'discType' => 'integer|min:0|max:1',
             'discValue' => 'numeric|min:0',
             'fineValue' => 'numeric|min:0',
             'status' => 'integer|min:0',
+            'VAT' => 'boolean|min:0',
         ];
     }
 

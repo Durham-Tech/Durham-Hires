@@ -217,7 +217,11 @@ class BookingsController extends Controller
             ]
         );
         $booking->name = $request->name;
-        $booking->vat = $request->vat;
+
+        if ($request->status <= 2) {
+            $booking->vat = $request->vat;
+        }
+
         // Need to check for colitions before changing dates!
         // $booking->start = $request->start;
         // $booking->end = $request->end;

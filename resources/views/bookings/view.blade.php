@@ -63,36 +63,26 @@ if ($booking->status < 4){
               @endforeach
               @if ($booking->discount != 0)
               <tr id="discRow">
-                <td></td>
-                <td></td>
-                <td>Discount</td>
+                <td colspan="3">Discount</td>
                 <td>-£{{ number_format((float)$booking->discount, 2) }}</td>
               </tr>
               @endif
               @if ($booking->fineValue != 0)
               <tr id="fineRow">
-                <td>Fine: {{ $booking->fineDesc }}</td>
-                <td></td>
-                <td></td>
+                <td colspan="3">Fine: {{ $booking->fineDesc }}</td>
                 <td>£{{ number_format((float)$booking->fineValue, 2) }}</td>
               </tr>
               @endif
               <tr id="subTotal">
-                <td></td>
-                <td></td>
-                <td>Subtotal</td>
+                <td colspan="3">Subtotal</td>
                 <td>£{{ number_format((float)$booking->subTotal, 2) }}</td>
               </tr>
               <tr id="vatRow">
-                <td></td>
-                <td></td>
-                <td>VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</td>
+                <td colspan="3">VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</td>
                 <td>£{{ number_format((float)$booking->vatValue, 2) }}</td>
               </tr>
               <tr id="totalRow">
-                <td></td>
-                <td></td>
-                <td>Total</td>
+                <td colspan="3">Total</td>
                 <td>£{{ number_format((float)$booking->total, 2) }}</td>
               </tr>
             </tbody>

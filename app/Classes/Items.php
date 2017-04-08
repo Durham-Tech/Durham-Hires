@@ -326,4 +326,28 @@ class Items
             $this->correctDuplicateHelper($booking, $all, $id);
         }
     }
+
+    public function changeTime($id, $start, $end, $force)
+    {
+        $booking = Bookings::findOrFail($id);
+        $errorList = new ErrorList;
+        $booking->start = $start;
+        $booking->end = $end;
+        $allItems = $this->getAvalibleArray($booking);
+        $booked_items = booked_items::where('bookingID', $id);
+
+        foreach ($booked_items as $item){
+            if ($item->number > $allItems[$item->item]->available) {
+                $name = $allItems[$item->item]->description;
+                $errorList->addError($item->item, $name, $item->number - $allItems[$item->item]->available);
+                if ($force) {
+                    $item->number = $allItems[$item->item]->available;
+                    $item->save();
+                }
+            }
+        }
+        if ($force || empty($errorList->id)) {
+            $booking->save();
+        }
+    }
 }
