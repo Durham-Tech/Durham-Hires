@@ -20,7 +20,7 @@
 
                 @if ($category->sub == 0)
                 {!! ($loop->first) ? '' : '</table></div>' !!}
-                <div id="{{ $category->name }}" class="tab-pane fade {{ ($loop->first) ? 'in active' : '' }} ">
+                <div id="{{ $category->name }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
                 <table class="table ItemsTable">
                 <thead>
                     <tr>

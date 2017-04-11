@@ -83,6 +83,11 @@
             padding: 0;
         }
 
+        &:nth-child(6) {
+            min-width: 120px;
+            width: 120px;
+        }
+
         &.tableHeader {
             border: 0;
 
@@ -92,6 +97,10 @@
             }
         }
     }
+}
+
+.table-responsive {
+    border: 0;
 }
 
 .userTable {

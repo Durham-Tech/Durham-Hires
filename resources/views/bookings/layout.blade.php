@@ -9,6 +9,7 @@
         <li class="{{ ($active == 'new') ? 'active' : '' }}">{{ link_to_route('bookings.create', 'New Hire') }}</li>
         <li class="{{ ($active == 'current') ? 'active' : '' }}">{{ link_to_route('bookings.index', 'Current Hires') }}</li>
         <li class="{{ ($active == 'old') ? 'active' : '' }}">{{ link_to_route('bookings.complete', 'Completed Hires') }}</li>
+        <li class="{{ ($active == 'internal') ? 'active' : '' }}">{{ link_to_route('internal.index', 'Internal Events') }}</li>
       </ul>
     </div>
 

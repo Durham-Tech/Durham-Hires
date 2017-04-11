@@ -120,4 +120,5 @@ if ($booking->status < 4){
 @endif
 {!! link_to_route('bookings.index', 'Back', array(), array('class' => 'btn btn-primary')) !!}
 </div>
+
 @endsection

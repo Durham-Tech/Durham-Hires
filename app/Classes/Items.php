@@ -334,7 +334,7 @@ class Items
         $booking->start = $start;
         $booking->end = $end;
         $allItems = $this->getAvalibleArray($booking);
-        $booked_items = booked_items::where('bookingID', $id);
+        $booked_items = booked_items::where('bookingID', $id)->get();
 
         foreach ($booked_items as $item){
             if ($item->number > $allItems[$item->item]->available) {
@@ -349,5 +349,6 @@ class Items
         if ($force || empty($errorList->id)) {
             $booking->save();
         }
+        return $errorList;
     }
 }

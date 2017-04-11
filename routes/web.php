@@ -19,7 +19,8 @@ Route::resource('categories', 'CategoryController');
 Route::resource('items', 'ItemController');
 Route::resource('admin', 'AdminController');
 Route::resource('bookings', 'BookingsController');
-Route::resource('template', 'TemplateController');
+Route::resource('templates', 'TemplateController');
+Route::resource('internal', 'InternalEventController');
 
 Route::get('bookings/index/complete', 'BookingsController@indexComplete')
           ->name('bookings.complete');

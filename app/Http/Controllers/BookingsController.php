@@ -38,10 +38,14 @@ class BookingsController extends Controller
         //
         if (CAuth::checkAdmin()) {
             $data = Bookings::orderBy('start')->get()
-                ->where('status', '!=', 4);
+                ->where('status', '!=', 4)
+                ->where('internal', 0)
+                ->where('template', 0);
         } else {
             $data = Bookings::orderBy('start', 'DESC')
                 ->where('email', '=', CAuth::user()->email)
+                ->where('internal', 0)
+                ->where('template', 0)
                 ->get();
         }
 
@@ -99,9 +103,6 @@ class BookingsController extends Controller
                 $booking->email = $request->email;
                 $booking->user = $details->surname;
                 $booking->user = $details->name;
-                if ($booking->status == 2) {
-                    \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
-                }
             }
         } else {
             $booking->status = 0;
@@ -110,6 +111,9 @@ class BookingsController extends Controller
             $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
         }
         $booking->save();
+        if ($booking->status == 2 && CAuth::checkAdmin(4)) {
+            \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
+        }
         return redirect('/bookings/' . $booking->id);
     }
 
@@ -244,8 +248,8 @@ class BookingsController extends Controller
         $booking->fineValue = $request->fineValue;
 
         $booking->save();
-
         return redirect('/bookings/' . $booking->id);
+
     }
 
     public function updateStatus(Request $request, Bookings $booking)
@@ -331,7 +335,13 @@ class BookingsController extends Controller
                 $items->correctDuplicateBookings($booking);
             }
 
-            return redirect()->route('bookings.show', ['id' => $id]);
+            if ($booking->template == '1') {
+                return redirect()->route('templates.show', ['id' => $id]);
+            } elseif ($booking->internal == '1') {
+                return redirect()->route('internal.show', ['id' => $id]);
+            } else {
+                return redirect()->route('bookings.show', ['id' => $id]);
+            }
         } else {
             return redirect()->route('items.index');
         }

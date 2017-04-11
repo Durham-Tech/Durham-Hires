@@ -10,15 +10,15 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Styles -->
-    <link href="/css/app.css" rel="stylesheet">
-
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
+    <!-- Styles -->
+    <link href="/css/app.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">

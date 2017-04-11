@@ -1,0 +1,160 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use View;
+use App\Bookings;
+use App\booked_items;
+use App\Classes\Items;
+use App\Classes\CAuth;
+use App\Http\Requests\NewInternal;
+
+class InternalEventController extends Controller
+{
+    //
+
+    public function __construct()
+    {
+        $this->middleware('login');
+        $this->middleware('admin');
+    }
+
+    public function index()
+    {
+            $data = Bookings::orderBy('start')
+                ->whereRaw('end > NOW()')
+                ->where('internal', '1')
+                ->get();
+
+        return View::make('bookings.internal.index')
+            ->with(['data' => $data]);
+    }
+
+
+    public function create()
+    {
+        $templates = Bookings::where('template', '1')->get();
+        return View::make('bookings.internal.edit')
+            ->with(['templates' => $templates]);
+    }
+
+    public function store(NewInternal $request)
+    {
+        $booking = new Bookings;
+        $booking->name = $request->name;
+        $start = strtotime($request->start)+43200;
+        $end = strtotime($request->end)+43200;
+        $booking->start = date("Y-m-d H:i:s", $start);
+        $booking->end = date("Y-m-d H:i:s", $end);
+        $booking->days = ($end - $start)/(86400);
+
+        $booking->status = 2;
+        $booking->internal = 1;
+        $booking->email = CAuth::user()->email;
+        $booking->user = '';
+
+        $booking->save();
+
+        if ($request->template != 0) {
+
+            $template = booked_items::where('bookingID', $request->template)
+                  ->get();
+            foreach($template as $x){
+                booked_items::updateOrCreate(
+                    ['bookingID' => $booking->id, 'item' => $x->item],
+                    ['number' => $x->number]
+                );
+            }
+            $items = new Items;
+            $errorList = $items->changeTime($booking->id, $booking->start, $booking->end, true);
+            $items->correctDuplicateBookings($booking);
+        }
+
+        return redirect('/internal/' . $booking->id)
+                ->with('unavalible', $errorList->name)
+                ->with('uQuant', $errorList->number);
+    }
+
+    public function show($id)
+    {
+        $booking = Bookings::findOrFail($id);
+        $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
+            ->where('booked_items.bookingID', '=', $id)
+            ->where('booked_items.number', '!=', '0')
+            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+            ->get();
+
+            return View::make('bookings.internal.view')
+                          ->with(
+                              [
+                              'booking' => $booking,
+                              'items' => $bookedItems
+                              ]
+                          );
+
+    }
+
+    public function destroy($id)
+    {
+        $booking = Bookings::findOrFail($id);
+        if ($booking->internal == '1') {
+            $booking->delete();
+        }
+        return redirect('/internal');
+    }
+
+    public function addItems($id)
+    {
+        $items = new Items;
+        $booking = Bookings::find($id);
+        $data = $items->getAvalible($booking);
+
+        if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
+            return View::make('items.index')
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking]);
+        } else {
+            return redirect()->route('items.index');
+        }
+    }
+
+    public function updateItems(Request $request, $id)
+    {
+        $items = new Items;
+        $booking = Bookings::find($id);
+        $data = $items->getAvalibleArray($booking);
+
+        if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {
+            $inputs = $request->input();
+            unset($inputs['_token']);
+
+            $bookedItems = booked_items::where('bookingID', $id)
+              ->get()
+              ->keyBy('item')
+              ->toArray();
+            foreach ($inputs as $item => $quantity) {
+                if (isset($bookedItems[$item]) || $quantity != 0) {
+                    $quantity = (int)$quantity;
+                    if (is_int($item) && is_int($quantity)) {
+                        if ($quantity <= $data[$item]->available) {
+                            booked_items::updateOrCreate(
+                                ['bookingID' => $id, 'item' => $item],
+                                ['number' => $quantity]
+                            );
+                        }
+                    }
+                }
+            }
+
+            if ($booking->status >= 2) {
+                $booking->save();
+                $items->correctDuplicateBookings($booking);
+            }
+
+            return redirect()->route('bookings.show', ['id' => $id]);
+        } else {
+            return redirect()->route('items.index');
+        }
+    }
+
+}
