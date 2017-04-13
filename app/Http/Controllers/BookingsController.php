@@ -98,16 +98,19 @@ class BookingsController extends Controller
                 'email' => 'required|email'
                 ]
             );
+            $booking->email = $request->email;
             $details = Common::getDetailsEmail($request->email);
             if ($details) {
-                $booking->email = $request->email;
-                $booking->user = $details->surname;
                 $booking->user = $details->name;
+                $booking->isDurham = 1;
+            } else {
+                $booking->isDurham = 0;
             }
         } else {
             $booking->status = 0;
             $temp = CAuth::user();
             $booking->email = $temp->email;
+            $booking->isDurham = 1;
             $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
         }
         $booking->save();
@@ -135,12 +138,6 @@ class BookingsController extends Controller
         Common::calcAllCosts($booking, $bookedItems);
 
         $booking->status_string = $this->status[$booking->status];
-
-        $start = date_create($booking->start);
-        $booking->start = date_format($start, "d/m/Y");
-
-        $end = date_create($booking->end);
-        $booking->end = date_format($end, "d/m/Y");
 
         if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()) {
             return View::make('bookings.view')
@@ -221,6 +218,7 @@ class BookingsController extends Controller
             ]
         );
         $booking->name = $request->name;
+        $booking->user = $request->user;
 
         if ($request->status <= 2) {
             $booking->vat = $request->vat;

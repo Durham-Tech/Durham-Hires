@@ -43,8 +43,39 @@ class NewBooking extends FormRequest
     {
         $validator->after(
             function ($validator) {
-                if (CAuth::checkAdmin(4) && !Common::getDetailsEmail($this->input(['email']))) {
-                    $validator->errors()->add('email', 'The email is not a valid durham email address.');
+                if (CAuth::checkAdmin(4) && $this->input(['email']) != '') {
+                    $query = http_build_query(
+                        [
+                        'address' => $this->input(['email'])
+                        ]
+                    );
+                    $remote_url = 'https://api.mailgun.net/v3/address/validate?' . $query;
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $remote_url);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+                    curl_setopt($ch, CURLOPT_USERPWD, "api:pubkey-95c8fd3b3467e6982561e7c22c3b9dc7");
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+
+                    $result=json_decode(curl_exec($ch));
+                    curl_close($ch);
+
+                    if (!($result->is_valid)) {
+                        if ($result->did_you_mean) {
+                            $validator->errors()->add('email', 'The provided email address is not valid. Did you mean ' . $result->did_you_mean);
+                        } else {
+                            $validator->errors()->add('email', 'The provided email address is not valid.');
+                        }
+                    } else {
+                        if ($result->parts->domain == 'durham.ac.uk') {
+                            if (!Common::getDetailsEmail($this->input(['email']))) {
+                                $validator->errors()->add('email', 'The email is not a valid durham email address.');
+                            }
+                        }
+                    }
                 }
             }
         );

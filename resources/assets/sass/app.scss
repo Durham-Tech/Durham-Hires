@@ -190,3 +190,22 @@
         width: 700px;
     }
 }
+
+// Status styles
+.status {
+    &#s1 {
+        color: $statusBlue;
+    }
+
+    &#s2 {
+        color: $statusGreen;
+    }
+
+    &#s3 {
+        color: $statusAmber;
+    }
+
+    &#s4 {
+        color: $statusGreen;
+    }
+}

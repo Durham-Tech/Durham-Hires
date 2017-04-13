@@ -13,13 +13,23 @@ if ($booking->status < 4){
         <h1 id='name'>
             {{ $booking->name }}
         </h1>
+        @if (CAuth::checkAdmin(4))
+        <p id='user'>
+            <b>Hirer's Name: </b>
+            {{ $booking->user }}
+        </p>
+        <p id='email'>
+            <b>Email: </b>
+            <a href='mailto:{{ $booking->email }}'>{{ $booking->email }}</a>
+        </p>
+        @endif
         <p id='start'>
             <b>Start date: </b>
-            {{ $booking->start }}
+            {{ date('D jS M Y', strtotime($booking->start) )  }}
         </p>
         <p id='end'>
             <b>Return date: </b>
-            {{ $booking->end }}
+            {{ date('D jS M Y', strtotime($booking->end) )  }}
         </p>
         <p id='length'>
             <b>Total Days: </b>
@@ -30,7 +40,7 @@ if ($booking->status < 4){
         </p>
         <p id='status'>
             <b>Hire status: </b>
-            {{ $booking->status_string }}
+            <span class="status" id="s{{ $booking->status }}">{{ $booking->status_string }}</span>
         </p>
         @if ($booking->status >= 3)
         <p id='invoice'>

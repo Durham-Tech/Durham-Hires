@@ -53,6 +53,14 @@ if (isset($old)){
             </div>
             @if (CAuth::checkAdmin())
               <div class="form-group">
+                  {{ Form::label('user', 'Hirer\'s Name') }}
+                  {{ Form::text('user', NULL,
+                  array(
+                      'class'=>'form-control',
+                      'placeholder'=>'Hirer\'s Name'
+                  )) }}
+              </div>
+              <div class="form-group">
                   {{ Form::label('email', 'Durham Email') }}
                   {{ Form::text('email', NULL,
                   array(
