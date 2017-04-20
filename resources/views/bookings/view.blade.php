@@ -73,27 +73,27 @@ if ($booking->status < 4){
               @endforeach
               @if ($booking->discount != 0)
               <tr id="discRow">
-                <td colspan="3">Discount</td>
+                <td colspan="3"><b>Discount</b></td>
                 <td>-£{{ number_format((float)$booking->discount, 2) }}</td>
               </tr>
               @endif
               @if ($booking->fineValue != 0)
               <tr id="fineRow">
-                <td colspan="3">Fine: {{ $booking->fineDesc }}</td>
+                <td colspan="3"><b/>Fine:</b> {{ $booking->fineDesc }}</td>
                 <td>£{{ number_format((float)$booking->fineValue, 2) }}</td>
               </tr>
               @endif
               <tr id="subTotal">
-                <td colspan="3">Subtotal</td>
+                <td colspan="3"><b>Subtotal</b></td>
                 <td>£{{ number_format((float)$booking->subTotal, 2) }}</td>
               </tr>
               <tr id="vatRow">
-                <td colspan="3">VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</td>
+                <td colspan="3"><b>VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</b></td>
                 <td>£{{ number_format((float)$booking->vatValue, 2) }}</td>
               </tr>
               <tr id="totalRow">
-                <td colspan="3">Total</td>
-                <td>£{{ number_format((float)$booking->total, 2) }}</td>
+                <td colspan="3"><b>Total</b></td>
+                <td><b>£{{ number_format((float)$booking->total, 2) }}</b></td>
               </tr>
             </tbody>
           </table>
@@ -123,7 +123,7 @@ if ($booking->status < 4){
   <button class="btn btn-primary" type="submit">{{ ($booking->status === 0) ? 'Submit' : 'Unsubmit' }}</button>
 {{ Form::close() }}
 @endif
-@if ($booking->status == 0)
+@if ($booking->status < 3)
 {{ Form::open(['route' => ['bookings.destroy', $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}

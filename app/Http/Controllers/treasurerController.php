@@ -7,6 +7,7 @@ use App\Http\Requests\Treasurer;
 use App\Bookings;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Mail\bankIncorrect;
+use App\Mail\paymentReceived;
 
 class treasurerController extends Controller
 {
@@ -23,7 +24,12 @@ class treasurerController extends Controller
 
     public function submit(Treasurer $request)
     {
-        $id = $request->ref;
+        $pregSuc = preg_match('/^tech[0-9]+$/', strtolower(str_replace(' ', '', $request->ref)), $temp);
+        if ($pregSuc) {
+            $id = intval(str_replace('tech', '', $temp[0]));
+        } else {
+            $id = 0;
+        }
         $success = 2;
         try {
             $booking = Bookings::where('id', $id)
@@ -33,6 +39,7 @@ class treasurerController extends Controller
             if ($request->amount == round($booking->totalPrice, 2)) {
                 $booking->status = 4;
                 $booking->save();
+                \Mail::to($booking->email)->send(new paymentReceived($booking->name));
                 $success = 1;
             }
         } catch (ModelNotFoundException $e) {

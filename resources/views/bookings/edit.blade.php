@@ -61,11 +61,11 @@ if (isset($old)){
                   )) }}
               </div>
               <div class="form-group">
-                  {{ Form::label('email', 'Durham Email') }}
+                  {{ Form::label('email', 'Email Address') }}
                   {{ Form::text('email', NULL,
                   array(
                       'class'=>'form-control',
-                      'placeholder'=>'Durham Email'
+                      'placeholder'=>'Email Address'
                   )) }}
               </div>
             @endif

@@ -16,9 +16,7 @@ body {
 }
 
 p,
-ul,
-ol,
-blockquote {
+p, ul, ol, blockquote {
     line-height: 1.4;
     text-align: left;
 }
@@ -30,6 +28,7 @@ a {
 a img {
     border: none;
 }
+
 
 /* Typography */
 
@@ -76,7 +75,7 @@ img {
 /* Layout */
 
 .wrapper {
-    background-color: #f5f8fa;
+
     margin: 0;
     padding: 0;
     width: 100%;
@@ -94,6 +93,7 @@ img {
     -premailer-width: 100%;
 }
 
+
 /* Header */
 
 .header {
@@ -108,6 +108,7 @@ img {
     text-decoration: none;
     text-shadow: 0 1px 0 white;
 }
+
 
 /* Body */
 
@@ -133,6 +134,7 @@ img {
     -premailer-width: 570px;
 }
 
+
 /* Subcopy */
 
 .subcopy {
@@ -144,6 +146,7 @@ img {
 .subcopy p {
     font-size: 12px;
 }
+
 
 /* Footer */
 
@@ -162,6 +165,7 @@ img {
     font-size: 12px;
     text-align: center;
 }
+
 
 /* Tables */
 
@@ -189,6 +193,7 @@ img {
     padding: 35px;
 }
 
+
 /* Buttons */
 
 .action {
@@ -211,11 +216,11 @@ img {
 }
 
 .button-blue {
-    background-color: #3097D1;
-    border-top: 10px solid #3097D1;
-    border-right: 18px solid #3097D1;
-    border-bottom: 10px solid #3097D1;
-    border-left: 18px solid #3097D1;
+    background-color: #384F7F;
+    border-top: 10px solid #384F7F;
+    border-right: 18px solid #384F7F;
+    border-bottom: 10px solid #384F7F;
+    border-left: 18px solid #384F7F;
 }
 
 .button-green {
@@ -233,6 +238,7 @@ img {
     border-bottom: 10px solid #bf5329;
     border-left: 18px solid #bf5329;
 }
+
 
 /* Panels */
 
@@ -253,6 +259,7 @@ img {
     margin-bottom: 0;
     padding-bottom: 0;
 }
+
 
 /* Promotions */
 

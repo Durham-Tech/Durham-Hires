@@ -53,6 +53,7 @@
                         @if (CAuth::checkAdmin(1))
                         <li><a href="{{ url('/treasurer') }}">Treasurer</a></li>
                         @endif
+                        <li><a href="{{ url('/terms') }}">Terms & Conditions</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

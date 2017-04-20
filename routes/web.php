@@ -44,6 +44,7 @@ Route::post('treasurer', 'treasurerController@submit')
           ->name('bank.submit');
 
 Route::get('/', 'publicController@index');
+Route::get('terms', 'publicController@terms');
 
 Route::get(
     '/login', ['as'=>'login',function () {
@@ -55,5 +56,6 @@ Route::post('/login', 'customAuth@checkAuth');
 Route::post('/logout', 'customAuth@logout');
 
 
-// Calender routes
+// testing routes
 Route::get('/calendar23', 'CalendarController@downloadCalendar');
+Route::get('invoice_test', 'AdminController@pdfTest');

@@ -9,6 +9,7 @@ use CAuth;
 use Illuminate\Http\Request;
 use App\Http\Requests\newUser;
 use App\Classes\Common;
+use App\Classes\pdf;
 
 class AdminController extends Controller
 {
@@ -44,7 +45,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(newUser $request)
@@ -63,7 +64,7 @@ class AdminController extends Controller
     /**
      * Save the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function save(Request $request)
@@ -99,7 +100,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function destroy(Admin $admin)
@@ -113,4 +114,10 @@ class AdminController extends Controller
             return redirect()->route('admin.index')->with(['error' => 'Cannot delete an admin user.']);
         }
     }
+
+    public function pdfTest()
+    {
+        return pdf::createInvoice(30, false);
+    }
+
 }

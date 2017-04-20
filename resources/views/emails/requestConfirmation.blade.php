@@ -7,6 +7,4 @@ A new booking has been submitted, you can use the link below to view it.
 View booking
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
 @endcomponent

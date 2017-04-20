@@ -209,3 +209,11 @@
         color: $statusGreen;
     }
 }
+
+// Home paeg styleing
+img#homeLogo {
+    max-width: 100%;
+    @media (max-width: $screen-xs-max) {
+        display: none;
+    }
+}

@@ -8,12 +8,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Bookings;
 use App\Classes\Common;
+use App\Settings;
 
 class sendInvoice extends Mailable
 {
     use Queueable, SerializesModels;
     public $id;
-    public $invoice;
+    public $booking;
+    public $hiresEmail;
 
     /**
      * Create a new message instance.
@@ -24,7 +26,8 @@ class sendInvoice extends Mailable
     {
         //
         $this->id = $id;
-        $this->invoice = Bookings::findOrFail($id)->invoice;
+        $this->booking = Bookings::findOrFail($id);
+        $this->hiresEmail = Settings::where('name', 'hiresEmail')->firstOrFail()->value;
     }
 
     /**
@@ -35,8 +38,8 @@ class sendInvoice extends Mailable
     public function build()
     {
         return $this->subject('Tech hire invoice')
-                    ->replyTo(Common::hiresEmail())
-                    ->attach(base_path() . '/storage/invoices/' . $this->invoice)
-                    ->markdown('emails.sendInvoice');
+            ->replyTo(Common::hiresEmail())
+            ->attach(base_path() . '/storage/invoices/' . $this->booking->invoice)
+            ->markdown('emails.sendInvoice');
     }
 }

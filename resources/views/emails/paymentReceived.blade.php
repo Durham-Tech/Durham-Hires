@@ -1,7 +1,10 @@
 @component('mail::message')
 
-Your payment has been received and processed, thank you.
+Your payment for hire "{{ $name }}" has been received and processed.
 
-Thanks,<br>
-{{ config('app.name') }}
+Thank you for using Trevelyan College equipment hire.
+
+<b>Hires Coordinator</b><br>
+Trevelyan College Technical Equipment Hire<br>
+{{ $hiresEmail }}
 @endcomponent

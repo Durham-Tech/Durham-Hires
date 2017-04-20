@@ -179,6 +179,7 @@ class BookingsController extends Controller
 
     private function manageStatusChange(&$booking, $status)
     {
+        // TODO: Pass isDurham parmiter to emails and enable or disable buttons.
         switch ($status) {
         case 2:
             if ($booking->status <= 1) {
@@ -195,7 +196,7 @@ class BookingsController extends Controller
             break;
         case 4:
             if ($booking->status != 4) {
-                \Mail::to($booking->email)->send(new paymentReceived);
+                \Mail::to($booking->email)->send(new paymentReceived($booking->name));
             }
             break;
         default:
@@ -280,7 +281,7 @@ class BookingsController extends Controller
      */
     public function destroy(Bookings $booking)
     {
-        if (($booking->email == CAuth::user()->email || CAuth::checkAdmin()) && $booking->status < 2) {
+        if (($booking->email == CAuth::user()->email || CAuth::checkAdmin()) && $booking->status < 3) {
             $booking->delete();
         }
         return redirect('/bookings');
