@@ -15,7 +15,6 @@ body {
     -webkit-text-size-adjust: none;
 }
 
-p,
 p, ul, ol, blockquote {
     line-height: 1.4;
     text-align: left;
@@ -72,10 +71,11 @@ img {
     max-width: 100%;
 }
 
+
 /* Layout */
 
 .wrapper {
-
+    background-color: #f5f5f5;
     margin: 0;
     padding: 0;
     width: 100%;
