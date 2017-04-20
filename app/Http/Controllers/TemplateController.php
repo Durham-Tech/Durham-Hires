@@ -42,6 +42,7 @@ class TemplateController extends Controller
 
         $booking->email = '';
         $booking->user = '';
+        $booking->isDurham = 0;
         $booking->status = 0;
 
         $booking->template = 1;

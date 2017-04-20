@@ -51,6 +51,7 @@ class InternalEventController extends Controller
 
         $booking->status = 2;
         $booking->internal = 1;
+        $booking->isDurham = 0;
         $booking->email = CAuth::user()->email;
         $booking->user = '';
 
