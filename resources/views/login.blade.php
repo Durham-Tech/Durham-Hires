@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Login')
+
 @section('content')
     <div class="">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">

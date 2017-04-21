@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Bookings')
+
 @section('content')
   @if (CAuth::checkAdmin(4))
   <div class="row">

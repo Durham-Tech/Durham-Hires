@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Treasurer')
+
 @section('content')
 <div class="treasurer">
 

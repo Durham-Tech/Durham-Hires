@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Catalog')
+
 @section('content')
 <div class="limWidth">
             @if ($data)

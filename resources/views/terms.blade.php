@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Terms and Conditions')
+
 @section('content')
   <div class="limWidth">
 		<h1>Hire Terms &amp; Conditions</h1>

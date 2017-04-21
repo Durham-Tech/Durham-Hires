@@ -1,5 +1,6 @@
 @extends('bookings.layout')
 
+
 @php
   $active = 'internal';
 @endphp
