@@ -5,6 +5,11 @@ $active = 'current';
 @endphp
 
 @section('page')
+
+            @if (!CAuth::checkAdmin(4))
+              <a class="btn btn-primary" href="{{ route('bookings.create') }}">Add new</a>
+            @endif
+
             @if ($data)
 
                 <table class="table">
@@ -30,9 +35,9 @@ $active = 'current';
                 </tbody>
               </table>
 
-            @endif
+            @else
 
-            @if (!CAuth::checkAdmin(4))
-              <a class="btn btn-primary" href="{{ route('bookings.create') }}">Add new</a>
+            <p>There's no bookings here, create a new booking to get started.</p>
+
             @endif
 @endsection

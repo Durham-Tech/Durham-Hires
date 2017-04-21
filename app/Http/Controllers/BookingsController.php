@@ -179,7 +179,6 @@ class BookingsController extends Controller
 
     private function manageStatusChange(&$booking, $status)
     {
-        // TODO: Pass isDurham parmiter to emails and enable or disable buttons.
         switch ($status) {
         case 2:
             if ($booking->status <= 1) {
@@ -281,7 +280,7 @@ class BookingsController extends Controller
      */
     public function destroy(Bookings $booking)
     {
-        if (($booking->email == CAuth::user()->email || CAuth::checkAdmin()) && $booking->status < 3) {
+        if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {
             $booking->delete();
         }
         return redirect('/bookings');

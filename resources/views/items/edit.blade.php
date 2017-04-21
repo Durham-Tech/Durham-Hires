@@ -66,26 +66,29 @@
                 )) }}
                 </div>
             </div>
-            <div class='form-group number'>
-                {{ Form::label('quantity', 'Quantity avalible') }}
-                {{ Form::number('quantity') }}
+            <div class='form-group form-inline number'>
+                {{ Form::label('quantity', 'Quantity avalible: ') }}
+                {{ Form::number('quantity', NULL,
+                array(
+                  'class' => 'form-control'
+                )) }}
             </div>
-            <div class='form-group price'>
-                {{ Form::label('dayPrice', 'Daily cost £') }}
+            <div class='form-group form-inline price'>
+                {{ Form::label('dayPrice', 'Daily cost: £') }}
                 {{ Form::text('dayPrice', NULL,
                 array(
                     'class'=>'form-control',
                 )) }}
             </div>
-            <div class='form-group price'>
-                {{ Form::label('weekPrice', 'Weekly cost £') }}
+            <div class='form-group form-inline price'>
+                {{ Form::label('weekPrice', 'Weekly cost: £') }}
                 {{ Form::text('weekPrice', NULL,
                 array(
                     'class'=>'form-control',
                 )) }}
             </div>
-            <div class='form-group order'>
-                {{ Form::label('orderOf', 'Item order (optional)') }}
+            <div class='form-group form-inline order'>
+                {{ Form::label('orderOf', 'Item order (optional): ') }}
                 {{ Form::text('orderOf', NULL,
                 array(
                     'class'=>'form-control',

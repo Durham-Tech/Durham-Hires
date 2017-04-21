@@ -3,69 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use App\Classes\ICS;
-use Jsvrcek\ICS\Model\Calendar;
-use Jsvrcek\ICS\Model\CalendarEvent;
-use Jsvrcek\ICS\Model\Relationship\Attendee;
-use Jsvrcek\ICS\Model\Relationship\Organizer;
-
-use Jsvrcek\ICS\Utility\Formatter;
-use Jsvrcek\ICS\CalendarStream;
-use Jsvrcek\ICS\CalendarExport;
+use App\Bookings;
 
 class CalendarController extends Controller
 {
     //
-    public function downloadCalendar()
+    public function downloadCalendar(Request $request)
     {
-        //   header('Content-type: text/calendar; charset=utf-8');
-      //   header('Content-Disposition: attachment; filename=invite.ics');
-      //
-      //   $ics = new ICS(array(
-      //   'description' => "This is my description",
-      //   'dtstart' => "2017-4-5 9:00AM",
-      //   'dtend' => "2017-4-5 10:00AM",
-      //   'summary' => "This is my summary"
-      // ));
-      //
-      //   echo $ics->to_string();
+        $bookings = Bookings::where('template', 0)->get();
 
-      //setup an event
-      $eventOne = new CalendarEvent();
-        $eventOne->setStart(new \DateTime())
-          ->setSummary('Family reunion')
-          ->setUid('event-uid');
+        // set default timezone (PHP 5.4)
+        date_default_timezone_set('Europe/London');
 
-      //add an Attendee
-      $attendee = new Attendee(new Formatter());
-        $attendee->setValue('moe@example.com')
-          ->setName('Moe Smith');
-        $eventOne->addAttendee($attendee);
+        // 1. Create new calendar
+        $vCalendar = new \Eluceo\iCal\Component\Calendar($request->url());
+        $vCalendar->setPublishedTTL('PT1H');
+        $vCalendar->setName('Trevs Techcomm Calendar');
 
-      //set the Organizer
-      $organizer = new Organizer(new Formatter());
-        $organizer->setValue('heidi@example.com')
-          ->setName('Heidi Merkell')
-          ->setLanguage('de');
-        $eventOne->setOrganizer($organizer);
+        foreach ($bookings as $booking){
+            $vEvent = new \Eluceo\iCal\Component\Event();
+            $vEvent->setDtStart(new \DateTime($booking->start));
+            $vEvent->setDtEnd(new \DateTime($booking->end));
+            $vEvent->setNoTime(true);
+            $vEvent->setSummary($booking->name);
+            $vCalendar->addComponent($vEvent);
+        }
 
-      //new event
-      $eventTwo = new CalendarEvent();
-        $eventTwo->setStart(new \DateTime())
-          ->setSummary('Dentist Appointment')
-          ->setUid('event-uid');
+        // 4. Set headers
+        header('Content-Type: text/calendar; charset=utf-8');
+        header('Content-Disposition: attachment; filename="cal.ics"');
 
-      //setup calendar
-      $calendar = new Calendar();
-        $calendar->setProdId('-//My Company//Cool Calendar App//EN')
-          ->addEvent($eventOne)
-          ->addEvent($eventTwo);
+        // 5. Output
+        echo $vCalendar->render();
 
-      //setup exporter
-      $calendarExport = new CalendarExport(new CalendarStream, new Formatter());
-        $calendarExport->addCalendar($calendar);
-
-      //output .ics formatted text
-      echo $calendarExport->getStream();
     }
 }

@@ -57,5 +57,5 @@ Route::post('/logout', 'customAuth@logout');
 
 
 // testing routes
-Route::get('/calendar23', 'CalendarController@downloadCalendar');
+Route::get('/calendar', 'CalendarController@downloadCalendar');
 Route::get('invoice_test', 'AdminController@pdfTest');
