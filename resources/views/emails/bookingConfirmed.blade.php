@@ -8,7 +8,7 @@ Your booking
 @endcomponent
 @endif
 
-<b>Hires Coordinator</b><br>
-Trevelyan College Technical Equipment Hire<br>
+@component('emails.components.sign')
 {{ $hiresEmail }}
+@endcomponent
 @endcomponent

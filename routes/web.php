@@ -24,7 +24,7 @@ Route::resource('internal', 'InternalEventController');
 
 Route::get('bookings/index/complete', 'BookingsController@indexComplete')
           ->name('bookings.complete');
-Route::get('bookings/{id}/invoice', 'BookingsController@getInvoice')
+Route::get('bookings/{id}/invoice/{nocache}', 'BookingsController@getInvoice')
           ->name('bookings.invoice');
 Route::get('bookings/{id}/add', 'BookingsController@addItems')
           ->name('bookings.add');
@@ -57,5 +57,5 @@ Route::post('/logout', 'customAuth@logout');
 
 
 // testing routes
-Route::get('/calendar', 'CalendarController@downloadCalendar');
+Route::get('/calendar/{type}', 'CalendarController@downloadCalendar');
 Route::get('invoice_test', 'AdminController@pdfTest');

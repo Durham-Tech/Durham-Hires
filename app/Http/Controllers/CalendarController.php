@@ -8,9 +8,19 @@ use App\Bookings;
 class CalendarController extends Controller
 {
     //
-    public function downloadCalendar(Request $request)
+    public function downloadCalendar(Request $request, $type)
     {
-        $bookings = Bookings::where('template', 0)->get();
+        if ($type == 'hires') {
+            $bookings = Bookings::where('template', 0)
+            ->where('internal', 0)
+            ->where('status', '>', 1)
+            ->get();
+        } elseif ($type == 'internal') {
+            $bookings = Bookings::where('internal', 1)
+            ->get();
+        } else {
+            die();
+        }
 
         // set default timezone (PHP 5.4)
         date_default_timezone_set('Europe/London');
@@ -20,12 +30,11 @@ class CalendarController extends Controller
         $vCalendar->setPublishedTTL('PT1H');
         $vCalendar->setName('Trevs Techcomm Calendar');
 
+
         foreach ($bookings as $booking){
             $vEvent = new \Eluceo\iCal\Component\Event();
-            $vEvent->setDtStart(new \DateTime($booking->start));
-            $vEvent->setDtEnd(new \DateTime($booking->end));
-            $vEvent->setNoTime(true);
             $vEvent->setSummary($booking->name);
+            // $vEvent->setDescription('Description');
             $vCalendar->addComponent($vEvent);
         }
 

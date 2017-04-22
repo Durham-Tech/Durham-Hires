@@ -44,6 +44,8 @@
                 </select>
             </div>
 
+            <p>Note: these dates run from mid day to mid day, so if the event is in the evening 'end date' should be the day after.</p>
+
             <div class='form-group form-inline'>
                 {{ Form::label('start', 'Start date: ') }}
                 <vue-datepicker name="start" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
