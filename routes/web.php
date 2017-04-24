@@ -24,7 +24,7 @@ Route::resource('internal', 'InternalEventController');
 
 Route::get('bookings/index/complete', 'BookingsController@indexComplete')
           ->name('bookings.complete');
-Route::get('bookings/{id}/invoice/{nocache}', 'BookingsController@getInvoice')
+Route::get('bookings/{id}/{nocache}/invoice', 'BookingsController@getInvoice')
           ->name('bookings.invoice');
 Route::get('bookings/{id}/add', 'BookingsController@addItems')
           ->name('bookings.add');

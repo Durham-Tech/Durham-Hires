@@ -123,7 +123,7 @@
 
 <div id="info">
 <p>
-  Payment due no later than <b>28 days</b> from invoice date.<br><br>
+  Payment is due no later than <b>28 days</b> from invoice date.<br><br>
 
   Please pay by bank transfer:
 </p>

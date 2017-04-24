@@ -24,6 +24,8 @@ class CalendarController extends Controller
 
         // set default timezone (PHP 5.4)
         date_default_timezone_set('Europe/London');
+        $dt = new \DateTimeZone('Europe/London');
+        $utc = new \DateTimeZone('UTC');
 
         // 1. Create new calendar
         $vCalendar = new \Eluceo\iCal\Component\Calendar($request->url());
@@ -33,6 +35,9 @@ class CalendarController extends Controller
 
         foreach ($bookings as $booking){
             $vEvent = new \Eluceo\iCal\Component\Event();
+            $vEvent->setDtStart(date_timezone_set(new \DateTime($booking->start, $dt), $utc));
+            $vEvent->setDtEnd(date_timezone_set(new \DateTime($booking->end, $dt), $utc));
+            // $vEvent->setNoTime(true);
             $vEvent->setSummary($booking->name);
             // $vEvent->setDescription('Description');
             $vCalendar->addComponent($vEvent);

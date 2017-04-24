@@ -123,7 +123,7 @@ if ($booking->status < 4){
   <button class="btn btn-primary" type="submit">{{ ($booking->status === 0) ? 'Submit' : 'Unsubmit' }}</button>
 {{ Form::close() }}
 @endif
-@if ($booking->status < 2 || ($booking->status = 3 && CAuth::checkAdmin()))
+@if ($booking->status < 2 || ($booking->status == 2 && CAuth::checkAdmin()))
 {{ Form::open(['route' => ['bookings.destroy', $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}

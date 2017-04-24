@@ -1,3 +1,9 @@
+<!--
+
+Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights reserved.
+
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

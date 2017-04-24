@@ -10,7 +10,6 @@
         "eluceo/ical": "^0.11.2",
         "guzzlehttp/guzzle": "^6.2",
         "intervention/image": "^2.3",
-        "jsvrcek/ics": "^0.5.1",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.3.0"
