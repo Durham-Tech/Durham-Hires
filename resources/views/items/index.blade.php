@@ -12,7 +12,7 @@
               <ul class="nav nav-tabs">
                 @foreach($data as $category)
                     @if ($category->sub == 0)
-                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{$category->name}}">{{ $category->name }}</a></li>
+                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-') }}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
             </ul>
@@ -22,7 +22,7 @@
 
                 @if ($category->sub == 0)
                 {!! ($loop->first) ? '' : '</table></div>' !!}
-                <div id="{{ $category->name }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
+                <div id="{{ str_slug($category->name, '-') }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
                 <table class="table ItemsTable">
                 <thead>
                     <tr>
