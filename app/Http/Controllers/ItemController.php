@@ -36,7 +36,9 @@ class ItemController extends Controller
     public function create()
     {
         $cats = [];
-        $data = \App\Category::orderBy('orderOf')->get();
+        $data = \App\Category::orderBy('orderOf')
+              ->orderBy('id')
+              ->get();
 
         foreach ($data as $cat) {
             if (empty($cat->subCatOf)) {
@@ -130,7 +132,9 @@ class ItemController extends Controller
     public function edit($id)
     {
         $cats = [];
-        $data = \App\Category::orderBy('orderOf')->get();
+        $data = \App\Category::orderBy('orderOf')
+              ->orderBy('id')
+              ->get();
 
         foreach ($data as $cat) {
             if (empty($cat->subCatOf)) {

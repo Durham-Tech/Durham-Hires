@@ -25,7 +25,7 @@ class NewCat extends FormRequest
     {
         return [
           'name' => 'required',
-          'subCatOf' => 'required|integer',
+          // 'subCatOf' => 'required|integer',
           'orderOf' => 'nullable|integer'
         ];
     }

@@ -66,7 +66,9 @@ class Items
     {
         $all = [];
 
-        $cats = \App\Category::orderBy('orderOf')->get();
+        $cats = \App\Category::orderBy('orderOf')
+              ->orderBy('id')
+              ->get();
         $catalog = \App\catalog::orderBy('orderOf')->get();
 
         foreach ($cats as $cat) {
