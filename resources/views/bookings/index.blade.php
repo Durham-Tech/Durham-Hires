@@ -10,7 +10,7 @@ $active = 'current';
               <a class="btn btn-primary" href="{{ route('bookings.create') }}">Add new</a>
             @endif
 
-            @if (!empty($data->items))
+            @if (!($data->isEmpty()))
 
                 <table class="table">
                 <thead>

@@ -70,11 +70,14 @@ class InternalEventController extends Controller
             $items = new Items;
             $errorList = $items->changeTime($booking->id, $booking->start, $booking->end, true);
             $items->correctDuplicateBookings($booking);
-        }
-
-        return redirect('/internal/' . $booking->id)
+            
+            return redirect('/internal/' . $booking->id)
                 ->with('unavalible', $errorList->name)
                 ->with('uQuant', $errorList->number);
+        } else {
+            return redirect('/internal/' . $booking->id);
+        }
+
     }
 
     public function show($id)

@@ -1,219 +1,216 @@
 // Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-// Variables
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600); // Variables
 @import "variables";
-@import "mixins";
-// Bootstrap
+@import "mixins"; // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 #app {
-    > .container {
-        padding-bottom: 15px;
+  > .container {
+    padding-bottom: 15px;
 
-        .limWidth {
-            max-width: 900px;
-            margin: auto;
-        }
-
+    .limWidth {
+      max-width: 900px;
+      margin: auto;
     }
+  }
 }
 
 .treasurer {
-    max-width: 300px;
-    margin: auto;
+  max-width: 300px;
+  margin: auto;
 }
 
 .navbar-default {
-    .navbar-nav {
-        li {
-            a {
-                @include linkOnBackground($navbar-text-colour)
-            }
-        }
-    }
-
-    .navbar-brand {
+  .navbar-nav {
+    li {
+      a {
         @include linkOnBackground($navbar-text-colour)
+      }
     }
+  }
+
+  .navbar-brand {
+    @include linkOnBackground($navbar-text-colour)
+  }
 }
 
 .panel-default .panel-heading {
-    background-color: $accent;
-    color: $navbar-text-colour;
+  background-color: $accent;
+  color: $navbar-text-colour;
 }
 
 .btn {
-    border-radius: 0;
+  border-radius: 0;
 }
 
 .nav-pills,
 .nav-tabs {
-    li {
-        a {
-            border-radius: 0;
-            font-size: 20px;
-        }
+  li {
+    a {
+      border-radius: 0;
+      font-size: 20px;
     }
+  }
 }
 
 .ItemsTable {
-    th {
-        font-size: 18px;
+  th {
+    font-size: 18px;
+  }
+
+  th + th + th {
+    text-align: center;
+  }
+
+  td {
+    &:not(.tableHeader) {
+      text-align: center;
+      height: 60px;
+      vertical-align: middle;
     }
 
-    th + th + th {
-        text-align: center;
+    &.itemTitle {
+      font-size: 16px;
+      text-align: left;
+      font-weight: 580;
     }
 
-    td {
-        &:not(.tableHeader) {
-            text-align: center;
-            height: 60px;
-            vertical-align: middle;
-        }
-
-        &.itemTitle {
-            font-size: 16px;
-            text-align: left;
-            font-weight: 580;
-        }
-
-        &:nth-child(1) {
-            width: 80px;
-            padding: 0;
-        }
-
-        &:nth-child(6) {
-            min-width: 120px;
-            width: 120px;
-        }
-
-        &.tableHeader {
-            border: 0;
-
-            h2 {
-                font-size: 22px;
-                font-weight: bold;
-            }
-        }
+    &:nth-child(1) {
+      width: 80px;
+      padding: 0;
     }
+
+    &:nth-child(6) {
+      min-width: 120px;
+      width: 120px;
+    }
+
+    &.tableHeader {
+      border: 0;
+
+      h2 {
+        font-size: 22px;
+        font-weight: bold;
+      }
+    }
+  }
 }
 
 .table-responsive {
-    border: 0;
+  border: 0;
 }
 
 .userTable {
-    th + th + th {
-        text-align: center;
-    }
+  th + th + th {
+    text-align: center;
+  }
 
-    td+td+td {
-        text-align: center;
-    }
+  td+td+td {
+    text-align: center;
+  }
 }
 
 .form-control {
-    &:focus {
-        box-shadow: none;
-    }
+  &:focus {
+    box-shadow: none;
+  }
 }
-
 // Styling for custom number spinners
+
 .numInput {
-    > * {
-        display: block;
-        float: left;
-    }
+  > * {
+    display: block;
+    float: left;
+  }
 
-    input {
-        width: 40px;
-        text-align: center;
-        border-radius: 0;
-        border-right: 0;
-        border-left: 0;
-    }
+  input {
+    width: 40px;
+    text-align: center;
+    border-radius: 0;
+    border-right: 0;
+    border-left: 0;
+  }
 
-    .btnMore {
-        border-radius: 0 4px 4px 0;
-    }
+  .btnMore {
+    border-radius: 0 4px 4px 0;
+  }
 
-    .btnLess {
-        border-radius: 4px 0 0 4px;
-    }
+  .btnLess {
+    border-radius: 4px 0 0 4px;
+  }
 }
-
 // Styling for number text text inputs
+
 .form-group {
-    .customNum {
-        max-width: 100px;
-    }
+  .customNum {
+    max-width: 100px;
+  }
 
-    .bg-form-group {
-        font-size: 40px;
-    }
+  .bg-form-group {
+    font-size: 40px;
+  }
 }
-
 // Styling for vue-datepicker
+
 .form-group .datepicker {
-    display: inline-block;
+  display: inline-block;
 
-    input {
-        width: 300px;
+  input {
+    width: 300px;
+  }
+
+  .calendar {
+    span.cell.selected {
+      background: $accent;
+      color: $navbar-text-colour;
     }
 
-    .calendar {
-        span.cell.selected {
-            background: $accent;
-            color: $navbar-text-colour;
-        }
-
-        .cell:not(.blank):not(.disabled).day:hover {
-            border: 1px solid $accent;
-
-        }
+    .cell:not(.blank):not(.disabled).day:hover {
+      border: 1px solid $accent;
     }
+  }
 }
-
 // Login styling
+
 .login {
-    max-width: 700px;
-    margin: auto;
+  max-width: 700px;
+  margin: auto;
 }
 @media (min-width: $screen-md-min) {
-    .borderLeft {
-        border-left: 1px solid $accent;
-    }
+  .borderLeft {
+    border-left: 1px solid $accent;
+  }
 }
 @media (min-width: $screen-sm-min) {
-    .modal-dialog {
-        width: 700px;
-    }
+  .modal-dialog {
+    width: 700px;
+  }
 }
-
 // Status styles
+
 .status {
-    &#s1 {
-        color: $statusBlue;
-    }
+  &#s1 {
+    color: $statusBlue;
+  }
 
-    &#s2 {
-        color: $statusGreen;
-    }
+  &#s2 {
+    color: $statusGreen;
+  }
 
-    &#s3 {
-        color: $statusAmber;
-    }
+  &#s3 {
+    color: $statusAmber;
+  }
 
-    &#s4 {
-        color: $statusGreen;
-    }
+  &#s4,
+  &#s5 {
+    color: $statusGreen;
+  }
 }
-
 // Home paeg styleing
+
 img#homeLogo {
-    max-width: 100%;
-    @media (max-width: $screen-xs-max) {
-        display: none;
-    }
+  max-width: 100%;
+  @media (max-width: $screen-xs-max) {
+    display: none;
+  }
 }

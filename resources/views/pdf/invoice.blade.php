@@ -58,7 +58,7 @@
         </p>
         <p id='invoiceNo'>
             <b>Invoice referance: </b>
-              {{ 'TECH'.$booking->id  }}
+              {{ 'TechHires'.$booking->id  }}
         </p>
       </td>
     </tr>
@@ -130,7 +130,7 @@
   <ul>
     <li>Sort Code: 20-27-41</li>
     <li>Account Number: 43547930</li>
-    <li>Reference: {{ 'TECH'.$booking->id }}</li>
+    <li>Reference: {{ 'TechHires'.$booking->id }}</li>
   </ul>
 <p>
   <br>

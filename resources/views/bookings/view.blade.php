@@ -109,7 +109,7 @@ if ($booking->status < 4){
 
 @if (CAuth::checkAdmin())
 
-@if ($booking->status != 4 && $booking->status != 0)
+@if ($booking->status < 4 && $booking->status != 0)
 {{ Form::open(['route' => ['bookings.updateStatus', $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
   {{ Form::hidden('status', $booking->status + 1) }}
   <button class="btn btn-primary" type="submit">{{ $next[$booking->status - 1]}}</button>

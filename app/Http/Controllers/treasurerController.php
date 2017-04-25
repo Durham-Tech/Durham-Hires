@@ -24,9 +24,9 @@ class treasurerController extends Controller
 
     public function submit(Treasurer $request)
     {
-        $pregSuc = preg_match('/^tech[0-9]+$/', strtolower(str_replace(' ', '', $request->ref)), $temp);
+        $pregSuc = preg_match('/^techhires[0-9]+$/', strtolower(str_replace(' ', '', $request->ref)), $temp);
         if ($pregSuc) {
-            $id = intval(str_replace('tech', '', $temp[0]));
+            $id = intval(str_replace('techhires', '', $temp[0]));
         } else {
             $id = 0;
         }

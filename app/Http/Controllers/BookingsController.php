@@ -38,7 +38,7 @@ class BookingsController extends Controller
         //
         if (CAuth::checkAdmin()) {
             $data = Bookings::orderBy('start')->get()
-                ->where('status', '!=', 4)
+                ->where('status', '<', 4)
                 ->where('internal', 0)
                 ->where('template', 0);
         } else {
@@ -56,7 +56,7 @@ class BookingsController extends Controller
     public function indexComplete()
     {
         $data = Bookings::orderBy('start', 'DESC')
-              ->where('status', '=', 4)
+              ->where('status', '>=', 4)
               ->get();
 
         return View::make('bookings.old')
@@ -137,6 +137,11 @@ class BookingsController extends Controller
 
         Common::calcAllCosts($booking, $bookedItems);
 
+        // Correction for VAT marker
+        if ($booking->status == 5) {
+            $booking->status = 4;
+        }
+
         $booking->status_string = $this->status[$booking->status];
 
         if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()) {
@@ -172,6 +177,11 @@ class BookingsController extends Controller
         $old->fineValue = number_format($old->fineValue, 2);
         if ($old->discType == 0) {
             $old->discValue = number_format($old->discValue, 2);
+        }
+
+        // Correction for VAT marker
+        if ($old->status == 5) {
+            $old->status = 4;
         }
         return View::make('bookings.edit')
                       ->with(['old' => $old, 'statusArray' => $this->status]);
@@ -228,8 +238,10 @@ class BookingsController extends Controller
         // $booking->start = $request->start;
         // $booking->end = $request->end;
 
-        $this->manageStatusChange($booking, $request->status);
-        $booking->status = $request->status;
+        if (!($booking->status == 5 && $request->status == 4)) {
+            $this->manageStatusChange($booking, $request->status);
+            $booking->status = $request->status;
+        }
 
         if ($booking->email != $request->email) {
             $details = Common::getDetailsEmail($request->email);
