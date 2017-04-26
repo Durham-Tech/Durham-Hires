@@ -26,3 +26,14 @@
     <div>
   @endif
 @endsection
+
+@section('scripts')
+<script>
+$(document).ready(function(){
+  var subHeight = $('.submenu').height();
+  if (subHeight > $('.borderLeft').height()){
+    $('.borderLeft').height(subHeight);
+  }
+})
+</script>
+@endsection

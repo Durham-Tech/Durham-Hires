@@ -59,7 +59,9 @@
                     <tr>
                         <td class="itemImage">
                         @if (!empty($item->image))
-                        {{ Html::image('images/catalog/thumb_' . $item->image) }}
+                          <a href='{!! action('ItemController@show', ['items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">
+                            {{ Html::image('images/catalog/thumb_' . $item->image) }}
+                          </a>
                         @endif
                         </td>
                         <td class="itemTitle"><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">{{ $item->description }}</a></td>

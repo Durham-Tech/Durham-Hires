@@ -15,7 +15,7 @@ if ($booking->status < 4){
         </h1>
         @if (CAuth::checkAdmin(4))
         <p id='user'>
-            <b>Hirer's Name: </b>
+            <b>Hiree's Name: </b>
             {{ $booking->user }}
         </p>
         <p id='email'>
