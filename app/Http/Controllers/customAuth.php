@@ -16,7 +16,7 @@ class customAuth extends Controller
     {
         $user = $request->input('user');
         $pass = $request->input('password');
-        $remote_url = 'https://community.dur.ac.uk/jonathan.p.salmon/password/auth.php';
+        $remote_url = 'https://community.dur.ac.uk/trevelyan.jcr/password/tech/auth.php';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $remote_url);

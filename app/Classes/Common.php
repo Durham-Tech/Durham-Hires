@@ -10,7 +10,7 @@ class Common
 {
     public static function getDetailsEmail($email)
     {
-        $remote_url = 'https://community.dur.ac.uk/jonathan.p.salmon/auth.php';
+        $remote_url = 'https://community.dur.ac.uk/trevelyan.jcr/tech/auth.php';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $remote_url);
