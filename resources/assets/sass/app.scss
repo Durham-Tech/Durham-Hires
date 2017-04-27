@@ -180,6 +180,11 @@
   .borderLeft {
     border-left: 1px solid $accent;
   }
+
+  .submenu {
+    border-right: 1px solid $accent;
+    margin-right: -1px;
+  }
 }
 @media (min-width: $screen-sm-min) {
   .modal-dialog {
@@ -213,4 +218,9 @@ img#homeLogo {
   @media (max-width: $screen-xs-max) {
     display: none;
   }
+}
+// Item view styling
+
+.modal-dialog .img-responsive {
+  margin: auto;
 }
