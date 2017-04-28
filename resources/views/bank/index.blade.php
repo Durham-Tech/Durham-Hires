@@ -71,7 +71,7 @@
   {{ Form::close() }}
 </div>
 
-@if ($bookings)
+@if (!($bookings->isEmpty()))
 
   <div class='vatTable'>
     <h1>Paid VAT</h1>
