@@ -70,6 +70,42 @@
 
   {{ Form::close() }}
 </div>
+
+@if ($bookings)
+
+  <div class='vatTable'>
+    <h1>Paid VAT</h1>
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Booking Name</th>
+              <th>Invoice</th>
+              <th>VAT Paid</th>
+              <th></th>
+          </tr>
+      </thead>
+      <tbody>
+      @foreach($bookings as $booking)
+          <tr>
+              <td>{{ $booking->name }}</td>
+              <td>
+                {!! link_to_route('bookings.invoice', $booking->invoice, array($booking->id, str_random(5))) !!}
+              </td>
+              <td>
+                £{{ number_format(((float)$booking->totalPrice)/6.0, 2) }}
+              </td>
+              <td class="btnRemove">
+                {{ Form::open(['route' => ['bank.vatdone', $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+                  <button class="btn btn-primary" type="submit">Remove</button>
+                {{ Form::close() }}
+              </td>
+          </tr>
+      @endforeach
+      </tbody>
+    </table>
+
+  </div>
+@endif
 @endsection
 
 @section('scripts')

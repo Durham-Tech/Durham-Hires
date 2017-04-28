@@ -361,7 +361,7 @@ class BookingsController extends Controller
     public function getInvoice($id)
     {
         $booking = Bookings::findOrFail($id);
-        if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin())) {
+        if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin([1,4]))) {
             $invoice = $booking->invoice;
             if (!empty($invoice)) {
                 $file = base_path() . '/storage/invoices/' . $invoice;

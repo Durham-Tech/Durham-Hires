@@ -1,8 +1,8 @@
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600); // Variables
-@import "variables";
-@import "mixins"; // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import 'variables';
+@import 'mixins'; // Bootstrap
+@import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
 #app {
   > .container {
@@ -14,29 +14,46 @@
     }
   }
 }
+// Treasurer interface
 
 .treasurer {
   max-width: 300px;
   margin: auto;
 }
 
+.vatTable {
+  max-width: 800px;
+  margin: auto;
+
+  table {
+    th,
+    tr {
+      text-align: center;
+    }
+  }
+
+  .btnRemove {
+    width: 100px;
+  }
+}
+
 .navbar-default {
   .navbar-nav {
     li {
       a {
-        @include linkOnBackground($navbar-text-colour)
+        @include linkOnBackground($navbar-text-colour);
       }
     }
   }
 
   .navbar-brand {
-    @include linkOnBackground($navbar-text-colour)
+    @include linkOnBackground($navbar-text-colour);
   }
 }
 
 .panel-default .panel-heading {
-  background-color: $accent;
   color: $navbar-text-colour;
+  background-color: $accent;
 }
 
 .btn {
@@ -47,8 +64,8 @@
 .nav-tabs {
   li {
     a {
-      border-radius: 0;
       font-size: 20px;
+      border-radius: 0;
     }
   }
 }
@@ -64,15 +81,15 @@
 
   td {
     &:not(.tableHeader) {
-      text-align: center;
       height: 60px;
+      text-align: center;
       vertical-align: middle;
     }
 
     &.itemTitle {
       font-size: 16px;
-      text-align: left;
       font-weight: 580;
+      text-align: left;
     }
 
     &:nth-child(1) {
@@ -81,8 +98,8 @@
     }
 
     &:nth-child(6) {
-      min-width: 120px;
       width: 120px;
+      min-width: 120px;
     }
 
     &.tableHeader {
@@ -105,7 +122,7 @@
     text-align: center;
   }
 
-  td+td+td {
+  td + td + td {
     text-align: center;
   }
 }
@@ -126,9 +143,9 @@
   input {
     width: 40px;
     text-align: center;
-    border-radius: 0;
     border-right: 0;
     border-left: 0;
+    border-radius: 0;
   }
 
   .btnMore {
@@ -161,8 +178,8 @@
 
   .calendar {
     span.cell.selected {
-      background: $accent;
       color: $navbar-text-colour;
+      background: $accent;
     }
 
     .cell:not(.blank):not(.disabled).day:hover {
@@ -182,8 +199,8 @@
   }
 
   .submenu {
-    border-right: 1px solid $accent;
     margin-right: -1px;
+    border-right: 1px solid $accent;
   }
 }
 @media (min-width: $screen-sm-min) {

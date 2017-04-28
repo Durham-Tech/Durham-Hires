@@ -18,7 +18,14 @@ class CAuth
     public static function checkAdmin($priv = 4)
     {
         $privileges = session()->get('privileges', '0');
-        $value = (int)$privileges & $priv;
+        $value = 0;
+        if (is_array($priv) ) {
+            foreach ($priv as $x){
+                $value |= (int)$privileges & $x;
+            }
+        } elseif (is_int($priv)) {
+            $value |= (int)$privileges & $priv;
+        }
         return $value;
     }
 

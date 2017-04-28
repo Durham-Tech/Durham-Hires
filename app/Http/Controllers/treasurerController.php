@@ -13,13 +13,18 @@ class treasurerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('login', ['except' => ['index', 'show']]);
+        $this->middleware('login');
         $this->middleware('treasurer');
     }
 
     public function index()
     {
-        return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => 0]);
+        $bookings = Bookings::orderBy('start')
+              ->where('status', '=', 4)
+              ->where('vat', '=', 1)
+              ->get();
+
+        return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => 0, 'bookings' => $bookings]);
     }
 
     public function submit(Treasurer $request)
@@ -54,5 +59,14 @@ class treasurerController extends Controller
             }
             return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success]);
         }
+    }
+
+    public function vatSorted(Bookings $booking)
+    {
+        if ($booking->status == 4) {
+            $booking->status = 5;
+            $booking->save();
+        }
+        return redirect('/treasurer');
     }
 }

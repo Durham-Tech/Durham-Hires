@@ -42,6 +42,8 @@ Route::get('treasurer', 'treasurerController@index')
           ->name('bank.index');
 Route::post('treasurer', 'treasurerController@submit')
           ->name('bank.submit');
+Route::delete('treasurer/{booking}', 'treasurerController@vatSorted')
+          ->name('bank.vatdone');
 
 Route::get('/', 'publicController@index');
 Route::get('terms', 'publicController@terms');
