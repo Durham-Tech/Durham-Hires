@@ -119,5 +119,4 @@ class AdminController extends Controller
     {
         return pdf::createInvoice(30, false);
     }
-
 }
