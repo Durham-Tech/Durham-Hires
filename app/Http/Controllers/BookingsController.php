@@ -23,7 +23,7 @@ class BookingsController extends Controller
         $this->middleware('login');
         $this->middleware('admin', ['only' => ['edit', 'update', 'indexComplete']]);
 
-        $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid'];
+        $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid', 'Paid'];
         $this->nextStatus = ['Confirm Booking', 'Booking Returned', 'Booking Paid'];
     }
 
