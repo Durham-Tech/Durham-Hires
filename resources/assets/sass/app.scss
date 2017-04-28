@@ -104,12 +104,16 @@
 
     &.tableHeader {
       border: 0;
-
-      h2 {
-        font-size: 22px;
-        font-weight: bold;
-      }
     }
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  tbody:not(:first-of-type) td h2{
+    padding-top: 20px;
   }
 }
 
