@@ -29,6 +29,7 @@ class ContentController extends Controller
 
     public function savePage(Request $request)
     {
+        //TODO: Save images to file and check input valid.
         $page = content::where('page', $request->page)->firstOrFail();
         $page->content = $request->content;
         $page->save();

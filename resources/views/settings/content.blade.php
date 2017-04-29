@@ -14,8 +14,7 @@ $active = 'content';
 const app = new Vue({
     el: '#app',
     data: {
-      page: 'home',
-      test: ''
+      page: '{{ $pages[0]->page }}',
     },
 
     methods: {
