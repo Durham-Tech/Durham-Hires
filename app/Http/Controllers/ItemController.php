@@ -93,7 +93,7 @@ class ItemController extends Controller
             );
 
             $img = Image::make('images/catalog/' . $imageName)->resize(
-                54, 54, function ($constraint) {
+                108, 108, function ($constraint) {
                     $constraint->aspectRatio();
                 }
             );
@@ -200,7 +200,7 @@ class ItemController extends Controller
             );
 
             $img = Image::make('images/catalog/' . $imageName)->resize(
-                54, 54, function ($constraint) {
+                108, 108, function ($constraint) {
                     $constraint->aspectRatio();
                 }
             );

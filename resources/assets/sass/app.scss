@@ -105,6 +105,11 @@
     &.tableHeader {
       border: 0;
     }
+
+    &.itemImage img {
+      max-width: 54px;
+      max-height: 54px;
+    }
   }
 
   h2 {
