@@ -55,7 +55,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                         <li><a href="{{ url('/bookings') }}">Bookings</a></li>
                         @endif
                         @if (CAuth::checkAdmin())
-                        <li><a href="{{ url('/admin') }}">Settings</a></li>
+                        <li><a href="{{ url('/settings/admin') }}">Settings</a></li>
                         @endif
                         @if (CAuth::checkAdmin(1))
                         <li><a href="{{ url('/treasurer') }}">Treasurer</a></li>
