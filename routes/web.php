@@ -42,6 +42,8 @@ Route::post('settings/admin/save', 'AdminController@Save')
 
 Route::get('settings/content', 'ContentController@index')
           ->name('settings.content');
+Route::post('settings/content/{page}', 'ContentController@getPage');
+Route::patch('settings/content', 'ContentController@savePage');
 
 
 Route::get('treasurer', 'treasurerController@index')
