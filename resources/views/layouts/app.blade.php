@@ -24,6 +24,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     </script>
 
     <!-- Styles -->
+    @yield('styles')
     <link href="/css/app.css" rel="stylesheet">
 </head>
 <body>

@@ -15,12 +15,13 @@
     return view('home');
 }]);*/
 
-Route::resource('categories', 'CategoryController');
+Route::resource('settings/categories', 'CategoryController');
 Route::resource('items', 'ItemController');
-Route::resource('admin', 'AdminController');
+Route::resource('settings/admin', 'AdminController');
 Route::resource('bookings', 'BookingsController');
 Route::resource('templates', 'TemplateController');
 Route::resource('internal', 'InternalEventController');
+
 
 Route::get('bookings/index/complete', 'BookingsController@indexComplete')
           ->name('bookings.complete');
@@ -35,8 +36,13 @@ Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')
 Route::patch('bookings/{booking}/updateStatus', 'BookingsController@updateStatus')
           ->name('bookings.updateStatus');
 
-Route::post('admin/save', 'AdminController@Save')
+
+Route::post('settings/admin/save', 'AdminController@Save')
           ->name('admin.save');
+
+Route::get('settings/content', 'ContentController@index')
+          ->name('settings.content');
+
 
 Route::get('treasurer', 'treasurerController@index')
           ->name('bank.index');
@@ -44,6 +50,7 @@ Route::post('treasurer', 'treasurerController@submit')
           ->name('bank.submit');
 Route::delete('treasurer/{booking}', 'treasurerController@vatSorted')
           ->name('bank.vatdone');
+
 
 Route::get('/', 'publicController@index');
 Route::get('terms', 'publicController@terms');
