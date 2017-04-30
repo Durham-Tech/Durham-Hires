@@ -60,17 +60,17 @@ const app = new Vue({
 
 @section('page')
 
-<div class="form-group">
+<div id="ContentEditorControls" class="form-group input-group">
 <select class="form-control" v-model="page">
   @foreach ($pages as $page)
   <option value="{{ $page->page }}">{{ $page->name }}</option>
   @endforeach
 </select>
+<span id="contentSave" class="input-group-btn">
+  <button class="btn btn-primary" v-on:click="savePage">Save</button>
+</span>
 </div>
 
 <div id="summernote"></div>
 
-<div id="save">
-  <button class="btn btn-primary" v-on:click="savePage">Save</button>
-</div>
 @endsection
