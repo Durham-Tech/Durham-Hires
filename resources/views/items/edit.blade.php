@@ -57,7 +57,12 @@
                 {{ Form::label('image', 'Image') }}
                 <div>
                 @if (!empty($old->image))
-                {{ Html::image('images/catalog/thumb_' . $old->image) }}
+                {{ Html::image('images/catalog/thumb_' . $old->image,
+                  'Item Image',
+                  array(
+                  'class' => 'imageThumb'
+                  )
+                ) }}
                 @endif
 
                 {{ Form::file('image',
