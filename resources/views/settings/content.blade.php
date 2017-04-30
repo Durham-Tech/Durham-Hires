@@ -38,10 +38,7 @@ const app = new Vue({
             },
             success: function(){
               alert('Save Successful');
-            },
-            error: function(){
-              alert('Save Failed');
-            },
+            }
         });
         this.updatePage();
       }
@@ -54,7 +51,6 @@ const app = new Vue({
     mounted: function () {
       $('#summernote').summernote({
         minHeight: 250,
-        fontNames: ['Raleway', 'Arial', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana']
       });
       $.ajaxSetup({ headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } });
       this.updatePage();
