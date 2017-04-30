@@ -69,10 +69,6 @@
                         <td class="itemWeekPrice">£{{ number_format($item->weekPrice,2) }}</td>
                         @if ($edit == TRUE)
                         <td class="itemAvalible">{{ $item->available }}/{{ $item->quantity }}</td>
-                        @else
-                        <td class="itemAvalible">{{ $item->quantity }}</td>
-                        @endif
-                        @if ($edit == TRUE)
                         <td>
                           <div class="numInput" id="spinner_{{ $item->id }}" max="{{ $item->available}}">
                             <button type="button" {{ $item->booked === 0 ? "disabled='true'" : "" }} onclick="sub({{ $item->id }})" class="btnLess btn btn-default">-</button>
@@ -80,6 +76,8 @@
                             <button type="button" {{ $item->booked === $item->available ? "disabled='true'" : "" }} onclick="plus({{ $item->id }})" class="btnMore btn btn-default">+</button>
                           </div>
                         </td>
+                        @else
+                        <td class="itemAvalible">{{ $item->quantity }}</td>
                         @endif
                     </tr>
                     @endforeach
