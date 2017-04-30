@@ -40,6 +40,7 @@ const app = new Vue({
               alert('Save Successful');
             }
         });
+        this.updatePage();
       }
     },
     watch: {

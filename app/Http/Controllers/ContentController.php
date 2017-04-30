@@ -31,7 +31,8 @@ class ContentController extends Controller
     {
         //TODO: Save images to file and check input valid.
         $page = content::where('page', $request->page)->firstOrFail();
-        $page->content = $request->content;
+        $content = strip_tags($request->content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe>');
+        $page->content = $content;
         $page->save();
     }
 }
