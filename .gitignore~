@@ -2,8 +2,8 @@
 /public/storage
 /public/images/catalog
 /public/hot
-/public/css/*
-/public/js/*
+/public/css
+/public/js
 /storage/*.key
 /storage/invoices
 /vendor
@@ -12,5 +12,3 @@ Homestead.json
 Homestead.yaml
 .env
 updateGit.txt
-public/css/app.css
-public/js/app.js
