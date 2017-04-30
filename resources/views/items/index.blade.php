@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+<?php
+$admin = CAuth::checkAdmin(4) ? 1 : 0;
+?>
+
 @section('title', 'Catalog')
 
 @section('content')
@@ -15,6 +19,9 @@
                     <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-') }}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
+                @if ($admin && $edit)
+                  <li><a href="#custom">Custom Items</a></li>
+                @endif
             </ul>
 
             <div class="tab-content">
@@ -86,6 +93,48 @@
 
                 {!! ($loop->last) ? '</table></div>' : '' !!}
                 @endforeach
+                @if ($admin && $edit)
+                <div id="custom" class="tab-pane fade table-responsive">
+                  @foreach ($custom as $item)
+                    <div class="form-group form-inline">
+                        {{ Form::hidden('id[]', $item->id) }}
+                        {{ Form::text('description[]', $item->description,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Description'
+                        )) }}
+                        {{ Form::text('quantity[]', $item->quantity,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Quantity'
+                        )) }}
+                        {{ Form::text('price[]', $item->price,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Price'
+                        )) }}
+                    </div>
+                  @endforeach
+                    <div class="form-group form-inline">
+                        {{ Form::hidden('id[]', NULL) }}
+                        {{ Form::text('description[]', NULL,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Description'
+                        )) }}
+                        {{ Form::text('quantity[]', NULL,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Quantity'
+                        )) }}
+                        {{ Form::text('price[]', NULL,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Price'
+                        )) }}
+                    </div>
+                </div>
+                @endif
             </div>
 
             @if ($edit == TRUE)
@@ -118,7 +167,7 @@
     };
 
     $('#myModal').on('hide.bs.modal', function(e) {
-	$(this).removeData('bs.modal');
+    $(this).removeData('bs.modal');
 });
 
     $('.nav-tabs a').click(function (e) {
@@ -130,7 +179,7 @@
 function plus(ref)
 {
   var main = document.getElementById("spinner_" + ref);
-	var max = parseInt(main.getAttribute("max"));
+    var max = parseInt(main.getAttribute("max"));
   var val = main.getElementsByTagName('input')[0];
   var cur = parseInt(val.value);
   var newVal = cur + 1;
@@ -146,7 +195,7 @@ function plus(ref)
 function sub(ref)
 {
   var main = document.getElementById("spinner_" + ref);
-	var max = parseInt(main.getAttribute("max"));
+    var max = parseInt(main.getAttribute("max"));
   var val = main.getElementsByTagName('input')[0];
   var cur = parseInt(val.value);
   var newVal = cur - 1;
