@@ -16,7 +16,7 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
               <ul class="nav nav-tabs">
                 @foreach($data as $category)
                     @if ($category->sub == 0)
-                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-') }}">{{ $category->name }}</a></li>
+                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-').'_'.$loop->iteration }}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
                 @if ($admin && $edit)
@@ -29,7 +29,7 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
 
                 @if ($category->sub == 0)
                 {!! ($loop->first) ? '' : '</table></div>' !!}
-                <div id="{{ str_slug($category->name, '-') }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
+                <div id="{{ str_slug($category->name, '-').'_'.$loop->iteration }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
                 <table class="table ItemsTable">
                 <thead>
                     <tr>

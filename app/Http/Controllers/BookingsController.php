@@ -136,7 +136,12 @@ class BookingsController extends Controller
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
 
-        Common::calcAllCosts($booking, $bookedItems);
+        $customItems = custom_items::select('description', 'number', 'price')
+            ->where('booking', $id)
+            ->where('number', '!=', '0')
+            ->get();
+
+        Common::calcAllCosts($booking, $bookedItems, $customItems);
 
         // Correction for VAT marker
         if ($booking->status == 5) {
@@ -151,6 +156,7 @@ class BookingsController extends Controller
                               [
                               'booking' => $booking,
                               'items' => $bookedItems,
+                              'custom' => $customItems,
                               'next' => $this->nextStatus
                               ]
                           );
@@ -347,20 +353,20 @@ class BookingsController extends Controller
                 $key = array_search($item->id, $request->id);
                 if ($key !== false) {
                     $item->description = $request->description[$key];
-                    $item->quantity = $request->quantity[$key];
+                    $item->number = $request->quantity[$key];
                     $item->price = $request->price[$key];
                     $item->save();
                 } else {
                     $item->delete();
                 }
             }
-            foreach ($request->id as $key => $id){
-                if (is_null($id)) {
+            foreach ($request->id as $key => $cus_id){
+                if (is_null($cus_id)) {
                     if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {
                         $item = new custom_items;
                         $item->booking = $booking->id;
                         $item->description = $request->description[$key];
-                        $item->quantity = $request->quantity[$key];
+                        $item->number = $request->quantity[$key];
                         $item->price = $request->price[$key];
                         $item->save();
                     }
