@@ -103,15 +103,16 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
                             'class'=>'form-control',
                             'placeholder'=>'Item Description'
                         )) }}
-                        {{ Form::text('quantity[]', $item->number,
+                        {{ Form::number('quantity[]', $item->number,
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Quantity'
                         )) }}
-                        {{ Form::text('price[]', $item->price,
+                        {{ Form::text('price[]', number_format($item->price, 2),
                         array(
                             'class'=>'form-control',
-                            'placeholder'=>'Item Price'
+                            'placeholder'=>'Item Price',
+                            'onchange'=>'moneyInput(this)'
                         )) }}
                     </div>
                   @endforeach
@@ -122,7 +123,7 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
                             'class'=>'form-control',
                             'placeholder'=>'Item Description'
                         )) }}
-                        {{ Form::text('quantity[]', NULL,
+                        {{ Form::number('quantity[]', NULL,
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Quantity'
@@ -130,7 +131,8 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
                         {{ Form::text('price[]', NULL,
                         array(
                             'class'=>'form-control',
-                            'placeholder'=>'Item Price'
+                            'placeholder'=>'Item Price',
+                            'onchange'=>'moneyInput(this)'
                         )) }}
                     </div>
                 </div>
@@ -206,6 +208,15 @@ function sub(ref)
     main.getElementsByClassName('btnLess')[0].disabled = true;
   }
   main.getElementsByClassName('btnMore')[0].disabled = false;
+}
+
+function moneyInput(obj){
+  var val = parseFloat(obj.value);
+  if (isNaN(val)){
+    obj.value = '0.00';
+  } else {
+    obj.value = val.toFixed(2);
+  }
 }
 
   </script>
