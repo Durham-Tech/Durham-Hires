@@ -103,7 +103,7 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
                             'class'=>'form-control',
                             'placeholder'=>'Item Description'
                         )) }}
-                        {{ Form::text('quantity[]', $item->quantity,
+                        {{ Form::text('quantity[]', $item->number,
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Quantity'
