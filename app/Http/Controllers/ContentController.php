@@ -28,15 +28,36 @@ class ContentController extends Controller
         echo $content->content;
     }
 
+
+    private function FileExt($contentType)
+    {
+        $map = array(
+            'image/gif'         => '.gif',
+            'image/jpeg'        => '.jpg',
+            'image/png'         => '.png',
+            'image/bmp'         => '.bmp',
+            'image/tiff'        => '.tif',
+        );
+        if (isset($map[$contentType])) {
+            return $map[$contentType];
+        }
+
+        // HACKISH CATCH ALL (WHICH IN MY CASE IS
+        // PREFERRED OVER THROWING AN EXCEPTION)
+        $pieces = explode('/', $contentType);
+        return '.' . array_pop($pieces);
+    }
+
     public function savePage(Request $request)
     {
         $page = content::where('page', $request->page)->firstOrFail();
         $content = strip_tags($request->content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe>');
         $content = preg_replace_callback(
-            '/<img.+?src="(data:image\/[A-Za-z]+;base64,[^\"]+)".+?data-filename="[^\.]+\.([a-zA-Z]+)".+?>/',
+            '/<img.+?src="(data:image\/[A-Za-z]+;base64,[^\"]+)".+?>/',
             function ($matches) {
-                $name = uniqid() . str_random(5) . '.' . $matches[2];
+                // $name = uniqid() . str_random(5) . '.' . $matches[2];
                 $img = Image::make($matches[1]);
+                $name = uniqid() . str_random(5) . $this->FileExt($img->mime());
                 $img->save('images/content/' . $name);
                 return str_replace($matches[1], '/images/content/' . $name, $matches[0]);
             },
