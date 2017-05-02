@@ -70,6 +70,7 @@ if (isset($old)){
               </div>
             @endif
 
+            <!-- TODO: Display today's date on datepicker -->
             <div class='form-group form-inline'>
                 {{ Form::label('start', 'Start date: ') }}
                 <vue-datepicker name="start" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>

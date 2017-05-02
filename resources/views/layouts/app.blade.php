@@ -69,15 +69,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                             <li><a href="{{ url('/login') }}">Login</a></li>
                         @else
                             <li>
-                                <a href="{{ url('/logout') }}"
-                                    onclick="event.preventDefault();
-                                                document.getElementById('logout-form').submit();">
-                                    Logout ({{CAuth::user()->username}})
-                                </a>
-
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
+                                <a href="{{ url('/logout') }}">Logout ({{CAuth::user()->username}})</a>
                             </li>
                         @endif
                     </ul>

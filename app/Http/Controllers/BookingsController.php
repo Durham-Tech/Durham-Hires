@@ -243,6 +243,7 @@ class BookingsController extends Controller
             $booking->status = $request->status;
         }
 
+        // TODO: Alow updating of non durham email addresses
         if ($booking->email != $request->email) {
             $details = Common::getDetailsEmail($request->email);
             if ($details) {
