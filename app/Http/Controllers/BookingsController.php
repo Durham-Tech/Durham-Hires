@@ -243,13 +243,25 @@ class BookingsController extends Controller
             $booking->status = $request->status;
         }
 
-        // TODO: Alow updating of non durham email addresses
         if ($booking->email != $request->email) {
+            $this->validate(
+                $request, [
+                'email' => 'required|email'
+                ]
+            );
+            $booking->email = $request->email;
             $details = Common::getDetailsEmail($request->email);
             if ($details) {
-                $booking->email = $request->email;
                 $booking->user = $details->name;
+                $booking->isDurham = 1;
+            } else {
+                $booking->isDurham = 0;
             }
+            // $details = Common::getDetailsEmail($request->email);
+            // if ($details) {
+            //     $booking->email = $request->email;
+            //     $booking->user = $details->name;
+            // }
         }
 
         $booking->discDays = $request->discDays;
