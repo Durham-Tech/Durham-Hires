@@ -5,7 +5,7 @@
   <table align="center">
     <tr>
       <td class="img">
-      <img src="{{ public_path() . '/images/logo.png' }}">
+      <img src="{{ public_path() . '/images/content/logo.png' }}">
       </td>
       <td class="address">
         <p>

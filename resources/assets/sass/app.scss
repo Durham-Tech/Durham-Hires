@@ -117,7 +117,7 @@
     font-weight: bold;
   }
 
-  tbody:not(:first-of-type) td h2{
+  tbody:not(:first-of-type) td h2 {
     padding-top: 20px;
   }
 }
@@ -250,17 +250,23 @@ img#homeLogo {
 .modal-dialog .img-responsive {
   margin: auto;
 }
-
 // Summernote styling
-.panel-default .panel-heading{
+
+.panel-default .panel-heading {
   background-color: #F5F5F5;
 }
 
-#ContentEditorControls span#contentSave {
-  padding-left: 10px;
-}
+#ContentEditorControls {
+  select {
+    border-radius: 4px;
+  }
 
+  span#contentSave {
+    padding-left: 10px;
+  }
+}
 // Item Edit
+
 .imageThumb {
   max-width: 54px;
   max-height: 54px;
