@@ -95,46 +95,81 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
                 @endforeach
                 @if ($admin && $edit)
                 <div id="custom" class="tab-pane fade table-responsive">
+                  <div class="table-title">
+                    <h2>Custom Items</h2>
+                    <button type="button" class="btn add-button">
+                      Add&nbsp;
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                  </div>
+                  <div class='custom-item-table'>
+                    <div class="table-heading">
+                      <div class"table-max">Item Description</div>
+                      <div class="table-set">Quantity</div>
+                      <div class="table-pound"></div>
+                      <div class="table-set">Price</div>
+                    </div>
                   @foreach ($custom as $item)
-                    <div class="form-group form-inline">
+                    <div class="table-row">
                         {{ Form::hidden('id[]', $item->id) }}
+                        <div class="table-max">
                         {{ Form::text('description[]', $item->description,
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Description'
                         )) }}
+                      </div>
+                      <div class="table-set">
                         {{ Form::number('quantity[]', $item->number,
                         array(
                             'class'=>'form-control',
-                            'placeholder'=>'Item Quantity'
+                            'placeholder'=>'Quantity'
                         )) }}
+                      </div>
+                      <div class="table-pound">£</div>
+                      <div class="table-set">
                         {{ Form::text('price[]', number_format($item->price, 2),
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Price',
                             'onchange'=>'moneyInput(this)'
                         )) }}
+                      </div>
+                      <div class="table-delete">
+                        <a href="#" class="delete-row">Delete</a>
+                      </div>
                     </div>
                   @endforeach
-                    <div class="form-group form-inline">
+                    <div class="table-row">
                         {{ Form::hidden('id[]', NULL) }}
+                        <div class="table-max">
                         {{ Form::text('description[]', NULL,
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Description'
                         )) }}
+                      </div>
+                      <div class="table-set">
                         {{ Form::number('quantity[]', NULL,
                         array(
                             'class'=>'form-control',
-                            'placeholder'=>'Item Quantity'
+                            'placeholder'=>'Quantity'
                         )) }}
+                      </div>
+                      <div class="table-pound">£</div>
+                      <div class="table-set">
                         {{ Form::text('price[]', NULL,
                         array(
                             'class'=>'form-control',
                             'placeholder'=>'Item Price',
                             'onchange'=>'moneyInput(this)'
                         )) }}
+                      </div>
+                      <div class="table-delete">
+                        <a href="#" class="delete-row">Delete</a>
+                      </div>
                     </div>
+                </div>
                 </div>
                 @endif
             </div>
@@ -177,6 +212,17 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
     location.replace(e.target.hash);
     $(this).tab('show');
 });
+
+
+    $(".add-button").click(function(e){ //on add input button click
+        e.preventDefault();
+            $(".custom-item-table").append('<div class="table-row"> <input name="id[]" type="hidden"> <div class="table-max"> <input class="form-control" placeholder="Item Description" name="description[]" type="text"> </div> <div class="table-set"> <input class="form-control" placeholder="Quantity" name="quantity[]" type="number"> </div> <div class="table-pound">£</div> <div class="table-set"> <input class="form-control" placeholder="Item Price" onchange="moneyInput(this)" name="price[]" type="text"> </div> <div class="table-delete"> <a href="#" class"delete-row"="">Delete</a> </div> </div>'); //add input box
+    });
+
+    $(".delete-row").click(function(e){ //on add input button click
+        e.preventDefault();
+        $(this).parent('div').parent('div').remove();;
+    });
 
 function plus(ref)
 {
