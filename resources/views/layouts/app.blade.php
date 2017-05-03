@@ -79,9 +79,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
 
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
                     @yield('content')
-                </div>
             </div>
         </div>
     </div>
