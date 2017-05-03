@@ -67,13 +67,14 @@ class Handler extends ExceptionHandler
 
         if (env('APP_DEBUG')) {
             return $this->convertExceptionToResponse($e);
-        }
-        if (view()->exists("errors::{$status}")) {
-            return response()->view("errors::{$status}", ['exception' => $e], $status, $e->getHeaders());
-        } elseif (view()->exists("errors::default")) {
-            return response()->view("errors::default", ['exception' => $e], $status, $e->getHeaders());
         } else {
-            return $this->convertExceptionToResponse($e);
+            if (view()->exists("errors::{$status}")) {
+                return response()->view("errors::{$status}", ['exception' => $e], $status, $e->getHeaders());
+            } elseif (view()->exists("errors::default")) {
+                return response()->view("errors::default", ['exception' => $e], $status, $e->getHeaders());
+            } else {
+                return $this->convertExceptionToResponse($e);
+            }
         }
     }
 
