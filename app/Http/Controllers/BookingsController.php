@@ -362,26 +362,28 @@ class BookingsController extends Controller
                 }
             }
 
-            foreach ($custom_items as $item){
-                $key = array_search($item->id, $request->id);
-                if ($key !== false) {
-                    $item->description = $request->description[$key];
-                    $item->number = $request->quantity[$key];
-                    $item->price = $request->price[$key];
-                    $item->save();
-                } else {
-                    $item->delete();
-                }
-            }
-            foreach ($request->id as $key => $cus_id){
-                if (is_null($cus_id)) {
-                    if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {
-                        $item = new custom_items;
-                        $item->booking = $booking->id;
+            if (!$booking->internal && !$booking->template) {
+                foreach ($custom_items as $item){
+                    $key = array_search($item->id, $request->id);
+                    if ($key !== false) {
                         $item->description = $request->description[$key];
                         $item->number = $request->quantity[$key];
                         $item->price = $request->price[$key];
                         $item->save();
+                    } else {
+                        $item->delete();
+                    }
+                }
+                foreach ($request->id as $key => $cus_id){
+                    if (is_null($cus_id)) {
+                        if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {
+                            $item = new custom_items;
+                            $item->booking = $booking->id;
+                            $item->description = $request->description[$key];
+                            $item->number = $request->quantity[$key];
+                            $item->price = $request->price[$key];
+                            $item->save();
+                        }
                     }
                 }
             }

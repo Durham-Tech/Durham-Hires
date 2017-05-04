@@ -2,6 +2,9 @@
 
 <?php
 $admin = CAuth::checkAdmin(4) ? 1 : 0;
+if ($edit) {
+    $external = $admin && !($booking->template) && !($booking->internal);
+}
 ?>
 
 @section('title', 'Catalog')
@@ -19,7 +22,7 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
                     <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-').'_'.$loop->iteration }}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
-                @if ($admin && $edit)
+                @if ($edit && $external)
                   <li><a href="#custom">Custom Items</a></li>
                 @endif
             </ul>
@@ -93,7 +96,7 @@ $admin = CAuth::checkAdmin(4) ? 1 : 0;
 
                 {!! ($loop->last) ? '</table></div>' : '' !!}
                 @endforeach
-                @if ($admin && $edit)
+                @if ($edit && $external)
                 <div id="custom" class="tab-pane fade table-responsive">
                   <div class="table-title">
                     <h2>Custom Items</h2>

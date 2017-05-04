@@ -333,6 +333,8 @@ img#homeLogo {
     display: table-cell;
     text-align: right;
     margin-left: -5px;
+    vertical-align: middle;
+    font-weight: bold;
   }
 
   .table-delete {
@@ -340,6 +342,7 @@ img#homeLogo {
     text-align: right;
     width: 1px;
     padding-left: 10px;
+    vertical-align: middle;
   }
 }
 
