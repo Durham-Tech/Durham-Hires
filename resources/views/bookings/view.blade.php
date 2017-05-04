@@ -50,7 +50,7 @@ if ($booking->status < 4){
         </p>
         @endif
 
-        @if (count($items) > 0)
+        @if (count($items) + count($custom)> 0)
         <?php $total = 0; ?>
         <div id="items_table">
           <table class="table table-bordered">
