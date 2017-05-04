@@ -70,7 +70,7 @@ $active = 'admin';
       e.preventDefault();
       var id = $(this).data('idvalue');
       var ajax = $.ajax({
-          url: "/admin/" + id,
+          url: "/settings/admin/" + id,
           type: 'post',
           data: {_method: 'delete'},
           success: function(){

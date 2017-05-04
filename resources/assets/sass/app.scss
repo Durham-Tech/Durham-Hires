@@ -273,6 +273,21 @@ img#homeLogo {
 .modal-dialog .img-responsive {
   margin: auto;
 }
+// Summernote styling
+
+.panel-default .panel-heading {
+  background-color: #F5F5F5;
+}
+
+#ContentEditorControls {
+  select {
+    border-radius: 4px;
+  }
+
+  span#contentSave {
+    padding-left: 10px;
+  }
+}
 // Item Edit
 
 .imageThumb {

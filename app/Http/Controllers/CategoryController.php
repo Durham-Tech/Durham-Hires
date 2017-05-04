@@ -84,7 +84,7 @@ class CategoryController extends Controller
         }
 
         $cat->save();
-        return redirect('/categories');
+        return redirect('/settings/categories');
     }
 
     /**
@@ -143,7 +143,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect('/categories');
+        return redirect('/settings/categories');
     }
 
     /**
@@ -155,6 +155,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect('/categories');
+        return redirect('/settings/categories');
     }
 }

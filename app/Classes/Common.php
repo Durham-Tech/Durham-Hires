@@ -5,6 +5,7 @@ namespace App\Classes;
 use App\Bookings;
 use App\Settings;
 use App\Admin;
+use App\content;
 
 class Common
 {
@@ -95,5 +96,11 @@ class Common
     public static function hiresEmail()
     {
         return Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+    }
+
+    public static function getContent($page)
+    {
+        $data = content::where('page', $page)->firstOrFail()->content;
+        return $data;
     }
 }
