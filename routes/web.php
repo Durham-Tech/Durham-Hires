@@ -64,7 +64,7 @@ Route::get(
 );
 
 Route::post('/login', 'customAuth@checkAuth');
-Route::post('/logout', 'customAuth@logout');
+Route::get('/logout', 'customAuth@logout');
 
 
 // testing routes

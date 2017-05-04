@@ -71,6 +71,14 @@ if ($booking->status < 4){
                 <td>£{{ number_format((float)$item->cost, 2) }}</td>
               </tr>
               @endforeach
+              @foreach ($custom as $item)
+              <tr>
+                <td>{{ $item->description }}</td>
+                <td>{{ $item->number }}</td>
+                <td>£{{ number_format((float)$item->unitCost, 2) }}</td>
+                <td>£{{ number_format((float)$item->cost, 2) }}</td>
+              </tr>
+              @endforeach
               @if ($booking->discount != 0)
               <tr id="discRow">
                 <td colspan="3"><b>Discount</b></td>

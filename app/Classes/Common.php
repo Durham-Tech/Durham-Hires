@@ -38,7 +38,7 @@ class Common
         }
     }
 
-    public static function calcAllCosts(&$booking, &$bookedItems)
+    public static function calcAllCosts(&$booking, &$bookedItems, &$customItems)
     {
         $booking->subTotal = 0;
         $booking->discount = 0;
@@ -46,6 +46,7 @@ class Common
         if ($days < 0) {
             $days = 0;
         }
+        // Normal items
         foreach ($bookedItems as $item) {
             $d = ceil(($days % 7)/2) * $item->dayPrice;
             if ($d < $item->weekPrice) {
@@ -53,6 +54,12 @@ class Common
             } else {
                 $item->unitCost = ceil($days / 7) * $item->weekPrice;
             }
+            $item->cost = $item->unitCost * $item->number;
+            $booking->subTotal += $item->cost;
+        }
+        // Custom Bookings
+        foreach ($customItems as $item) {
+            $item->unitCost = $item->price;
             $item->cost = $item->unitCost * $item->number;
             $booking->subTotal += $item->cost;
         }
