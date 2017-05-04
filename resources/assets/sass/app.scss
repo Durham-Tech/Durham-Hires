@@ -279,3 +279,68 @@ img#homeLogo {
   max-width: 54px;
   max-height: 54px;
 }
+// Custom Items table
+
+.custom-item-table {
+  display: table;
+  width: 100%;
+  padding: 10px 0;
+
+  .table-heading {
+    display: table-row;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .table-row {
+    display: table-row;
+    padding: 5px;
+  }
+
+  .table-max {
+    display: table-cell;
+    padding: 5px;
+  }
+
+  .table-set {
+    display: table-cell;
+    width: 110px;
+    padding: 5px;
+
+    input {
+      text-align: center;
+    }
+  }
+
+  .table-pound {
+    display: table-cell;
+    text-align: right;
+    margin-left: -5px;
+  }
+
+  .table-delete {
+    display: table-cell;
+    text-align: right;
+    width: 1px;
+    padding-left: 10px;
+  }
+}
+
+.table-title {
+  padding-top: 25px;
+  display: table;
+
+  h2 {
+    font-size: 22px;
+    font-weight: bold;
+    padding-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  button {
+    display: table-cell;
+  }
+}

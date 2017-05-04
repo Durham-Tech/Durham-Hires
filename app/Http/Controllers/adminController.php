@@ -117,6 +117,6 @@ class AdminController extends Controller
 
     public function pdfTest()
     {
-        return pdf::createInvoice(30, false);
+        return pdf::createInvoice(16, false);
     }
 }

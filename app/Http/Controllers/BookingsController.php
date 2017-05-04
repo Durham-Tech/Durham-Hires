@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bookings;
 use App\booked_items;
+use App\custom_items;
 use Illuminate\Http\Request;
 use View;
 use App\Classes\Items;
@@ -135,7 +136,12 @@ class BookingsController extends Controller
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
 
-        Common::calcAllCosts($booking, $bookedItems);
+        $customItems = custom_items::select('description', 'number', 'price')
+            ->where('booking', $id)
+            ->where('number', '!=', '0')
+            ->get();
+
+        Common::calcAllCosts($booking, $bookedItems, $customItems);
 
         // Correction for VAT marker
         if ($booking->status == 5) {
@@ -150,6 +156,7 @@ class BookingsController extends Controller
                               [
                               'booking' => $booking,
                               'items' => $bookedItems,
+                              'custom' => $customItems,
                               'next' => $this->nextStatus
                               ]
                           );
@@ -316,10 +323,11 @@ class BookingsController extends Controller
         $items = new Items;
         $booking = Bookings::find($id);
         $data = $items->getAvalible($booking);
+        $custom_items = custom_items::where('booking', $booking->id)->get();
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
             return View::make('items.index')
-                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking]);
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items]);
         } else {
             return redirect()->route('items.index');
         }
@@ -330,6 +338,7 @@ class BookingsController extends Controller
         $items = new Items;
         $booking = Bookings::find($id);
         $data = $items->getAvalibleArray($booking);
+        $custom_items = custom_items::where('booking', $booking->id)->get();
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {
             $inputs = $request->input();
@@ -353,8 +362,32 @@ class BookingsController extends Controller
                 }
             }
 
+            foreach ($custom_items as $item){
+                $key = array_search($item->id, $request->id);
+                if ($key !== false) {
+                    $item->description = $request->description[$key];
+                    $item->number = $request->quantity[$key];
+                    $item->price = $request->price[$key];
+                    $item->save();
+                } else {
+                    $item->delete();
+                }
+            }
+            foreach ($request->id as $key => $cus_id){
+                if (is_null($cus_id)) {
+                    if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {
+                        $item = new custom_items;
+                        $item->booking = $booking->id;
+                        $item->description = $request->description[$key];
+                        $item->number = $request->quantity[$key];
+                        $item->price = $request->price[$key];
+                        $item->save();
+                    }
+                }
+            }
+
             if ($booking->status >= 2) {
-                $booking->save();
+                // $booking->save();
                 $items->correctDuplicateBookings($booking);
             }
 

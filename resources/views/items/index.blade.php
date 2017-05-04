@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+<?php
+$admin = CAuth::checkAdmin(4) ? 1 : 0;
+?>
+
 @section('title', 'Catalog')
 
 @section('content')
@@ -12,9 +16,12 @@
               <ul class="nav nav-tabs">
                 @foreach($data as $category)
                     @if ($category->sub == 0)
-                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-') }}">{{ $category->name }}</a></li>
+                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-').'_'.$loop->iteration }}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
+                @if ($admin && $edit)
+                  <li><a href="#custom">Custom Items</a></li>
+                @endif
             </ul>
 
             <div class="tab-content">
@@ -22,7 +29,7 @@
 
                 @if ($category->sub == 0)
                 {!! ($loop->first) ? '' : '</table></div>' !!}
-                <div id="{{ str_slug($category->name, '-') }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
+                <div id="{{ str_slug($category->name, '-').'_'.$loop->iteration }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
                 <table class="table ItemsTable">
                 <thead>
                     <tr>
@@ -69,10 +76,6 @@
                         <td class="itemWeekPrice">£{{ number_format($item->weekPrice,2) }}</td>
                         @if ($edit == TRUE)
                         <td class="itemAvalible">{{ $item->available }}/{{ $item->quantity }}</td>
-                        @else
-                        <td class="itemAvalible">{{ $item->quantity }}</td>
-                        @endif
-                        @if ($edit == TRUE)
                         <td>
                           <div class="numInput" id="spinner_{{ $item->id }}" max="{{ $item->available}}">
                             <button type="button" {{ $item->booked === 0 ? "disabled='true'" : "" }} onclick="sub({{ $item->id }})" class="btnLess btn btn-default">-</button>
@@ -80,6 +83,8 @@
                             <button type="button" {{ $item->booked === $item->available ? "disabled='true'" : "" }} onclick="plus({{ $item->id }})" class="btnMore btn btn-default">+</button>
                           </div>
                         </td>
+                        @else
+                        <td class="itemAvalible">{{ $item->quantity }}</td>
                         @endif
                     </tr>
                     @endforeach
@@ -88,6 +93,85 @@
 
                 {!! ($loop->last) ? '</table></div>' : '' !!}
                 @endforeach
+                @if ($admin && $edit)
+                <div id="custom" class="tab-pane fade table-responsive">
+                  <div class="table-title">
+                    <h2>Custom Items</h2>
+                    <button type="button" class="btn add-button">
+                      Add&nbsp;
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                  </div>
+                  <div class='custom-item-table'>
+                    <div class="table-heading">
+                      <div class"table-max">Item Description</div>
+                      <div class="table-set">Quantity</div>
+                      <div class="table-pound"></div>
+                      <div class="table-set">Price</div>
+                    </div>
+                  @foreach ($custom as $item)
+                    <div class="table-row">
+                        {{ Form::hidden('id[]', $item->id) }}
+                        <div class="table-max">
+                        {{ Form::text('description[]', $item->description,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Description'
+                        )) }}
+                      </div>
+                      <div class="table-set">
+                        {{ Form::number('quantity[]', $item->number,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Quantity'
+                        )) }}
+                      </div>
+                      <div class="table-pound">£</div>
+                      <div class="table-set">
+                        {{ Form::text('price[]', number_format($item->price, 2),
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Price',
+                            'onchange'=>'moneyInput(this)'
+                        )) }}
+                      </div>
+                      <div class="table-delete">
+                        <a href="#" class="delete-row">Delete</a>
+                      </div>
+                    </div>
+                  @endforeach
+                    <div class="table-row">
+                        {{ Form::hidden('id[]', NULL) }}
+                        <div class="table-max">
+                        {{ Form::text('description[]', NULL,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Description'
+                        )) }}
+                      </div>
+                      <div class="table-set">
+                        {{ Form::number('quantity[]', NULL,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Quantity'
+                        )) }}
+                      </div>
+                      <div class="table-pound">£</div>
+                      <div class="table-set">
+                        {{ Form::text('price[]', NULL,
+                        array(
+                            'class'=>'form-control',
+                            'placeholder'=>'Item Price',
+                            'onchange'=>'moneyInput(this)'
+                        )) }}
+                      </div>
+                      <div class="table-delete">
+                        <a href="#" class="delete-row">Delete</a>
+                      </div>
+                    </div>
+                </div>
+                </div>
+                @endif
             </div>
 
             @if ($edit == TRUE)
@@ -120,7 +204,7 @@
     };
 
     $('#myModal').on('hide.bs.modal', function(e) {
-	$(this).removeData('bs.modal');
+    $(this).removeData('bs.modal');
 });
 
     $('.nav-tabs a').click(function (e) {
@@ -129,10 +213,21 @@
     $(this).tab('show');
 });
 
+
+    $(".add-button").click(function(e){ //on add input button click
+        e.preventDefault();
+            $(".custom-item-table").append('<div class="table-row"> <input name="id[]" type="hidden"> <div class="table-max"> <input class="form-control" placeholder="Item Description" name="description[]" type="text"> </div> <div class="table-set"> <input class="form-control" placeholder="Quantity" name="quantity[]" type="number"> </div> <div class="table-pound">£</div> <div class="table-set"> <input class="form-control" placeholder="Item Price" onchange="moneyInput(this)" name="price[]" type="text"> </div> <div class="table-delete"> <a href="#" class"delete-row"="">Delete</a> </div> </div>'); //add input box
+    });
+
+    $(".delete-row").click(function(e){ //on add input button click
+        e.preventDefault();
+        $(this).parent('div').parent('div').remove();;
+    });
+
 function plus(ref)
 {
   var main = document.getElementById("spinner_" + ref);
-	var max = parseInt(main.getAttribute("max"));
+    var max = parseInt(main.getAttribute("max"));
   var val = main.getElementsByTagName('input')[0];
   var cur = parseInt(val.value);
   var newVal = cur + 1;
@@ -148,7 +243,7 @@ function plus(ref)
 function sub(ref)
 {
   var main = document.getElementById("spinner_" + ref);
-	var max = parseInt(main.getAttribute("max"));
+    var max = parseInt(main.getAttribute("max"));
   var val = main.getElementsByTagName('input')[0];
   var cur = parseInt(val.value);
   var newVal = cur - 1;
@@ -159,6 +254,15 @@ function sub(ref)
     main.getElementsByClassName('btnLess')[0].disabled = true;
   }
   main.getElementsByClassName('btnMore')[0].disabled = false;
+}
+
+function moneyInput(obj){
+  var val = parseFloat(obj.value);
+  if (isNaN(val)){
+    obj.value = '0.00';
+  } else {
+    obj.value = val.toFixed(2);
+  }
 }
 
   </script>
