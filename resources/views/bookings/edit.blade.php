@@ -70,9 +70,10 @@ if (isset($old)){
               </div>
             @endif
 
+            <!-- TODO: Display today's date on datepicker -->
             <div class='form-group form-inline'>
                 {{ Form::label('start', 'Start date: ') }}
-                <vue-datepicker name="start" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
+                <vue-datepicker name="start" :highlighted="highlighted" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
                 <!-- <div class="input-group date" id="start">
                   {{ Form::date('start', \Carbon\Carbon::now(),
                   array(
@@ -83,7 +84,7 @@ if (isset($old)){
             </div>
             <div class='form-group form-inline'>
                 {{ Form::label('end', 'Return date: ') }}
-                <vue-datepicker name="end" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
+                <vue-datepicker name="end" :highlighted="highlighted" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
                 <!-- <div class="input-group date" id="end">
                   {{ Form::date('end', \Carbon\Carbon::now(),
                   array(
@@ -194,11 +195,16 @@ const app = new Vue({
       disc:'{{ $old->discValue }}',
       start:'{{ $old->start }}',
       end:'{{ $old->end }}',
-      discountType:{{ $old->discType }}
+      discountType:{{ $old->discType }},
       @else
       start:'',
       end:'',
       @endif
+      highlighted: {
+          dates: [ // Highlight an array of dates
+              new Date(),
+          ]
+      },
     },
 
     methods: {
@@ -214,9 +220,9 @@ const app = new Vue({
     watch: {
       start: function(val) {
         var start = new Date(val);
+        var temp = new Date(this.start);
+        temp.setDate(temp.getDate() + 1);
         if (start.toISOString() > this.end){
-          var temp = new Date(this.start);
-          temp.setDate(temp.getDate() + 1);
           this.end = temp.toISOString();
         }
       }

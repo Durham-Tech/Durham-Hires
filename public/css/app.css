@@ -8328,6 +8328,25 @@ button.close {
   margin: auto;
 }
 
+a,
+a:focus {
+  outline: none;
+}
+
+.errorPage#errorImage img {
+  width: 100%;
+}
+
+.errorPage h1 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 100px;
+}
+
+.errorPage h2 {
+  text-align: center;
+}
+
 .treasurer {
   max-width: 300px;
   margin: auto;

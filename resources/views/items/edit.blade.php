@@ -112,7 +112,7 @@
                   )) !!}
                 @endif
         {!! Form::close() !!}
-        @if(isset($old))
+        @if(isset($old->id))
         {{ Form::open(['route' => ['items.destroy', $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
