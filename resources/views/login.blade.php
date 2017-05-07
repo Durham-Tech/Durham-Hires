@@ -3,7 +3,7 @@
 @section('title', 'Login')
 
 @section('content')
-    <div class="">
+    <div class="limWidth">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                 {{ csrf_field() }}
 

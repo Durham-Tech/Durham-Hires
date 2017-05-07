@@ -3,6 +3,7 @@
 @section('title', 'Treasurer')
 
 @section('content')
+<div class="limWidth">
 <div class="treasurer">
 
 @if ($success == 1)
@@ -105,6 +106,7 @@
     </table>
 
   </div>
+</div>
 @endif
 @endsection
 

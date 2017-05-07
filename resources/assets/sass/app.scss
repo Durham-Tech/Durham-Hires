@@ -9,8 +9,9 @@
     padding-bottom: 15px;
 
     .limWidth {
-      max-width: 900px;
+      max-width: 880px;
       margin: auto;
+      padding: 10px;
     }
   }
 }
@@ -224,6 +225,11 @@ a:focus {
 .login {
   max-width: 700px;
   margin: auto;
+
+  .form-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 @media (min-width: $screen-md-min) {
   .borderLeft {

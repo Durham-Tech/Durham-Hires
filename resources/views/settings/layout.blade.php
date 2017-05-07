@@ -3,7 +3,6 @@
 @section('title', 'Settings')
 
 @section('content')
-  <div class="row">
 
     <div class="col-md-3 submenu">
       <ul class="nav nav-pills nav-stacked">
@@ -18,5 +17,4 @@
       @yield('page')
     </div>
 
-  </div>
 @endsection
