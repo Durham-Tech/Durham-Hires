@@ -51,13 +51,18 @@ class treasurerController extends Controller
             $success = 3;
         }
 
+        $vatBookings = Bookings::orderBy('start')
+              ->where('status', '=', 4)
+              ->where('vat', '=', 1)
+              ->get();
+
         if ($success == 1) {
-            return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success]);
+            return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success, 'bookings' => $vatBookings]);
         } else {
             if ($request->attempt == 2) {
                 \Mail::send(new bankIncorrect($request->ref, $request->amount));
             }
-            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success]);
+            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success, 'bookings' => $vatBookings]);
         }
     }
 
