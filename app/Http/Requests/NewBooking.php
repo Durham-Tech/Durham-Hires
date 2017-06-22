@@ -69,12 +69,6 @@ class NewBooking extends FormRequest
                         } else {
                             $validator->errors()->add('email', 'The provided email address is not valid.');
                         }
-                    } else {
-                        if ($result->parts->domain == 'durham.ac.uk') {
-                            if (!Common::getDetailsEmail($this->input(['email']))) {
-                                $validator->errors()->add('email', 'The email is not a valid durham email address.');
-                            }
-                        }
                     }
                 }
             }
