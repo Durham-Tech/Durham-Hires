@@ -16,3 +16,4 @@ updateGit.txt
 public/css/app.css
 public/js/app.js
 .env
+.vscode/settings.json

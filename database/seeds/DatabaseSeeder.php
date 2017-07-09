@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         DB::table('settings')->insert(
             [
             'name' => 'hiresEmail',
-            'value' => '',
+            'value' => 'test@example.com',
             ]
         );
         DB::table('admins')->insert(
