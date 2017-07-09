@@ -11,6 +11,39 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        DB::table('content')->insert(
+            [
+            'page' => 'home',
+            'name' => 'Home Page',
+            'content' => '<div align="center"><h1><font face="Raleway">Welcome to the best hires site around!</font></h1></div>',
+            ]
+        );
+        DB::table('content')->insert(
+            [
+            'page' => 'tc',
+            'name' => 'Terms and Conditions',
+            'content' => '<h1>Ts and Cs fun and games!</h1>',
+            ]
+        );
+        DB::table('settings')->insert(
+            [
+            'name' => 'hiresManager',
+            'value' => '1',
+            ]
+        );
+        DB::table('settings')->insert(
+            [
+            'name' => 'hiresEmail',
+            'value' => 'test@example.com',
+            ]
+        );
+        DB::table('admins')->insert(
+            [
+            'name' => 'Test Admin User',
+            'user' => 'nwng84',
+            'email' => 'jonathan.salmon@hotmail.co.uk',
+            'privileges' => '5',
+            ]
+        );
     }
 }
