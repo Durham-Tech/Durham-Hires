@@ -34,10 +34,14 @@ class customAuth extends Controller
         if ($status_code == 200) {
             $request->session()->put('auth', '1');
             $request->session()->put('user_data', $result);
-            $privileges = DB::select('select privileges from admins where user = ?', [$request['user']]);
+            $privRows = DB::select('select site, privileges from admins where user = ?', [$request['user']]);
 
-            if (!empty($privileges)) {
-                $request->session()->put('privileges', $privileges[0]->privileges);
+            if (!empty($privRows)) {
+                $privileges = array();
+                foreach($privRows as $row){
+                    $privileges[$row->site] = $row->privileges;
+                }
+                $request->session()->put('privileges', $privileges);
                 echo 'true';
             }
 
