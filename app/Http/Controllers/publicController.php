@@ -17,8 +17,9 @@ class publicController extends Controller
         return View::make('home')
             ->with(['data' => $data]);
     }
-    public function terms()
+    public function terms(Request $request)
     {
+        // $site = $request->get('site');
         $data = Common::getContent('tc');
         return View::make('terms')
             ->with(['data' => $data]);
