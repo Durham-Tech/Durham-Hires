@@ -48,15 +48,15 @@
         </p>
         @endif
 @if (($booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3))
-{!! link_to_route('bookings.add', 'Add/Remove Items', array($booking->id), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('bookings.add', 'Add/Remove Items', array($site, $booking->id), array('class' => 'btn btn-primary')) !!}
 @endif
 
 
-{{ Form::open(['route' => ['internal.destroy', $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['internal.destroy', $site, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}
 
-{!! link_to_route('internal.index', 'Back', array(), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('internal.index', 'Back', array($site), array('class' => 'btn btn-primary')) !!}
 </div>
 
 @if (session('unavalible'))

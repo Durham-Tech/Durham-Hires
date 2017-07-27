@@ -14,6 +14,7 @@ class customAuth extends Controller
 
     public function checkAuth(Request $request)
     {
+        $site = $request->get('_site');
         $user = $request->input('user');
         $pass = $request->input('password');
         $remote_url = 'https://community.dur.ac.uk/trevelyan.jcr/password/tech/auth.php';
@@ -48,7 +49,7 @@ class customAuth extends Controller
 
             $path = session('target', '');
             if (empty($path)) {
-                return redirect('/');
+                return redirect()->route('home', $site->slug);
             } else {
                 session(['target' => '']);
                 return redirect($path);
@@ -57,7 +58,7 @@ class customAuth extends Controller
             $request->session()->put('auth', '0');
             $request->session()->forget('user_data');
             $request->session()->forget('privileges');
-            return redirect()->route('login');
+            return redirect()->route('login', $site->slug);
         }
     }
 

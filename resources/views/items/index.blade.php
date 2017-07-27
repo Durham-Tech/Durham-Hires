@@ -13,7 +13,7 @@ if ($edit) {
 <div class="limWidth">
             @if ($data)
             @if ($edit == TRUE)
-            {!! Form::open(['url' => 'bookings/' . $booking->id . '/add']) !!}
+            {!! Form::open(['url' => $site . '/bookings/' . $booking->id . '/add']) !!}
             @endif
 
               <ul class="nav nav-tabs">
@@ -69,12 +69,12 @@ if ($edit) {
                     <tr>
                         <td class="itemImage">
                         @if (!empty($item->image))
-                          <a href='{!! action('ItemController@show', ['items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">
+                          <a href='{!! action('ItemController@show', ['site' => $site, 'items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">
                             {{ Html::image('images/catalog/thumb_' . $item->image) }}
                           </a>
                         @endif
                         </td>
-                        <td class="itemTitle"><a href='{!! action('ItemController@show', ['items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">{{ $item->description }}</a></td>
+                        <td class="itemTitle"><a href='{!! action('ItemController@show', ['site' => $site, 'items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">{{ $item->description }}</a></td>
                         <td class="itemDayPrice">£{{ number_format($item->dayPrice,2) }}</td>
                         <td class="itemWeekPrice">£{{ number_format($item->weekPrice,2) }}</td>
                         @if ($edit == TRUE)

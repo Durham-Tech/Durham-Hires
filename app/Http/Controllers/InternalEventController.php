@@ -22,25 +22,33 @@ class InternalEventController extends Controller
 
     public function index()
     {
-            $data = Bookings::orderBy('start')
-                ->whereRaw('end > NOW()')
-                ->where('internal', '1')
-                ->get();
+        $site = Request()->get('_site');
+
+        $data = Bookings::where('site', $site->id)
+            ->whereRaw('end > NOW()')
+            ->where('internal', '1')
+            ->orderBy('start')
+            ->get();
 
         return View::make('bookings.internal.index')
-            ->with(['data' => $data]);
+            ->with(['data' => $data, 'site' => $site->slug]);
     }
 
 
     public function create()
     {
-        $templates = Bookings::where('template', '1')->get();
+        $site = Request()->get('_site');
+        $templates = Bookings::where('site', $site->id)
+            ->where('template', '1')
+            ->get();
         return View::make('bookings.internal.edit')
-            ->with(['templates' => $templates]);
+            ->with(['templates' => $templates, 'site' => $site->slug]);
     }
 
     public function store(NewInternal $request)
     {
+        $site = Request()->get('_site');
+
         $booking = new Bookings;
         $booking->name = $request->name;
         $start = strtotime($request->start)+43200;
@@ -54,6 +62,7 @@ class InternalEventController extends Controller
         $booking->isDurham = 0;
         $booking->email = CAuth::user()->email;
         $booking->user = '';
+        $booking->site = $site->id;
 
         $booking->save();
 
@@ -70,17 +79,17 @@ class InternalEventController extends Controller
             $items = new Items;
             $errorList = $items->changeTime($booking->id, $booking->start, $booking->end, true);
             $items->correctDuplicateBookings($booking);
-            
-            return redirect('/internal/' . $booking->id)
+
+            return redirect('/' . $site->slug . '/internal/' . $booking->id)
                 ->with('unavalible', $errorList->name)
                 ->with('uQuant', $errorList->number);
         } else {
-            return redirect('/internal/' . $booking->id);
+            return redirect('/' . $site->slug . '/internal/' . $booking->id);
         }
 
     }
 
-    public function show($id)
+    public function show($site, $id)
     {
         $booking = Bookings::findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
@@ -93,37 +102,40 @@ class InternalEventController extends Controller
                           ->with(
                               [
                               'booking' => $booking,
-                              'items' => $bookedItems
+                              'items' => $bookedItems,
+                              'site' => $site
                               ]
                           );
 
     }
 
-    public function destroy($id)
+    public function destroy($site, $id)
     {
         $booking = Bookings::findOrFail($id);
         if ($booking->internal == '1') {
             $booking->delete();
         }
-        return redirect('/internal');
+        return redirect('/' . $site . '/internal');
     }
 
     public function addItems($id)
     {
+        $site = Request()->get('_site');
         $items = new Items;
         $booking = Bookings::find($id);
         $data = $items->getAvalible($booking);
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
             return View::make('items.index')
-                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking]);
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'site' => $site->slug]);
         } else {
-            return redirect()->route('items.index');
+            return redirect()->route('items.index', $site->slug);
         }
     }
 
     public function updateItems(Request $request, $id)
     {
+        $site = Request()->get('_site');
         $items = new Items;
         $booking = Bookings::find($id);
         $data = $items->getAvalibleArray($booking);
@@ -155,9 +167,9 @@ class InternalEventController extends Controller
                 $items->correctDuplicateBookings($booking);
             }
 
-            return redirect()->route('bookings.show', ['id' => $id]);
+            return redirect()->route('bookings.show', ['id' => $id, 'site' => $site->slug]);
         } else {
-            return redirect()->route('items.index');
+            return redirect()->route('items.index', $site->slug);
         }
     }
 

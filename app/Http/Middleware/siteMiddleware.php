@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App;
 use App\Site;
 
 class siteMiddleware
@@ -18,7 +19,7 @@ class siteMiddleware
     public function handle(Request $request, Closure $next)
     {
         $slug = $request->route('site');
-        
+
         if (!is_null($slug)) {
 
             $site = Site::where('slug', $slug)
@@ -26,10 +27,10 @@ class siteMiddleware
                   ->first();
 
             if ($site) {
-                $request->attributes->add(['site' => $site]);
+                $request->attributes->add(['_site' => $site]);
                 return $next($request);
             } else {
-                abort(404);
+                App::abort(404, "Error");
             }
         } else {
             return $next($request);

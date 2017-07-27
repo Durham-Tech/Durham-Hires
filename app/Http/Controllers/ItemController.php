@@ -23,9 +23,10 @@ class ItemController extends Controller
      */
     public function index()
     {
+        $site = Request()->get('_site');
         $Items = new Items;
-        $data = $Items->getAll();
-        return View::make('items.index')->with(['data'=>$data, 'edit'=>false]);
+        $data = $Items->getAll($site->id);
+        return View::make('items.index')->with(['data'=>$data, 'edit'=>false, 'site' => $site->slug]);
     }
 
     /**
@@ -35,8 +36,10 @@ class ItemController extends Controller
      */
     public function create()
     {
+        $site = Request()->get('_site');
         $cats = [];
         $data = \App\Category::orderBy('orderOf')
+              ->where('site', $site->id)
               ->orderBy('id')
               ->get();
 
@@ -57,7 +60,7 @@ class ItemController extends Controller
         $old->quantity = 1;
 
         // return View::make('items.edit')->with(['cat'=>$cats]);
-        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats]);
+        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats, 'site' => $site->slug]);
     }
 
     /**
@@ -68,6 +71,7 @@ class ItemController extends Controller
      */
     public function store(NewItem $request)
     {
+        $site = Request()->get('_site');
         $item = new catalog;
 
         $item->description = $request->description;
@@ -76,6 +80,7 @@ class ItemController extends Controller
         $item->category = $request->category;
         $item->dayPrice = $request->dayPrice;
         $item->weekPrice = $request->weekPrice;
+        $item->site = $site->id;
 
         if (isset($request->orderOf)) {
             $item->orderOf = $request->orderOf;
@@ -100,13 +105,13 @@ class ItemController extends Controller
 
             $img->save('images/catalog/thumb_' . $imageName);
 
-            $item->image = $imageName;
+            $item->image = $site->slug . '/' . $imageName;
             $item->save();
         }
         if ($request->next == 'Save and New') {
-            return redirect('/items/create');
+            return redirect('/' . $site->slug . '/items/create');
         } else {
-            return redirect('/items');
+            return redirect('/' . $site->slug . '/items');
         }
     }
 
@@ -116,10 +121,11 @@ class ItemController extends Controller
      * @param  \App\catalog $catalog
      * @return \Illuminate\Http\Response
      */
-    public function show(catalog $catalog, $id)
+    public function show($s, catalog $catalog, $id)
     {
+        $site = Request()->get('_site');
         $item = catalog::findOrFail($id);
-        return View::make('items.view')->with(['item' => $item]);
+        return View::make('items.view')->with(['item' => $item, 'site' => $site->slug]);
         //
     }
 
@@ -129,10 +135,12 @@ class ItemController extends Controller
      * @param  \App\catalog $catalog
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($s, $id)
     {
+        $site = Request()->get('_site');
         $cats = [];
-        $data = \App\Category::orderBy('orderOf')
+        $data = \App\Category::where('site', $site->id)
+              ->orderBy('orderOf')
               ->orderBy('id')
               ->get();
 
@@ -155,7 +163,7 @@ class ItemController extends Controller
             $old->orderOf = '';
         }
 
-        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats]);
+        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats, 'site' => $site->slug]);
     }
 
     /**
@@ -165,8 +173,9 @@ class ItemController extends Controller
      * @param  \App\catalog             $catalog
      * @return \Illuminate\Http\Response
      */
-    public function update(NewItem $request, catalog $catalog, $id)
+    public function update($s, NewItem $request, catalog $catalog, $id)
     {
+        $site = Request()->get('_site');
         $cat = catalog::findOrFail($id);
 
         if (!empty($request->image)) {
@@ -208,7 +217,7 @@ class ItemController extends Controller
             $img->save('images/catalog/thumb_' . $imageName);
         }
 
-        return redirect('/items');
+        return redirect('/' . $site->slug . '/items');
     }
 
     /**
@@ -217,10 +226,13 @@ class ItemController extends Controller
      * @param  \App\catalog $catalog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(catalog $catalog, $id)
+    public function destroy($s, catalog $catalog, $id)
     {
+        $site = Request()->get('_site');
         $cat = catalog::findOrFail($id);
-        $cat->delete();
-        return redirect('/items');
+        if ($cat->site == $site->id) {
+            $cat->delete();
+        }
+        return redirect('/' . $site->slug . '/items');
     }
 }

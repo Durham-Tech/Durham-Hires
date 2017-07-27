@@ -39,13 +39,13 @@ $active = 'internal';
           There's nothing here. Go ahead and add some items to your order.
         </p>
         @endif
-{!! link_to_route('bookings.add', 'Add/Remove Items', array($template->id), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('bookings.add', 'Add/Remove Items', array($site, $template->id), array('class' => 'btn btn-primary')) !!}
 
-{!! link_to_route('templates.edit', 'Edit', array($template->id), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('templates.edit', 'Edit', array($site, $template->id), array('class' => 'btn btn-primary')) !!}
 
-{{ Form::open(['route' => ['templates.destroy', $template->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['templates.destroy', $site, $template->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}
-{!! link_to_route('templates.index', 'Back', array(), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('templates.index', 'Back', array($site), array('class' => 'btn btn-primary')) !!}
 </div>
 @endsection

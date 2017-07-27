@@ -23,12 +23,16 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $site = $request->get('_site');
         $error = session()->get('error', '');
-        $users = Admin::all();
-        $hires = Settings::where('name', 'hiresManager')->firstOrFail();
-        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error]);
+        $users = Admin::where('site', $site->id)
+              ->get();
+        $hires = Settings::where('name', 'hiresManager')
+              ->where('site', $site->id)
+              ->firstOrFail();
+        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error, 'site' => $site->slug]);
     }
 
     /**
@@ -36,10 +40,11 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
-        return View::make('settings.users.new');
+        $site = $request->get('_site');
+        return View::make('settings.users.new')->with(['site' => $site->slug]);
     }
 
     /**
@@ -48,17 +53,20 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(newUser $request)
+    public function store(newUser $requestUser)
     {
         //
+        $site = Request()->get('_site');
+        var_dump($site->slug);
         $user = new Admin;
-        $userDetails = Common::getDetailsEmail($request->email);
+        $userDetails = Common::getDetailsEmail($requestUser->email);
         $user->email = $userDetails->email;
         $user->user = $userDetails->username;
         $user->privileges = 0;
         $user->name = $userDetails->name;
+        $user->site = $site->id;
         $user->save();
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.index', $site->slug);
     }
 
     /**
@@ -69,11 +77,13 @@ class AdminController extends Controller
      */
     public function save(Request $request)
     {
+        $site = $request->get('_site');
         if (!isset($request->admin)) {
-            return redirect()->route('admin.index')->with(['error' => 'At least one user needs to be an admin.']);
+            return redirect()->route('admin.index', $site->slug)->with(['error' => 'At least one user needs to be an admin.']);
         }
         $hiresEmail = '';
-        $users = Admin::all();
+        $users = Admin::where('site', $site->id)
+            ->get();
         foreach ($users as $user) {
             $priv = 0;
             if (isset($request->treasurer[$user->id])) {
@@ -90,11 +100,13 @@ class AdminController extends Controller
         }
         if (!empty($hiresEmail)) {
             $hires = Settings::where('name', 'hiresManager')
+                            ->where('site', $site->id)
                             ->update(['value' => $request->hires]);
             $hires = Settings::where('name', 'hiresEmail')
+                            ->where('site', $site->id)
                             ->update(['value' => $hiresEmail]);
         }
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.index', $site->slug);
     }
 
     /**
@@ -103,15 +115,15 @@ class AdminController extends Controller
      * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Admin $admin)
+    public function destroy($site, Admin $admin)
     {
         //
-        var_dump($admin);
+        $site = Request()->get('_site');
         if (!($admin->privileges & 4)) {
             $admin->delete();
-            return redirect()->route('admin.index');
+            return redirect()->route('admin.index', $site->slug);
         } else {
-            return redirect()->route('admin.index')->with(['error' => 'Cannot delete an admin user.']);
+            return redirect()->route('admin.index', $site->slug)->with(['error' => 'Cannot delete an admin user.']);
         }
     }
 

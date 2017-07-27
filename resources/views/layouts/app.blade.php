@@ -42,35 +42,35 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                    <a class="navbar-brand" href="{{ route('home', $site) }}">
+                        {{ config('app.name', 'Hires') }}
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ url('/items') }}">Catalog</a></li>
+                        <li>{{ link_to_route('items.index', 'Catalog', $site) }}</li>
                         @if (CAuth::check())
-                        <li><a href="{{ url('/bookings') }}">Bookings</a></li>
+                        <li>{{ link_to_route('bookings.index', 'Bookings', $site) }}</li>
                         @endif
                         @if (CAuth::checkAdmin())
-                        <li><a href="{{ url('/settings/admin') }}">Settings</a></li>
+                        <li>{{ link_to_route('admin.index', 'Settings', $site) }}</li>
                         @endif
                         @if (CAuth::checkAdmin(1))
-                        <li><a href="{{ url('/treasurer') }}">Treasurer</a></li>
+                        <li>{{ link_to_route('bank.index', 'Treasurer', $site) }}</li>
                         @endif
-                        <li><a href="{{ url('/terms') }}">Terms & Conditions</a></li>
+                        <li>{{ link_to_route('terms', 'Terms & Conditions', $site) }}</li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (!CAuth::check())
-                            <li><a href="{{ url('/login') }}">Login</a></li>
+                          <li>{{ link_to_route('login', 'Login', $site) }}</li>
                         @else
                             <li>
-                                <a href="{{ url('/logout') }}">Logout ({{CAuth::user()->username}})</a>
+                                {{ link_to_route('logout', 'Logout (' . CAuth::user()->username . ')', $site) }}
                             </li>
                         @endif
                     </ul>
