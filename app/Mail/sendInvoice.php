@@ -25,9 +25,12 @@ class sendInvoice extends Mailable
     public function __construct($id)
     {
         //
+        $site = Request()->get('_site');
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
-        $this->hiresEmail = Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+        $this->hiresEmail = Settings::where('name', 'hiresEmail')
+            ->where('site', $site->id)
+            ->firstOrFail()->value;
     }
 
     /**

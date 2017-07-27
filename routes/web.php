@@ -15,56 +15,56 @@
     return view('home');
 }]);*/
 
-Route::resource('settings/categories', 'CategoryController');
-Route::resource('items', 'ItemController');
-Route::resource('settings/admin', 'AdminController');
-Route::resource('bookings', 'BookingsController');
-Route::resource('templates', 'TemplateController');
-Route::resource('internal', 'InternalEventController');
+Route::resource('{site}/settings/categories', 'CategoryController');
+Route::resource('{site}/items', 'ItemController');
+Route::resource('{site}/settings/admin', 'AdminController');
+Route::resource('{site}/bookings', 'BookingsController');
+Route::resource('{site}/templates', 'TemplateController');
+Route::resource('{site}/internal', 'InternalEventController');
 
 
-Route::get('bookings/index/complete', 'BookingsController@indexComplete')
+Route::get('{site}/bookings/index/complete', 'BookingsController@indexComplete')
           ->name('bookings.complete');
-Route::get('bookings/{id}/{nocache}/invoice', 'BookingsController@getInvoice')
+Route::get('{site}/bookings/{id}/{nocache}/invoice', 'BookingsController@getInvoice')
           ->name('bookings.invoice');
-Route::get('bookings/{id}/add', 'BookingsController@addItems')
+Route::get('{site}/bookings/{id}/add', 'BookingsController@addItems')
           ->name('bookings.add');
-Route::post('bookings/{id}/add', 'BookingsController@updateItems');
-Route::post('bookings/changestate', 'BookingsController@changeState');
-Route::get('bookings/{id}/submit', 'BookingsController@submitBooking')
+Route::post('{site}/bookings/{id}/add', 'BookingsController@updateItems');
+Route::post('{site}/bookings/changestate', 'BookingsController@changeState');
+Route::get('{site}/bookings/{id}/submit', 'BookingsController@submitBooking')
           ->name('bookings.submit');
-Route::patch('bookings/{booking}/updateStatus', 'BookingsController@updateStatus')
+Route::patch('{site}/bookings/{booking}/updateStatus', 'BookingsController@updateStatus')
           ->name('bookings.updateStatus');
 
 
-Route::post('settings/admin/save', 'AdminController@Save')
+Route::post('{site}/settings/admin/save', 'AdminController@Save')
           ->name('admin.save');
 
-Route::get('settings/content', 'ContentController@index')
+Route::get('{site}/settings/content', 'ContentController@index')
           ->name('settings.content');
-Route::post('settings/content/{page}', 'ContentController@getPage');
-Route::patch('settings/content', 'ContentController@savePage');
+Route::post('{site}/settings/content/{page}', 'ContentController@getPage');
+Route::patch('{site}/settings/content', 'ContentController@savePage');
 
 
-Route::get('treasurer', 'treasurerController@index')
+Route::get('{site}/treasurer', 'treasurerController@index')
           ->name('bank.index');
-Route::post('treasurer', 'treasurerController@submit')
+Route::post('{site}/treasurer', 'treasurerController@submit')
           ->name('bank.submit');
-Route::delete('treasurer/{booking}', 'treasurerController@vatSorted')
+Route::delete('{site}/treasurer/{booking}', 'treasurerController@vatSorted')
           ->name('bank.vatdone');
 
 
-Route::get('/', 'publicController@index');
-Route::get('terms', 'publicController@terms');
+Route::get('{site}/', 'publicController@index')
+          ->name('home');
+Route::get('{site}/terms', 'publicController@terms')
+          ->name('terms');
 
-Route::get(
-    '/login', ['as'=>'login',function () {
-        return view('login');
-    }]
-);
+Route::get('{site}/login', 'publicController@login')
+          ->name('login');
 
-Route::post('/login', 'customAuth@checkAuth');
-Route::get('/logout', 'customAuth@logout');
+Route::post('{site}/login', 'customAuth@checkAuth');
+Route::get('{site}/logout', 'customAuth@logout')
+          ->name('logout');
 
 
 // testing routes

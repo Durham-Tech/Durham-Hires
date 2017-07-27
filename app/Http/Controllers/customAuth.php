@@ -14,6 +14,7 @@ class customAuth extends Controller
 
     public function checkAuth(Request $request)
     {
+        $site = $request->get('_site');
         $user = $request->input('user');
         $pass = $request->input('password');
         $remote_url = 'https://community.dur.ac.uk/trevelyan.jcr/password/tech/auth.php';
@@ -34,17 +35,21 @@ class customAuth extends Controller
         if ($status_code == 200) {
             $request->session()->put('auth', '1');
             $request->session()->put('user_data', $result);
-            $privileges = DB::select('select privileges from admins where user = ?', [$request['user']]);
+            $privRows = DB::select('select site, privileges from admins where user = ?', [$request['user']]);
 
-            if (!empty($privileges)) {
-                $request->session()->put('privileges', $privileges[0]->privileges);
+            if (!empty($privRows)) {
+                $privileges = array();
+                foreach($privRows as $row){
+                    $privileges[$row->site] = $row->privileges;
+                }
+                $request->session()->put('privileges', $privileges);
                 echo 'true';
             }
 
 
             $path = session('target', '');
             if (empty($path)) {
-                return redirect('/');
+                return redirect()->route('home', $site->slug);
             } else {
                 session(['target' => '']);
                 return redirect($path);
@@ -53,7 +58,7 @@ class customAuth extends Controller
             $request->session()->put('auth', '0');
             $request->session()->forget('user_data');
             $request->session()->forget('privileges');
-            return redirect()->route('login');
+            return redirect()->route('login', $site->slug);
         }
     }
 

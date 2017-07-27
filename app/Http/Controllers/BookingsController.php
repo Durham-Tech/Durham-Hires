@@ -37,13 +37,16 @@ class BookingsController extends Controller
     public function index()
     {
         //
+        $site = Request()->get('_site');
         if (CAuth::checkAdmin()) {
             $data = Bookings::orderBy('start')->get()
+                ->where('site', $site->id)
                 ->where('status', '<', 4)
                 ->where('internal', 0)
                 ->where('template', 0);
         } else {
             $data = Bookings::orderBy('start', 'DESC')
+                ->where('site', $site->id)
                 ->where('email', '=', CAuth::user()->email)
                 ->where('internal', 0)
                 ->where('template', 0)
@@ -51,17 +54,19 @@ class BookingsController extends Controller
         }
 
         return View::make('bookings.index')
-            ->with(['data' => $data, 'statusArray' => $this->status]);
+            ->with(['data' => $data, 'statusArray' => $this->status, 'site' => $site->slug]);
     }
 
     public function indexComplete()
     {
+        $site = Request()->get('_site');
         $data = Bookings::orderBy('start', 'DESC')
+              ->where('site', $site->id)
               ->where('status', '>=', 4)
               ->get();
 
         return View::make('bookings.old')
-            ->with(['data' => $data]);
+            ->with(['data' => $data, 'site' => $site->slug]);
     }
 
     /**
@@ -71,8 +76,9 @@ class BookingsController extends Controller
      */
     public function create()
     {
+        $site = Request()->get('_site');
         return View::make('bookings.edit')
-                      ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]]]);
+                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'site' => $site->slug]);
     }
 
     /**
@@ -83,6 +89,7 @@ class BookingsController extends Controller
      */
     public function store(NewBooking $request)
     {
+        $site = Request()->get('_site');
         $booking = new Bookings;
         $booking->name = $request->name;
         $start = strtotime($request->start)+43200;
@@ -91,6 +98,7 @@ class BookingsController extends Controller
         $booking->end = date("Y-m-d H:i:s", $end);
         $booking->days = ($end - $start)/(86400);
         $booking->vat = $request->vat;
+        $booking->site = $site->id;
 
         if (CAuth::checkAdmin(4)) {
             $booking->status = $request->status;
@@ -118,7 +126,7 @@ class BookingsController extends Controller
         if ($booking->status == 2 && CAuth::checkAdmin(4)) {
             \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
         }
-        return redirect('/bookings/' . $booking->id);
+        return redirect('/' . $site->slug . '/bookings/' . $booking->id);
     }
 
     /**
@@ -127,8 +135,9 @@ class BookingsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site, $id)
     {
+        $site = Request()->get('_site');
         $booking = Bookings::findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $id)
@@ -157,11 +166,12 @@ class BookingsController extends Controller
                               'booking' => $booking,
                               'items' => $bookedItems,
                               'custom' => $customItems,
-                              'next' => $this->nextStatus
+                              'next' => $this->nextStatus,
+                              'site' => $site->slug
                               ]
                           );
         } else {
-            return redirect()->route('items.index');
+            return redirect()->route('items.index', ['site' => $site->slug]);
         }
     }
 
@@ -171,8 +181,9 @@ class BookingsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($site, $id)
     {
+        $site = Request()->get('_site');
         $old = Bookings::findOrFail($id);
 
         // $start = date_create($old->start);
@@ -191,7 +202,7 @@ class BookingsController extends Controller
             $old->status = 4;
         }
         return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->status]);
+                      ->with(['old' => $old, 'statusArray' => $this->status, 'site' => $site->slug]);
     }
 
     private function manageStatusChange(&$booking, $status)
@@ -227,8 +238,9 @@ class BookingsController extends Controller
      * @param  int                      $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NewBooking $request, Bookings $booking)
+    public function update(NewBooking $request, $site, Bookings $booking)
     {
+        $site = Request()->get('_site');
         $this->validate(
             $request, [
             'email' => 'required|email'
@@ -278,12 +290,13 @@ class BookingsController extends Controller
         $booking->fineValue = $request->fineValue;
 
         $booking->save();
-        return redirect('/bookings/' . $booking->id);
+        return redirect('/' . $site->slug . '/bookings/' . $booking->id);
 
     }
 
-    public function updateStatus(Request $request, Bookings $booking)
+    public function updateStatus(Request $request, $site, Bookings $booking)
     {
+        $site = Request()->get('_site');
         if (CAuth::checkAdmin(4)) {
             $this->manageStatusChange($booking, $request->status);
             $booking->status = $request->status;
@@ -301,7 +314,7 @@ class BookingsController extends Controller
             }
         }
         $booking->save();
-        return redirect('/bookings/' . $booking->id);
+        return redirect('/' . $site->slug . '/bookings/' . $booking->id);
     }
 
     /**
@@ -310,16 +323,18 @@ class BookingsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bookings $booking)
+    public function destroy($site, Bookings $booking)
     {
+        $site = Request()->get('_site');
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {
             $booking->delete();
         }
-        return redirect('/bookings');
+        return redirect('/' . $site->slug . '/bookings');
     }
 
-    public function addItems($id)
+    public function addItems($site, $id)
     {
+        $site = Request()->get('_site');
         $items = new Items;
         $booking = Bookings::find($id);
         $data = $items->getAvalible($booking);
@@ -327,14 +342,15 @@ class BookingsController extends Controller
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
             return View::make('items.index')
-                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items]);
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items, 'site' => $site->slug]);
         } else {
-            return redirect()->route('items.index');
+            return redirect()->route('items.index', ['site' => $site->slug]);
         }
     }
 
-    public function updateItems(Request $request, $id)
+    public function updateItems(Request $request, $site, $id)
     {
+        $site = Request()->get('_site');
         $items = new Items;
         $booking = Bookings::find($id);
         $data = $items->getAvalibleArray($booking);
@@ -394,19 +410,19 @@ class BookingsController extends Controller
             }
 
             if ($booking->template == '1') {
-                return redirect()->route('templates.show', ['id' => $id]);
+                return redirect()->route('templates.show', ['id' => $id, 'site' => $site->slug]);
             } elseif ($booking->internal == '1') {
-                return redirect()->route('internal.show', ['id' => $id]);
+                return redirect()->route('internal.show', ['id' => $id, 'site' => $site->slug]);
             } else {
-                return redirect()->route('bookings.show', ['id' => $id]);
+                return redirect()->route('bookings.show', ['id' => $id, 'site' => $site->slug]);
             }
         } else {
-            return redirect()->route('items.index');
+            return redirect()->route('items.index', ['site' => $site->slug]);
         }
     }
 
 
-    public function getInvoice($id)
+    public function getInvoice($site, $id)
     {
         $booking = Bookings::findOrFail($id);
         if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin([1,4]))) {

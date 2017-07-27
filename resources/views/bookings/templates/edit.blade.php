@@ -9,13 +9,13 @@ $active = 'internal';
         @if(isset($old))
                 {{ Form::model($old,
                     array(
-                        'route' => ['templates.update', $old->id],
+                        'route' => ['templates.update', $site, $old->id],
                         'method' => 'PATCH',
                         'class' => 'form')) }}
         @else
             {!! Form::open(
             array(
-                'route' => 'templates.store',
+                'route' => ['templates.store', $site],
                 'class' => 'form')
             ) !!}
         @endif
@@ -36,7 +36,7 @@ $active = 'internal';
                 {{ Form::text('name', NULL,
                 array(
                     'class'=>'form-control',
-                    'placeholder'=>'Category Name'
+                    'placeholder'=>'Template Name'
                 )) }}
             </div>
             <div class='form-group form-inline order'>
@@ -52,9 +52,9 @@ $active = 'internal';
                 )) !!}
         {!! Form::close() !!}
         @if(isset($old))
-        {{ Form::open(['route' => ['templates.destroy', $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['templates.destroy', $site, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif
-                <a class="btn btn-primary" href="{{ route('templates.index') }}">Cancel</a>
+                <a class="btn btn-primary" href="{{ route('templates.index', $site) }}">Cancel</a>
 @endsection

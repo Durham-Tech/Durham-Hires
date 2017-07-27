@@ -24,9 +24,13 @@ class pdf
             ->where('number', '!=', '0')
             ->get();
 
-        $hiresID = Settings::where('name', 'hiresManager')->firstOrFail()->value;
+        $hiresID = Settings::where('name', 'hiresManager')
+              ->where('site', $booking->site)
+              ->firstOrFail()->value;
         $hiresManager = Admin::findOrFail(intval($hiresID));
-        $hiresEmail = Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+        $hiresEmail = Settings::where('name', 'hiresEmail')
+              ->where('site', $booking->site)
+              ->firstOrFail()->value;
 
         Common::calcAllCosts($booking, $bookedItems, $customItems);
 

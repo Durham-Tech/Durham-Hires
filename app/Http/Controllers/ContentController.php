@@ -18,13 +18,17 @@ class ContentController extends Controller
 
     public function index()
     {
-        $pages = content::get();
-        return View::make('settings.content')->with(['pages' => $pages]);
+        $site = Request()->get('_site');
+        $pages = content::where('site', $site->id)->get();
+        return View::make('settings.content')->with(['pages' => $pages, 'site' => $site->slug]);
     }
 
-    public function getPage($page)
+    public function getPage($s, $page)
     {
-        $content = content::where('page', $page)->firstOrFail();
+        $site = Request()->get('_site');
+        $content = content::where('page', $page)
+                  ->where('site', $site->id)
+                  ->firstOrFail();
         echo $content->content;
     }
 

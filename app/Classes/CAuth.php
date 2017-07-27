@@ -1,6 +1,8 @@
 <?php
 namespace App\Classes;
 
+use Request;
+
 class CAuth
 {
     public function check()
@@ -17,7 +19,19 @@ class CAuth
 
     public static function checkAdmin($priv = 4)
     {
-        $privileges = session()->get('privileges', '0');
+        $siteObj = Request::get('_site');
+        if ($siteObj) {
+            $site = $siteObj->id;
+        } else {
+            $site = 0;
+        }
+
+        $privileges = session()->get('privileges');
+        if ($privileges && array_key_exists($site, $privileges)) {
+            $privileges = $privileges[$site];
+        } else {
+            $privileges = 0;
+        }
         $value = 0;
         if (is_array($priv) ) {
             foreach ($priv as $x){

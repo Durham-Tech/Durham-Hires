@@ -21,19 +21,23 @@ class TemplateController extends Controller
 
     public function index()
     {
+        $site = Request()->get('_site');
+
         $templates = Bookings::where('template', '1')
+          ->where('site', $site->id)
           ->get();
-        return view('bookings.templates.index')->with(['templates'=>$templates]);
+        return view('bookings.templates.index')->with(['templates'=>$templates, 'site' => $site->slug]);
     }
 
 
-    public function create()
+    public function create($site)
     {
-        return View::make('bookings.templates.edit');
+        return View::make('bookings.templates.edit')->with(['site' => $site]);
     }
 
     public function store(NewTemplate $request)
     {
+        $site = Request()->get('_site');
         $booking = new Bookings;
         $booking->name = $request->name;
         $booking->start = date("Y-m-d H:i:s", 0);
@@ -44,14 +48,15 @@ class TemplateController extends Controller
         $booking->user = '';
         $booking->isDurham = 0;
         $booking->status = 0;
+        $booking->site = $site->id;
 
         $booking->template = 1;
 
         $booking->save();
-        return redirect('/templates/' . $booking->id);
+        return redirect('/' . $site->slug . '/templates/' . $booking->id);
     }
 
-    public function show($id)
+    public function show($site, $id)
     {
         $template = Bookings::findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
@@ -64,37 +69,39 @@ class TemplateController extends Controller
                           [
                           'template' => $template,
                           'items' => $bookedItems,
+                          'site' => $site
                           ]
                       );
     }
 
-    public function edit($id)
+    public function edit($site, $id)
     {
         $old = Bookings::findOrFail($id);
 
         return View::make('bookings.templates.edit')
-                      ->with(['old' => $old]);
-
+                      ->with(['old' => $old, 'site' => $site]);
     }
 
-    public function update(NewTemplate $request, $id)
+    public function update(NewTemplate $request, $s, $id)
     {
+        $site = Request()->get('_site');
         $booking = Bookings::findOrFail($id);
         $booking->name = $request->name;
         $booking->days = $request->days;
+        $booking->site = $site->id;
 
         $booking->save();
 
-        return redirect('/templates/' . $booking->id);
+        return redirect('/' . $site->slug . '/templates/' . $booking->id);
     }
 
-    public function destroy($id)
+    public function destroy($site, $id)
     {
         $booking = Bookings::findOrFail($id);
         if ($booking->template == '1') {
             $booking->delete();
         }
-        return redirect('/templates');
+        return redirect('/' . $site . '/templates');
     }
 
 }

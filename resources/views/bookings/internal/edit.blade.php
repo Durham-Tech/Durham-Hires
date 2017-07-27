@@ -10,7 +10,7 @@
 
             {!! Form::open(
             array(
-                'route' => 'internal.store',
+                'route' => ['internal.store', $site],
                 'class' => 'form')
             ) !!}
 
@@ -75,9 +75,9 @@
                 )) !!}
         {!! Form::close() !!}
         @if (isset($old))
-          <a class="btn btn-primary" href="{{ route('internal.show', [$old->id]) }}">Cancel</a>
+          <a class="btn btn-primary" href="{{ route('internal.show', [$site, $old->id]) }}">Cancel</a>
         @else
-          <a class="btn btn-primary" href="{{ route('internal.index') }}">Cancel</a>
+          <a class="btn btn-primary" href="{{ route('internal.index', [$site]) }}">Cancel</a>
         @endif
       </div>
 @endsection

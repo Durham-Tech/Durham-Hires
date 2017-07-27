@@ -19,16 +19,19 @@ class treasurerController extends Controller
 
     public function index()
     {
+        $site = Request()->get('_site');
         $bookings = Bookings::orderBy('start')
+              ->where('site', $site->id)
               ->where('status', '=', 4)
               ->where('vat', '=', 1)
               ->get();
 
-        return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => 0, 'bookings' => $bookings]);
+        return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => 0, 'bookings' => $bookings, 'site' => $site->slug]);
     }
 
     public function submit(Treasurer $request)
     {
+        $site = Request()->get('_site');
         $pregSuc = preg_match('/^techhires[0-9]+$/', strtolower(str_replace(' ', '', $request->ref)), $temp);
         if ($pregSuc) {
             $id = intval(str_replace('techhires', '', $temp[0]));
@@ -57,21 +60,21 @@ class treasurerController extends Controller
               ->get();
 
         if ($success == 1) {
-            return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success, 'bookings' => $vatBookings]);
+            return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success, 'bookings' => $vatBookings, 'site' => $site->slug]);
         } else {
             if ($request->attempt == 2) {
                 \Mail::send(new bankIncorrect($request->ref, $request->amount));
             }
-            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success, 'bookings' => $vatBookings]);
+            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success, 'bookings' => $vatBookings, 'site' => $site->slug]);
         }
     }
 
-    public function vatSorted(Bookings $booking)
+    public function vatSorted($site, Bookings $booking)
     {
         if ($booking->status == 4) {
             $booking->status = 5;
             $booking->save();
         }
-        return redirect('/treasurer');
+        return redirect('/' . $site . '/treasurer');
     }
 }

@@ -20,7 +20,7 @@ const app = new Vue({
     methods: {
       updatePage: function() {
         $.ajax({
-            url: "/settings/content/" + this.page,
+            url: "/{{ $site }}/settings/content/" + this.page,
             type: 'post',
             success: function(text){
               $('#summernote').summernote('code', text);
@@ -30,7 +30,7 @@ const app = new Vue({
       savePage: function(){
         var data = $('#summernote').summernote('code');
         $.ajax({
-            url: "/settings/content",
+            url: "/{{ $site }}/settings/content",
             type: 'PATCH',
             data: {
               page: this.page,

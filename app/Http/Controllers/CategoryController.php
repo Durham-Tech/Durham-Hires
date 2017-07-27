@@ -21,10 +21,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $site = Request()->get('_site');
         $cats = [];
         $data = Category::orderBy('orderOf')
-              ->orderBy('id')
-              ->get();
+          ->where('site', $site->id)
+          ->orderBy('id')
+          ->get();
 
         foreach ($data as $cat) {
             if (empty($cat->subCatOf)) {
@@ -39,7 +41,7 @@ class CategoryController extends Controller
             }
         }
 
-        return view('settings.categories.view')->with(['cats'=>$cats]);
+        return view('settings.categories.view')->with(['cats'=>$cats, 'site' => $site->slug]);
     }
 
     /**
@@ -49,11 +51,13 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $site = Request()->get('_site');
         $cats = [];
         // $data = \App\Category::orderby('orderof')->get();
         $data = Category::orderBy('orderOf')
-              ->orderBy('id')
-              ->get();
+          ->where('site', $site->id)
+          ->orderBy('id')
+          ->get();
 
         $cats[''] = 'None';
         foreach ($data as $cat) {
@@ -63,7 +67,7 @@ class CategoryController extends Controller
         }
 
         return View::make('settings.categories.edit')
-            ->with(['cats' => $cats]);
+        ->with(['cats' => $cats, 'site' => $site->slug]);
     }
 
     /**
@@ -74,17 +78,19 @@ class CategoryController extends Controller
      */
     public function store(NewCat $request)
     {
+        $site = Request()->get('_site');
         $cat = new Category;
 
         $cat->name = $request->name;
         $cat->subCatOf = $request->subCatOf;
+        $cat->site = $site->id;
 
         if (isset($request->orderOf)) {
             $cat->orderOf = $request->orderOf;
         }
 
         $cat->save();
-        return redirect('/settings/categories');
+        return redirect('/'.$site->slug.'/settings/categories');
     }
 
     /**
@@ -104,10 +110,13 @@ class CategoryController extends Controller
      * @param  \App\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug, $id)
     {
+        $site = Request()->get('_site');
         $cats = [];
-        $data = Category::orderBy('orderOf')->get();
+        $data = Category::where('site', $site->id)
+          ->orderBy('orderOf')
+          ->get();
 
         $cats[''] = 'None';
         foreach ($data as $cat) {
@@ -122,7 +131,7 @@ class CategoryController extends Controller
             $old->orderOf = '';
         }
 
-        return View::make('settings.categories.edit')->with(['old' => $old, 'cats' => $cats]);
+        return View::make('settings.categories.edit')->with(['old' => $old, 'cats' => $cats, 'site' => $site->slug]);
     }
 
     /**
@@ -132,8 +141,9 @@ class CategoryController extends Controller
      * @param  \App\Category            $category
      * @return \Illuminate\Http\Response
      */
-    public function update(NewCat $request, Category $category)
+    public function update($site, NewCat $request, Category $category)
     {
+        $site = Request()->get('_site');
         $category->name = $request->name;
         $category->subCatOf = $request->subCatOf;
 
@@ -143,7 +153,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect('/settings/categories');
+        return redirect('/'.$site->slug.'/settings/categories');
     }
 
     /**
@@ -152,9 +162,10 @@ class CategoryController extends Controller
      * @param  \App\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($site, Category $category)
     {
+        $site = Request()->get('_site');
         $category->delete();
-        return redirect('/settings/categories');
+        return redirect('/'.$site->slug.'/settings/categories');
     }
 }

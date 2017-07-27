@@ -95,12 +95,18 @@ class Common
 
     public static function hiresEmail()
     {
-        return Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+        $site = Request()->get('_site');
+        return Settings::where('name', 'hiresEmail')
+                ->where('site', $site->id)
+                ->firstOrFail()->value;
     }
 
     public static function getContent($page)
     {
-        $data = content::where('page', $page)->firstOrFail()->content;
+        $site = Request()->get('_site');
+        $data = content::where('page', $page)
+                ->where('site', $site->id)
+                ->firstOrFail()->content;
         return $data;
     }
 }
