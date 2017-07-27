@@ -39,8 +39,8 @@ class SetupDb extends Migration
                 $table->string('email', 255);
                 // $table->string('email', 255)->unique();
                 $table->integer('isDurham');
-                $table->dateTime('start')->unique();
-                $table->dateTime('end')->unique();
+                $table->dateTime('start');
+                $table->dateTime('end');
                 $table->integer('days');
                 $table->boolean('internal')->default(0);
                 $table->boolean('template')->default(0);
