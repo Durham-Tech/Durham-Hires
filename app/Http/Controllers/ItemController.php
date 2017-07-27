@@ -105,7 +105,7 @@ class ItemController extends Controller
 
             $img->save('images/catalog/thumb_' . $imageName);
 
-            $item->image = $site->slug . '/' . $imageName;
+            $item->image = $imageName;
             $item->save();
         }
         if ($request->next == 'Save and New') {

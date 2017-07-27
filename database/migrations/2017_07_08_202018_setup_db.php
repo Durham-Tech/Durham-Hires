@@ -21,6 +21,7 @@ class SetupDb extends Migration
                 $table->string('user', 10)->unique();
                 $table->string('email', 255);
                 $table->tinyInteger('privileges');
+                $table->integer('site');
             }
         );
         Schema::create(
@@ -53,6 +54,7 @@ class SetupDb extends Migration
                 $table->float('discValue')->default(0);
                 $table->string('fineDesc')->nullable();
                 $table->float('fineValue')->default(0);
+                $table->integer('site');
                 $table->dateTime('created_at')->nullable();
                 $table->dateTime('updated_at')->nullable();
             }
@@ -68,6 +70,7 @@ class SetupDb extends Migration
                 $table->float('dayPrice');
                 $table->float('weekPrice');
                 $table->integer('orderOf')->default(999);
+                $table->integer('site');
             }
         );
         Schema::create(
@@ -76,6 +79,7 @@ class SetupDb extends Migration
                 $table->string('name');
                 $table->integer('subCatOf')->nullable();
                 $table->integer('orderOf')->default(999);
+                $table->integer('site');
             }
         );
         Schema::create(
@@ -85,6 +89,7 @@ class SetupDb extends Migration
                 // $table->string('page', 255)->unique();
                 $table->string('name', 255);
                 $table->text('content');
+                $table->integer('site');
             }
         );
         Schema::create(
@@ -102,6 +107,15 @@ class SetupDb extends Migration
                 $table->string('name', 255);
                 // $table->string('name', 255)->unique();
                 $table->string('value', 255);
+                $table->integer('site');
+            }
+        );
+        Schema::create(
+            'sites', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name', 255);
+                $table->string('slug', 255);
+                $table->boolean('deleted')->default(0);
             }
         );
     }
