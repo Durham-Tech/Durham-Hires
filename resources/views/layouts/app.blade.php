@@ -26,6 +26,13 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     <!-- Styles -->
     @yield('styles')
     <link href="/css/app.css" rel="stylesheet">
+    <style>
+
+    </style>
+    @if ($site->styleSheet != "")
+    <link href="/css/sites/{{ $site->styleSheet }}" rel="stylesheet">
+    @endif
+
 </head>
 <body>
     <div id="app">
@@ -43,7 +50,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ route('home', $site->slug) }}">
-                        {{ config('app.name', 'Hires') }}
+                        {{ $site->name }}
                     </a>
                 </div>
 
