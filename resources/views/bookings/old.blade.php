@@ -19,7 +19,7 @@ $active = 'old';
                 <tbody>
                 @foreach($data as $key => $booking)
                     <tr>
-                        <td><a href='{!! action('BookingsController@show', ['booking' => $booking->id, 'site' => $site]) !!}'>{{ $booking->name }}</a></td>
+                        <td><a href='{!! action('BookingsController@show', ['booking' => $booking->id, 'site' => $site->slug]) !!}'>{{ $booking->name }}</a></td>
                         <td>{{ date('D jS M Y', strtotime($booking->start) )  }}</td>
                         <td>{{ date('D jS M Y', strtotime($booking->end) )  }}</td>
                         <td>

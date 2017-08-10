@@ -20,7 +20,7 @@ class ContentController extends Controller
     {
         $site = Request()->get('_site');
         $pages = content::where('site', $site->id)->get();
-        return View::make('settings.content')->with(['pages' => $pages, 'site' => $site->slug]);
+        return View::make('settings.content')->with(['pages' => $pages, 'site' => $site]);
     }
 
     public function getPage($s, $page)

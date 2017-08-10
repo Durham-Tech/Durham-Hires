@@ -8,7 +8,7 @@ $active = 'admin';
 
             {!! Form::open(
             array(
-                'route' => ['admin.store', $site],
+                'route' => ['admin.store', $site->slug],
                 'class' => 'form')
             ) !!}
 
@@ -37,5 +37,5 @@ $active = 'admin';
                 array('class'=>'btn btn-primary'
                 )) !!}
         {!! Form::close() !!}
-        <a class="btn btn-primary" href="{{ route('admin.index', $site) }}">Cancel</a>
+        <a class="btn btn-primary" href="{{ route('admin.index', $site->slug) }}">Cancel</a>
 @endsection

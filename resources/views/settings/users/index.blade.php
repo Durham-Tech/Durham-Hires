@@ -16,7 +16,7 @@ $active = 'admin';
 
             {!! Form::open(
             array(
-                'route' => ['admin.save', $site],
+                'route' => ['admin.save', $site->slug],
                 'class' => 'form')
             ) !!}
                 <table class="table userTable">
@@ -53,7 +53,7 @@ $active = 'admin';
                 {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'
                 )) !!}
-                <a class="btn btn-primary" href="{{ route('admin.create', ['site' => $site]) }}">Add new</a>
+                <a class="btn btn-primary" href="{{ route('admin.create', ['site' => $site->slug]) }}">Add new</a>
 
         {!! Form::close() !!}
             @endif
@@ -70,7 +70,7 @@ $active = 'admin';
       e.preventDefault();
       var id = $(this).data('idvalue');
       var ajax = $.ajax({
-          url: "/{{ $site }}/settings/admin/" + id,
+          url: "/{{ $site->slug }}/settings/admin/" + id,
           type: 'post',
           data: {_method: 'delete'},
           success: function(){

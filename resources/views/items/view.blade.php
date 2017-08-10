@@ -34,7 +34,7 @@
             <b>Weekly price: </b>£{{ number_format($item->weekPrice,2) }}
         </p>
         @if (CAuth::checkAdmin())
-        <a class="btn btn-primary" href='{!! action('ItemController@edit', ['site' => $site, 'items' => $item->id]) !!}'>Edit</a>
+        <a class="btn btn-primary" href='{!! action('ItemController@edit', ['site' => $site->slug, 'items' => $item->id]) !!}'>Edit</a>
         @endif
     </div>
 </div>

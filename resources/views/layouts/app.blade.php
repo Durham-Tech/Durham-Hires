@@ -42,7 +42,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ route('home', $site) }}">
+                    <a class="navbar-brand" href="{{ route('home', $site->slug) }}">
                         {{ config('app.name', 'Hires') }}
                     </a>
                 </div>
@@ -50,27 +50,27 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li>{{ link_to_route('items.index', 'Catalog', $site) }}</li>
+                        <li>{{ link_to_route('items.index', 'Catalog', $site->slug) }}</li>
                         @if (CAuth::check())
-                        <li>{{ link_to_route('bookings.index', 'Bookings', $site) }}</li>
+                        <li>{{ link_to_route('bookings.index', 'Bookings', $site->slug) }}</li>
                         @endif
                         @if (CAuth::checkAdmin())
-                        <li>{{ link_to_route('admin.index', 'Settings', $site) }}</li>
+                        <li>{{ link_to_route('admin.index', 'Settings', $site->slug) }}</li>
                         @endif
                         @if (CAuth::checkAdmin(1))
-                        <li>{{ link_to_route('bank.index', 'Treasurer', $site) }}</li>
+                        <li>{{ link_to_route('bank.index', 'Treasurer', $site->slug) }}</li>
                         @endif
-                        <li>{{ link_to_route('terms', 'Terms & Conditions', $site) }}</li>
+                        <li>{{ link_to_route('terms', 'Terms & Conditions', $site->slug) }}</li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (!CAuth::check())
-                          <li>{{ link_to_route('login', 'Login', $site) }}</li>
+                          <li>{{ link_to_route('login', 'Login', $site->slug) }}</li>
                         @else
                             <li>
-                                {{ link_to_route('logout', 'Logout (' . CAuth::user()->username . ')', $site) }}
+                                {{ link_to_route('logout', 'Logout (' . CAuth::user()->username . ')', $site->slug) }}
                             </li>
                         @endif
                     </ul>

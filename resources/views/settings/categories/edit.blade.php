@@ -9,13 +9,13 @@ $active = 'categories';
         @if(isset($old))
                 {{ Form::model($old,
                     array(
-                        'route' => ['categories.update', $site, $old->id],
+                        'route' => ['categories.update', $site->slug, $old->id],
                         'method' => 'PATCH',
                         'class' => 'form')) }}
         @else
             {!! Form::open(
             array(
-                'route' => ['categories.store', $site],
+                'route' => ['categories.store', $site->slug],
                 'class' => 'form')
             ) !!}
         @endif
@@ -59,9 +59,9 @@ $active = 'categories';
                 )) !!}
         {!! Form::close() !!}
         @if(isset($old))
-        {{ Form::open(['route' => ['categories.destroy', $site, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['categories.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif
-                <a class="btn btn-primary" href="{{ route('categories.index', $site) }}">Cancel</a>
+                <a class="btn btn-primary" href="{{ route('categories.index', $site->slug) }}">Cancel</a>
 @endsection

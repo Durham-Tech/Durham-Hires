@@ -26,7 +26,7 @@ class ItemController extends Controller
         $site = Request()->get('_site');
         $Items = new Items;
         $data = $Items->getAll($site->id);
-        return View::make('items.index')->with(['data'=>$data, 'edit'=>false, 'site' => $site->slug]);
+        return View::make('items.index')->with(['data'=>$data, 'edit'=>false, 'site' => $site]);
     }
 
     /**
@@ -60,7 +60,7 @@ class ItemController extends Controller
         $old->quantity = 1;
 
         // return View::make('items.edit')->with(['cat'=>$cats]);
-        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats, 'site' => $site->slug]);
+        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats, 'site' => $site]);
     }
 
     /**
@@ -125,7 +125,7 @@ class ItemController extends Controller
     {
         $site = Request()->get('_site');
         $item = catalog::findOrFail($id);
-        return View::make('items.view')->with(['item' => $item, 'site' => $site->slug]);
+        return View::make('items.view')->with(['item' => $item, 'site' => $site]);
         //
     }
 
@@ -163,7 +163,7 @@ class ItemController extends Controller
             $old->orderOf = '';
         }
 
-        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats, 'site' => $site->slug]);
+        return View::make('items.edit')->with(['old' => $old, 'cat'=>$cats, 'site' => $site]);
     }
 
     /**

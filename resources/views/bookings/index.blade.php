@@ -7,7 +7,7 @@ $active = 'current';
 @section('page')
 
             @if (!CAuth::checkAdmin(4))
-              <a class="btn btn-primary" href="{{ route('bookings.create', $site) }}">Add new</a>
+              <a class="btn btn-primary" href="{{ route('bookings.create', $site->slug) }}">Add new</a>
             @endif
 
             @if (!($data->isEmpty()))
@@ -24,7 +24,7 @@ $active = 'current';
                 <tbody>
                 @foreach($data as $key => $booking)
                     <tr>
-                        <td><a href='{!! action('BookingsController@show', ['site' => $site, 'booking' => $booking->id]) !!}'>{{ $booking->name }}</a></td>
+                        <td><a href='{!! action('BookingsController@show', ['site' => $site->slug, 'booking' => $booking->id]) !!}'>{{ $booking->name }}</a></td>
                         <td>{{ date('D jS M Y', strtotime($booking->start) )  }}</td>
                         <td>{{ date('D jS M Y', strtotime($booking->end) )  }}</td>
                         <td class='status' id='s{{ $booking->status }}'>

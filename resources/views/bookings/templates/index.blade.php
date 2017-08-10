@@ -7,8 +7,8 @@ $active = 'internal';
 @section('page')
 
           <div class="buttonGroup">
-            <a class="btn btn-primary" href="{{ route('templates.create', $site) }}">Add new</a>
-            <a class="btn btn-primary" href="{{ route('internal.index', $site) }}">Back</a>
+            <a class="btn btn-primary" href="{{ route('templates.create', $site->slug) }}">Add new</a>
+            <a class="btn btn-primary" href="{{ route('internal.index', $site->slug) }}">Back</a>
           </div>
 
             @if ($templates)
@@ -24,7 +24,7 @@ $active = 'internal';
                 <tbody>
                 @foreach($templates as $key => $template)
                     <tr>
-                        <td><a href='{!! action('TemplateController@show', ['template' => $template->id, 'site' => $site]) !!}'>{{ $template->name }}</a></td>
+                        <td><a href='{!! action('TemplateController@show', ['template' => $template->id, 'site' => $site->slug]) !!}'>{{ $template->name }}</a></td>
                         <td>{{ $template->days }}</td>
                         <td></td>
                     </tr>

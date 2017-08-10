@@ -8,14 +8,14 @@
         @if($old->id)
                 {{ Form::model($old,
                     array(
-                        'route' => ['items.update', $site, $old->id],
+                        'route' => ['items.update', $site->slug, $old->id],
                         'method' => 'PATCH',
                         'files' => true,
                         'class' => 'form')) }}
         @else
                 {{ Form::model($old,
                     array(
-                        'route' => ['items.update', $site, $old->id],
+                        'route' => ['items.update', $site->slug, $old->id],
                         'files' => true,
                         'class' => 'form')) }}
         @endif
@@ -113,10 +113,10 @@
                 @endif
         {!! Form::close() !!}
         @if(isset($old->id))
-        {{ Form::open(['route' => ['items.destroy', $site, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['items.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif
-        <a class="btn btn-primary" href="{{ route('items.index', $site) }}">Cancel</a>
+        <a class="btn btn-primary" href="{{ route('items.index', $site->slug) }}">Cancel</a>
       </div>
 @endsection

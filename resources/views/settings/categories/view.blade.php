@@ -19,13 +19,13 @@ $active = 'categories';
                 @foreach($cats as $key => $category)
                     <tr>
                         <td>{{ $category[0] }}</td>
-                        <td><a href='{!! action('CategoryController@edit', ['category' => $key, 'site' => $site]) !!}'>Edit</a></td>
+                        <td><a href='{!! action('CategoryController@edit', ['category' => $key, 'site' => $site->slug]) !!}'>Edit</a></td>
                     </tr>
                     @endforeach
                     </tbody>
                   </table>
 
             @endif
-            <a class="btn btn-primary" href="{{ route('categories.create', $site) }}">Add new</a>
+            <a class="btn btn-primary" href="{{ route('categories.create', $site->slug) }}">Add new</a>
 
 @endsection

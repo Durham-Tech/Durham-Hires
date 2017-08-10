@@ -29,7 +29,7 @@
 
   {!! Form::Open(
   array(
-    'route' => ['bank.submit', $site],
+    'route' => ['bank.submit', $site->slug],
     'class' => 'form')
   ) !!}
   {{ Form::Hidden('attempt', $attempt)}}
@@ -90,13 +90,13 @@
           <tr>
               <td>{{ $booking->name }}</td>
               <td>
-                {!! link_to_route('bookings.invoice', $booking->invoice, array($site, $booking->id, str_random(5))) !!}
+                {!! link_to_route('bookings.invoice', $booking->invoice, array($site->slug, $booking->id, str_random(5))) !!}
               </td>
               <td>
                 £{{ number_format(((float)$booking->totalPrice)/6.0, 2) }}
               </td>
               <td class="btnRemove">
-                {{ Form::open(['route' => ['bank.vatdone', $site, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+                {{ Form::open(['route' => ['bank.vatdone', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
                   <button class="btn btn-primary" type="submit">Remove</button>
                 {{ Form::close() }}
               </td>

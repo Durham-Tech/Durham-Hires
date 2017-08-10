@@ -46,7 +46,7 @@ if ($booking->status < 4){
         <p id='invoice'>
             <b>Invoice: </b>
 
-            {!! link_to_route('bookings.invoice', $booking->invoice, array($site, $booking->id, str_random(5))) !!}
+            {!! link_to_route('bookings.invoice', $booking->invoice, array($site->slug, $booking->id, str_random(5))) !!}
         </p>
         @endif
 
@@ -112,31 +112,31 @@ if ($booking->status < 4){
         </p>
         @endif
 @if (($booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3))
-{!! link_to_route('bookings.add', 'Add/Remove Items', array($site, $booking->id), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('bookings.add', 'Add/Remove Items', array($site->slug, $booking->id), array('class' => 'btn btn-primary')) !!}
 @endif
 
 @if (CAuth::checkAdmin())
 
 @if ($booking->status < 4 && $booking->status != 0)
-{{ Form::open(['route' => ['bookings.updateStatus', $site, $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['bookings.updateStatus', $site->slug, $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
   {{ Form::hidden('status', $booking->status + 1) }}
   <button class="btn btn-primary" type="submit">{{ $next[$booking->status - 1]}}</button>
 {{ Form::close() }}
 @endif
 
-{!! link_to_route('bookings.edit', 'Edit', array($site, $booking->id), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('bookings.edit', 'Edit', array($site->slug, $booking->id), array('class' => 'btn btn-primary')) !!}
 
 @elseif ($booking->status < 2)
-{{ Form::open(['route' => ['bookings.updateStatus', $site, $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['bookings.updateStatus', $site->slug, $booking->id], 'method' => 'patch', 'style' => 'display:inline;']) }}
   <button class="btn btn-primary" type="submit">{{ ($booking->status === 0) ? 'Submit' : 'Unsubmit' }}</button>
 {{ Form::close() }}
 @endif
 @if ($booking->status < 2 || ($booking->status == 2 && CAuth::checkAdmin()))
-{{ Form::open(['route' => ['bookings.destroy', $site, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}
 @endif
-{!! link_to_route('bookings.index', 'Back', array($site), array('class' => 'btn btn-primary')) !!}
+{!! link_to_route('bookings.index', 'Back', array($site->slug), array('class' => 'btn btn-primary')) !!}
 </div>
 
 @endsection

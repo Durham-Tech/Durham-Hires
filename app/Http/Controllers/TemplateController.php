@@ -26,12 +26,13 @@ class TemplateController extends Controller
         $templates = Bookings::where('template', '1')
           ->where('site', $site->id)
           ->get();
-        return view('bookings.templates.index')->with(['templates'=>$templates, 'site' => $site->slug]);
+        return view('bookings.templates.index')->with(['templates'=>$templates, 'site' => $site]);
     }
 
 
-    public function create($site)
+    public function create($s)
     {
+        $site = Request()->get('_site');
         return View::make('bookings.templates.edit')->with(['site' => $site]);
     }
 
@@ -56,8 +57,9 @@ class TemplateController extends Controller
         return redirect('/' . $site->slug . '/templates/' . $booking->id);
     }
 
-    public function show($site, $id)
+    public function show($s, $id)
     {
+        $site = Request()->get('_site');
         $template = Bookings::findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $id)
@@ -74,8 +76,9 @@ class TemplateController extends Controller
                       );
     }
 
-    public function edit($site, $id)
+    public function edit($s, $id)
     {
+        $site = Request()->get('_site');
         $old = Bookings::findOrFail($id);
 
         return View::make('bookings.templates.edit')

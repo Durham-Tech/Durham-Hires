@@ -32,7 +32,7 @@ class AdminController extends Controller
         $hires = Settings::where('name', 'hiresManager')
               ->where('site', $site->id)
               ->firstOrFail();
-        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error, 'site' => $site->slug]);
+        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error, 'site' => $site]);
     }
 
     /**
@@ -44,7 +44,7 @@ class AdminController extends Controller
     {
         //
         $site = $request->get('_site');
-        return View::make('settings.users.new')->with(['site' => $site->slug]);
+        return View::make('settings.users.new')->with(['site' => $site]);
     }
 
     /**

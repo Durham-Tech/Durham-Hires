@@ -14,13 +14,13 @@ if (isset($old)){
         @if(isset($old))
                 {{ Form::model($old,
                     array(
-                        'route' => ['bookings.update', $site, $old->id],
+                        'route' => ['bookings.update', $site->slug, $old->id],
                         'method' => 'PATCH',
                         'class' => 'form bookingForm')) }}
         @else
             {!! Form::open(
             array(
-                'route' => ['bookings.store', $site],
+                'route' => ['bookings.store', $site->slug],
                 'class' => 'form')
             ) !!}
         @endif
@@ -178,9 +178,9 @@ if (isset($old)){
                 )) !!}
         {!! Form::close() !!}
         @if (isset($old))
-          <a class="btn btn-primary" href="{{ route('bookings.show', [$site, $old->id]) }}">Cancel</a>
+          <a class="btn btn-primary" href="{{ route('bookings.show', [$site->slug, $old->id]) }}">Cancel</a>
         @else
-          <a class="btn btn-primary" href="{{ route('bookings.index', [$site]) }}">Cancel</a>
+          <a class="btn btn-primary" href="{{ route('bookings.index', [$site->slug]) }}">Cancel</a>
         @endif
       </div>
 @endsection

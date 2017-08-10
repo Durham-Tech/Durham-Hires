@@ -54,7 +54,7 @@ class BookingsController extends Controller
         }
 
         return View::make('bookings.index')
-            ->with(['data' => $data, 'statusArray' => $this->status, 'site' => $site->slug]);
+            ->with(['data' => $data, 'statusArray' => $this->status, 'site' => $site]);
     }
 
     public function indexComplete()
@@ -66,7 +66,7 @@ class BookingsController extends Controller
               ->get();
 
         return View::make('bookings.old')
-            ->with(['data' => $data, 'site' => $site->slug]);
+            ->with(['data' => $data, 'site' => $site]);
     }
 
     /**
@@ -78,7 +78,7 @@ class BookingsController extends Controller
     {
         $site = Request()->get('_site');
         return View::make('bookings.edit')
-                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'site' => $site->slug]);
+                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'site' => $site]);
     }
 
     /**
@@ -167,7 +167,7 @@ class BookingsController extends Controller
                               'items' => $bookedItems,
                               'custom' => $customItems,
                               'next' => $this->nextStatus,
-                              'site' => $site->slug
+                              'site' => $site
                               ]
                           );
         } else {
@@ -202,7 +202,7 @@ class BookingsController extends Controller
             $old->status = 4;
         }
         return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->status, 'site' => $site->slug]);
+                      ->with(['old' => $old, 'statusArray' => $this->status, 'site' => $site]);
     }
 
     private function manageStatusChange(&$booking, $status)
@@ -342,7 +342,7 @@ class BookingsController extends Controller
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
             return View::make('items.index')
-                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items, 'site' => $site->slug]);
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items, 'site' => $site]);
         } else {
             return redirect()->route('items.index', ['site' => $site->slug]);
         }

@@ -9,13 +9,13 @@ $active = 'internal';
         @if(isset($old))
                 {{ Form::model($old,
                     array(
-                        'route' => ['templates.update', $site, $old->id],
+                        'route' => ['templates.update', $site->slug, $old->id],
                         'method' => 'PATCH',
                         'class' => 'form')) }}
         @else
             {!! Form::open(
             array(
-                'route' => ['templates.store', $site],
+                'route' => ['templates.store', $site->slug],
                 'class' => 'form')
             ) !!}
         @endif
@@ -52,9 +52,9 @@ $active = 'internal';
                 )) !!}
         {!! Form::close() !!}
         @if(isset($old))
-        {{ Form::open(['route' => ['templates.destroy', $site, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['templates.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif
-                <a class="btn btn-primary" href="{{ route('templates.index', $site) }}">Cancel</a>
+                <a class="btn btn-primary" href="{{ route('templates.index', $site->slug) }}">Cancel</a>
 @endsection

@@ -6,8 +6,8 @@ $active = 'internal';
 
 @section('page')
           <div class="buttonGroup">
-            <a class="btn btn-primary" href="{{ route('internal.create', [$site]) }}">Add new</a>
-            <a class="btn btn-primary" href="{{ route('templates.index', [$site]) }}">Templates</a>
+            <a class="btn btn-primary" href="{{ route('internal.create', [$site->slug]) }}">Add new</a>
+            <a class="btn btn-primary" href="{{ route('templates.index', [$site->slug]) }}">Templates</a>
           </div>
             @if ($data)
 
@@ -22,7 +22,7 @@ $active = 'internal';
                 <tbody>
                 @foreach($data as $key => $booking)
                     <tr>
-                        <td><a href='{!! action('InternalEventController@show', ['booking' => $booking->id, 'site' => $site]) !!}'>{{ $booking->name }}</a></td>
+                        <td><a href='{!! action('InternalEventController@show', ['booking' => $booking->id, 'site' => $site->slug]) !!}'>{{ $booking->name }}</a></td>
                         <td>{{ date('D jS M Y', strtotime($booking->start) )  }}</td>
                         <td>{{ date('D jS M Y', strtotime($booking->end) )  }}</td>
                     </tr>

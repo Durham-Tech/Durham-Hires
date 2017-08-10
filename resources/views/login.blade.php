@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="limWidth">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/'.$site.'/login') }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/'.$site->slug.'/login') }}">
                 {{ csrf_field() }}
 
               <div class="login">
