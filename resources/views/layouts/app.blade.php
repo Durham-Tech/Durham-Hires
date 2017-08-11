@@ -26,9 +26,44 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     <!-- Styles -->
     @yield('styles')
     <link href="/css/app.css" rel="stylesheet">
+    
     <style>
-
+    a
+    {
+    color: {{ $site->accent }};
+    }
+    
+    a:focus, a:hover
+    {
+    color: {{ $site->accentDark }};
+    }
+    
+    .navbar-default, .btn-primary
+    {
+    background-color: {{ $slug->accent }};
+    }
+    
+    .btn-primary.active, .btn-primary:active, .btn-primary:hover, .open>.btn-primary.dropdown-toggle,
+    .btn-primary.focus, .btn-primary:focus,
+    .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover
+    {
+    background-color: {{ $site->accentDark }};
+    }
+    
+    .navbar-brand, .navbar-default .navbar-nav li a,
+    .btn-primary,
+    .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover
+    {
+    color: {{ $site->accentText }};
+    }
+    
+    .navbar-default .navbar-nav li a:hover,
+    .navbar-default .navbar-brand:hover
+    {
+    color: {{ $site->accentTextDark }};
+    }
     </style>
+    
     @if ($site->styleSheet != "")
     <link href="/css/sites/{{ $site->styleSheet }}" rel="stylesheet">
     @endif
