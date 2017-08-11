@@ -26,44 +26,54 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     <!-- Styles -->
     @yield('styles')
     <link href="/css/app.css" rel="stylesheet">
-    
+
     <style>
     a
     {
     color: {{ $site->accent }};
     }
-    
+
     a:focus, a:hover
     {
     color: {{ $site->accentDark }};
     }
-    
+
     .navbar-default, .btn-primary
     {
     background-color: {{ $site->accent }};
     }
-    
+
+    .btn-primary, .btn-primary:hover
+    {
+    border-color: {{ $site->accentDark }};
+    }
+
     .btn-primary.active, .btn-primary:active, .btn-primary:hover, .open>.btn-primary.dropdown-toggle,
     .btn-primary.focus, .btn-primary:focus,
     .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover
     {
     background-color: {{ $site->accentDark }};
     }
-    
-    .navbar-brand, .navbar-default .navbar-nav li a,
+
+    .navbar-brand, .navbar-default .navbar-brand, .navbar-default .navbar-nav li a,
     .btn-primary,
     .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover
     {
     color: {{ $site->accentText }};
     }
-    
+
     .navbar-default .navbar-nav li a:hover,
     .navbar-default .navbar-brand:hover
     {
     color: {{ $site->accentTextDark }};
     }
+
+    .form-control:focus
+    {
+      border-color: {{ $site->accentLight }};
+    }
     </style>
-    
+
     @if ($site->styleSheet != "")
     <link href="/css/sites/{{ $site->styleSheet }}" rel="stylesheet">
     @endif
