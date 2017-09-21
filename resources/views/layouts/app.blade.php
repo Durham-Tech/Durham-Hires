@@ -40,7 +40,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     
     .navbar-default, .btn-primary
     {
-    background-color: {{ $slug->accent }};
+    background-color: {{ $site->accent }};
     }
     
     .btn-primary.active, .btn-primary:active, .btn-primary:hover, .open>.btn-primary.dropdown-toggle,
