@@ -54,7 +54,8 @@ class ContentController extends Controller
 
     public function savePage(Request $request)
     {
-        $page = content::where('page', $request->page)->firstOrFail();
+        $site = Request()->get('_site');
+        $page = content::where('page', $request->page)->where('site', $site->id)->firstOrFail();
         $content = strip_tags($request->content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe>');
         $content = preg_replace_callback(
             '/<img.+?src="(data:image\/[A-Za-z]+;base64,[^\"]+)".+?>/',
