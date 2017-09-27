@@ -18,7 +18,7 @@ class SetupDb extends Migration
             'admins', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name', 255);
-                $table->string('user', 10)->unique();
+                $table->string('user', 10)->index();
                 $table->string('email', 255);
                 $table->tinyInteger('privileges');
                 $table->integer('site');
@@ -104,8 +104,7 @@ class SetupDb extends Migration
         Schema::create(
             'settings', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('name', 255);
-                // $table->string('name', 255)->unique();
+                $table->string('name', 255)->index();
                 $table->string('value', 255);
                 $table->integer('site');
             }
