@@ -125,7 +125,11 @@ class ItemController extends Controller
     {
         $site = Request()->get('_site');
         $item = catalog::findOrFail($id);
-        return View::make('items.view')->with(['item' => $item, 'site' => $site]);
+        if ($item->site == $site->id){
+            return View::make('items.view')->with(['item' => $item, 'site' => $site]);
+        } else {
+            abort(404);
+        }
         //
     }
 
