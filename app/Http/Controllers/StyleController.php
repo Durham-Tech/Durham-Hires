@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Site;
 
 class StyleController extends Controller
@@ -37,16 +38,6 @@ class StyleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -54,6 +45,11 @@ class StyleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate(
+            $request, [
+            'name' => 'required|max:255'
+            ]
+        );
         //
         $siteCache = Request()->get('_site');
         $site = Site::find($siteCache->id);
@@ -75,49 +71,26 @@ class StyleController extends Controller
             $accentTextDark = $this->shadeColor($accentText, -5);
         }
 
+        if ($request->hasFile('stylesheet')) {
+            $file = $request->file('stylesheet');
+            if ($file->getClientOriginalExtension() == "css") {
+                $file->move(
+                    base_path() . '/public/css/sites/', $site->slug . ".css"
+                );
+                $site->styleSheet = $site->slug . ".css";
+            }
+        }
+
         $site->accent = $accent;
         $site->accentText = $accentText;
         $site->accentDark = $accentDark;
         $site->accentLight = $accentLight;
         $site->accentTextDark = $accentTextDark;
+        $site->name = $request->input('name');
 
         $site->save();
 
         return redirect()->route('style.index', ['site' => $site->slug]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -128,6 +101,10 @@ class StyleController extends Controller
      */
     public function destroy($id)
     {
+        $siteCache = Request()->get('_site');
+        $site = Site::find($siteCache->id);
+        $site->styleSheet = "";
+        $site->save();
         //
     }
 }

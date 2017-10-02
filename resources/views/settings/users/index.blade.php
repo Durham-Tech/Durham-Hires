@@ -43,7 +43,7 @@ $active = 'admin';
                           {{ Form::checkbox('admin['. $user->id .']', 1, $user->privileges & 4)}}
                         </td>
                         <td>
-                          <a href="#" class="deleteLink" data-idvalue="{{ $user->id }}">Delete</button>
+                          <a href="#" class="deleteLink" data-idvalue="{{ $user->id }}">Delete</a>
                         </td>
                     </tr>
                     @endforeach
