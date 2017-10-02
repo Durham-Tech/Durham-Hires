@@ -39,7 +39,7 @@ class customAuth extends Controller
 
             if (!empty($privRows)) {
                 $privileges = array();
-                foreach($privRows as $row){
+                foreach ($privRows as $row) {
                     $privileges[$row->site] = $row->privileges;
                 }
                 $request->session()->put('privileges', $privileges);
@@ -66,7 +66,7 @@ class customAuth extends Controller
     {
         $site = $request->get('_site');
         CAuth::logout();
-        return redirect()->route('home', $site->slug);
+        return redirect()->route('  home', $site->slug);
     }
 
     public function index(Request $request)

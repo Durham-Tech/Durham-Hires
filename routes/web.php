@@ -21,6 +21,7 @@ Route::resource('{site}/settings/admin', 'AdminController');
 Route::resource('{site}/bookings', 'BookingsController');
 Route::resource('{site}/templates', 'TemplateController');
 Route::resource('{site}/internal', 'InternalEventController');
+Route::resource('{site}/settings/style', 'StyleController');
 
 
 Route::get('{site}/bookings/index/complete', 'BookingsController@indexComplete')
