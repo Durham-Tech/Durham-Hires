@@ -74,7 +74,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     }
     </style>
 
-    @if (!empty($site->styleSheet))
+    @if ($site->styleSheet != "")
     <link href="/css/sites/{{ $site->styleSheet }}" rel="stylesheet">
     @endif
 
