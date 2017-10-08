@@ -390,6 +390,7 @@ class BookingsController extends Controller
                         $item->delete();
                     }
                 }
+                $request->id = (array)$request->id; // Make sure array of item ids is actually an array instead of single value
                 foreach ($request->id as $key => $cus_id){
                     if (is_null($cus_id)) {
                         if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {
