@@ -14,6 +14,9 @@
 /*Route::get('/', ['as' => 'home', function () {
     return view('home');
 }]);*/
+Route::resource('admin/users', 'SuperAdminController');
+Route::post('admin/users/save', 'SuperAdminController@Save')
+          ->name('users.save');
 
 Route::resource('{site}/settings/categories', 'CategoryController');
 Route::resource('{site}/items', 'ItemController');

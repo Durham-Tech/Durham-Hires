@@ -68,7 +68,7 @@ class StyleController extends Controller
             $accentDark = "";
             $accentLight = "";
         } else {
-            $accentDark = $this->shadeColor($accent, -0.2);
+            $accentDark = $this->shadeColor($accent, -0.15);
             $accentLight = $this->shadeColor($accent, 0.2);
         }
         if (is_null($accentText)) {

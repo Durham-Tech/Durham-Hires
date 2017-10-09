@@ -2,21 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use View;
-use App\Admin;
-use App\Settings;
-use CAuth;
 use Illuminate\Http\Request;
-use App\Http\Requests\newUser;
-use App\Classes\Common;
-use App\Classes\pdf;
+use View;
+use App\Classes\Items;
+use App\Admin;
 
-class AdminController extends Controller
+class SuperAdminController extends Controller
 {
     public function __construct()
     {
         $this->middleware('login');
-        $this->middleware('admin');
     }
     /**
      * Display a listing of the resource.
@@ -25,14 +20,10 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        $site = $request->get('_site');
         $error = session()->get('error', '');
-        $users = Admin::where('site', $site->id)
+        $users = Admin::where('site', 0)
               ->get();
-        $hires = Settings::where('name', 'hiresManager')
-              ->where('site', $site->id)
-              ->firstOrFail();
-        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error, 'site' => $site]);
+        return view('superAdmin.users.index')->with(['users' => $users, 'error' => $error]);
     }
 
     /**
@@ -43,8 +34,7 @@ class AdminController extends Controller
     public function create(Request $request)
     {
         //
-        $site = $request->get('_site');
-        return View::make('settings.users.new')->with(['site' => $site]);
+        return View::make('superAdmin.users.new');
     }
 
     /**
@@ -56,14 +46,13 @@ class AdminController extends Controller
     public function store(newUser $requestUser)
     {
         //
-        $site = Request()->get('_site');
         $user = new Admin;
         $userDetails = Common::getDetailsEmail($requestUser->email);
         $user->email = $userDetails->email;
         $user->user = $userDetails->username;
-        $user->privileges = 0;
+        $user->privileges = 1;
         $user->name = $userDetails->name;
-        $user->site = $site->id;
+        $user->site = 0;
         $user->save();
         return redirect()->route('admin.index', $site->slug);
     }
@@ -114,20 +103,14 @@ class AdminController extends Controller
      * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy($site, Admin $admin)
+    public function destroy(Admin $admin)
     {
         //
-        $site = Request()->get('_site');
         if (!($admin->privileges & 4)) {
             $admin->delete();
             return redirect()->route('admin.index', $site->slug);
         } else {
             return redirect()->route('admin.index', $site->slug)->with(['error' => 'Cannot delete an admin user.']);
         }
-    }
-
-    public function pdfTest()
-    {
-        return pdf::createInvoice(16, false);
     }
 }

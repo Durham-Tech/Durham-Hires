@@ -66,7 +66,7 @@ class customAuth extends Controller
     {
         $site = $request->get('_site');
         CAuth::logout();
-        return redirect()->route('  home', $site->slug);
+        return redirect()->route('home', $site->slug);
     }
 
     public function index(Request $request)
