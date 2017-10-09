@@ -10,11 +10,6 @@
 
             @if ($users)
 
-            {!! Form::open(
-            array(
-                'route' => ['users.save'],
-                'class' => 'form')
-            ) !!}
                 <table class="table userTable">
                 <thead>
                     <tr>
@@ -36,9 +31,6 @@
                     </tbody>
                   </table>
 
-                {!! Form::submit('Save',
-                array('class'=>'btn btn-primary'
-                )) !!}
                 <a class="btn btn-primary" href="{{ route('users.create') }}">Add new</a>
 
         {!! Form::close() !!}

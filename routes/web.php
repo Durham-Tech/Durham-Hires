@@ -15,8 +15,11 @@
     return view('home');
 }]);*/
 Route::resource('admin/users', 'SuperAdminController');
-Route::post('admin/users/save', 'SuperAdminController@Save')
-          ->name('users.save');
+Route::get('admin/login', 'publicController@login')
+          ->name('admin.login');
+Route::post('admin/login', 'customAuth@checkAuth');
+Route::get('admin/logout', 'customAuth@logout')
+          ->name('admin.logout');
 
 Route::resource('{site}/settings/categories', 'CategoryController');
 Route::resource('{site}/items', 'ItemController');

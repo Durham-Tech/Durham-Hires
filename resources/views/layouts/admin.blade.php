@@ -57,10 +57,10 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (!CAuth::check())
-                          <li>{{ link_to_route('login', 'Login', 0) }}</li>
+                          <li>{{ link_to_route('admin.login', 'Login', 0) }}</li>
                         @else
                             <li>
-                                {{ link_to_route('logout', 'Logout (' . CAuth::user()->username . ')', 0) }}
+                                {{ link_to_route('admin.logout', 'Logout (' . CAuth::user()->username . ')', 0) }}
                             </li>
                         @endif
                     </ul>

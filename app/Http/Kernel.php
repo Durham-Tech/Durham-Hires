@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'login' => \App\Http\Middleware\CustomAuth::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'superAdmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'treasurer' => \App\Http\Middleware\TreasurerMiddleware::class,
     ];
 }

@@ -17,6 +17,25 @@ class CAuth
         return (int)$value;
     }
 
+    public static function checkSuperAdmin($priv = 1)
+    {
+        $privileges = session()->get('privileges');
+        if ($privileges && array_key_exists(0, $privileges)) {
+            $privileges = $privileges[0];
+        } else {
+            $privileges = 0;
+        }
+        $value = 0;
+        if (is_array($priv) ) {
+            foreach ($priv as $x){
+                $value |= (int)$privileges & $x;
+            }
+        } elseif (is_int($priv)) {
+            $value |= (int)$privileges & $priv;
+        }
+        return $value;
+    }
+
     public static function checkAdmin($priv = 4)
     {
         $siteObj = Request::get('_site');
