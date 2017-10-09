@@ -27,7 +27,7 @@ class SetupDb extends Migration
         Schema::create(
             'booked_items', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('bookingID')->unique();
+                $table->integer('bookingID')->index();
                 $table->integer('item');
                 $table->integer('number');
             }
