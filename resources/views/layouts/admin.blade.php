@@ -50,7 +50,8 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li>{{ link_to_route('users.index', 'Users') }}</li>
+                        <li>{{ link_to_route('sites.index', 'Sites') }}</li>
+                        <li>{{ link_to_route('users.index', 'Global Admins') }}</li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

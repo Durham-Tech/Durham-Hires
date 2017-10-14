@@ -41,9 +41,11 @@ class BookingsController extends Controller
         if (CAuth::checkAdmin()) {
             $data = Bookings::orderBy('start')->get()
                 ->where('site', $site->id)
-                ->where('status', '<', 4)
                 ->where('internal', 0)
-                ->where('template', 0);
+                ->where('template', 0)
+                ->where('status', '<', 4)
+                ->where('status', '>', 0)
+                ->orWhere('end', '<=', date());
         } else {
             $data = Bookings::orderBy('start', 'DESC')
                 ->where('site', $site->id)

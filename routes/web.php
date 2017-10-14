@@ -14,7 +14,16 @@
 /*Route::get('/', ['as' => 'home', function () {
     return view('home');
 }]);*/
+Route::get('admin', 'SiteController@index');
 Route::resource('admin/users', 'SuperAdminController');
+
+Route::resource('admin/sites', 'SiteController');
+Route::get('admin/sites/{site}/addUser', 'SiteController@createAddUser')
+          ->name('sites.addUser');
+Route::post('admin/sites/{site}/addUser', 'SiteController@storeUser')
+          ->name('sites.storeUser');
+Route::delete('admin/sites/{site}/deleteUser/{user}', 'SiteController@destroyUser');
+
 Route::get('admin/login', 'publicController@login')
           ->name('admin.login');
 Route::post('admin/login', 'customAuth@checkAuth');

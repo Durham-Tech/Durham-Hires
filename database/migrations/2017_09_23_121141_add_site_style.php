@@ -15,12 +15,12 @@ class AddSiteStyle extends Migration
     {
         Schema::table(
             'sites', function (Blueprint $table) {
-                $table->string('accent', 10);
-                $table->string('accentDark', 10);
-                $table->string('accentLight', 10);
-                $table->string('accentText', 10);
-                $table->string('accentTextDark', 10);
-                $table->string('styleSheet', 255);
+                $table->string('accent', 10)->default('');
+                $table->string('accentDark', 10)->default('');
+                $table->string('accentLight', 10)->default('');
+                $table->string('accentText', 10)->default('');
+                $table->string('accentTextDark', 10)->default('');
+                $table->string('styleSheet', 255)->default('');
             }
         );
     }
