@@ -27,20 +27,6 @@ class DatabaseSeeder extends Seeder
             'site' => 1
             ]
         );
-        DB::table('settings')->insert(
-            [
-            'name' => 'hiresManager',
-            'value' => '1',
-            'site' => 1
-            ]
-        );
-        DB::table('settings')->insert(
-            [
-            'name' => 'hiresEmail',
-            'value' => 'test@example.com',
-            'site' => 1
-            ]
-        );
         DB::table('admins')->insert(
             [
             'name' => 'Test Admin User',
@@ -53,7 +39,9 @@ class DatabaseSeeder extends Seeder
         DB::table('sites')->insert(
             [
             'name' => 'Trevs',
-            'slug' => 'trevs'
+            'slug' => 'trevs',
+            'hiresManager' => 1,
+            'hiresEmail' => 'test@example.com'
             ]
         );
     }

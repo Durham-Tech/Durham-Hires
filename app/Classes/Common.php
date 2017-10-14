@@ -3,7 +3,6 @@
 namespace App\Classes;
 
 use App\Bookings;
-use App\Settings;
 use App\Admin;
 use App\content;
 
@@ -96,9 +95,7 @@ class Common
     public static function hiresEmail()
     {
         $site = Request()->get('_site');
-        return Settings::where('name', 'hiresEmail')
-                ->where('site', $site->id)
-                ->firstOrFail()->value;
+        return $site->hiresEmail;
     }
 
     public static function getContent($page)

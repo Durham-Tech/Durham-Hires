@@ -4,11 +4,11 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Bookings;
 use App\Classes\Common;
-use App\Settings;
 
 class sendInvoice extends Mailable
 {
@@ -28,9 +28,7 @@ class sendInvoice extends Mailable
         $site = Request()->get('_site');
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
-        $this->hiresEmail = Settings::where('name', 'hiresEmail')
-            ->where('site', $site->id)
-            ->firstOrFail()->value;
+        $this->hiresEmail = $site->hiresEmail;
     }
 
     /**

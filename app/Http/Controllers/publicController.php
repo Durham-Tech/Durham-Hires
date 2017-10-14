@@ -29,8 +29,12 @@ class publicController extends Controller
     public function login(Request $request)
     {
         $site = $request->get('_site');
-        return view('login')
+        if(!is_null($site)) {
+            return view('login')
             ->with(['site' => $site]);
+        } else {
+            return view('superAdmin.login');
+        }
     }
 
 }

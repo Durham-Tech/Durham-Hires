@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Classes\Common;
 use App\Bookings;
-use App\Settings;
+use App\Site;
 
 class itemRemoved extends Mailable
 {
@@ -17,6 +17,7 @@ class itemRemoved extends Mailable
     public $booking;
     public $errorList;
     public $hiresEmail;
+    public $site;
 
     /**
      * Create a new message instance.
@@ -28,8 +29,9 @@ class itemRemoved extends Mailable
         //
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
+        $this->site = Site::findOrFail($this->booking->site);
         $this->errorList = $errorList;
-        $this->hiresEmail = Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+        $this->hiresEmail = $site->hiresEmail;
     }
 
     /**
