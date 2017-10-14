@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use View;
 use App\Admin;
-use App\Settings;
+use App\Site;
 use CAuth;
 use Illuminate\Http\Request;
 use App\Http\Requests\newUser;
@@ -27,12 +27,10 @@ class AdminController extends Controller
     {
         $site = $request->get('_site');
         $error = session()->get('error', '');
-        $users = Admin::where('site', $site->id)
-              ->get();
-        $hires = Settings::where('name', 'hiresManager')
-              ->where('site', $site->id)
-              ->firstOrFail();
-        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires->value, 'error' => $error, 'site' => $site]);
+        $users = Admin::where('site', $site->id)->get();
+        $hires = $site->hiresManager;
+
+        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires, 'error' => $error, 'site' => $site]);
     }
 
     /**
@@ -61,7 +59,7 @@ class AdminController extends Controller
         $userDetails = Common::getDetailsEmail($requestUser->email);
         $user->email = $userDetails->email;
         $user->user = $userDetails->username;
-        $user->privileges = 0;
+        $user->privileges = 4;
         $user->name = $userDetails->name;
         $user->site = $site->id;
         $user->save();
@@ -98,12 +96,16 @@ class AdminController extends Controller
             $user->save();
         }
         if (!empty($hiresEmail)) {
-            $hires = Settings::where('name', 'hiresManager')
-                            ->where('site', $site->id)
-                            ->update(['value' => $request->hires]);
-            $hires = Settings::where('name', 'hiresEmail')
-                            ->where('site', $site->id)
-                            ->update(['value' => $hiresEmail]);
+
+            Site::where('id', $site->id)->update(['hiresManager' => $request->hires]);
+            Site::where('id', $site->id)->update(['hiresEmail' => $hiresEmail]);
+
+            // $hires = Settings::where('name', 'hiresManager')
+            //                 ->where('site', $site->id)
+            //                 ->update(['value' => $request->hires]);
+            // $hires = Settings::where('name', 'hiresEmail')
+            //                 ->where('site', $site->id)
+            //                 ->update(['value' => $hiresEmail]);
         }
         return redirect()->route('admin.index', $site->slug);
     }

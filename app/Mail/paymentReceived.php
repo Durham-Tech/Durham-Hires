@@ -4,10 +4,11 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Classes\Common;
-use App\Settings;
+use App\Site;
 use App\Bookings;
 
 class paymentReceived extends Mailable
@@ -15,6 +16,7 @@ class paymentReceived extends Mailable
     use Queueable, SerializesModels;
     public $hiresEmail;
     public $name;
+    public $site;
 
     /**
      * Create a new message instance.
@@ -23,7 +25,8 @@ class paymentReceived extends Mailable
      */
     public function __construct($name)
     {
-        $this->hiresEmail = Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+        $this->site = Request()->get('_site');
+        $this->hiresEmail = $this->site->hiresEmail;
         $this->name = $name;
         //
     }

@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Classes\Common;
 use App\Bookings;
-use App\Settings;
+use App\Site;
 
 class bookingConfirmed extends Mailable
 {
@@ -16,6 +16,7 @@ class bookingConfirmed extends Mailable
     public $id;
     public $booking;
     public $hiresEmail;
+    public $site;
     /**
      * Create a new message instance.
      *
@@ -26,7 +27,9 @@ class bookingConfirmed extends Mailable
         //
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
-        $this->hiresEmail = Settings::where('name', 'hiresEmail')->firstOrFail()->value;
+        $this->site = Site::findOrFail($this->booking->site);
+
+        $this->hiresEmail = $site->hiresEmail;
     }
 
     /**

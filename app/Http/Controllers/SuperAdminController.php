@@ -8,7 +8,6 @@ use App\Classes\Items;
 use App\Admin;
 use App\Http\Requests\newUser;
 use App\Classes\Common;
-use App\Settings;
 use CAuth;
 
 class SuperAdminController extends Controller

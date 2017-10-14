@@ -4,7 +4,6 @@ namespace App\Classes;
 use App\Bookings;
 use App\booked_items;
 use App\custom_items;
-use App\Settings;
 use App\Admin;
 use App\Classes\Common;
 
@@ -12,6 +11,7 @@ class pdf
 {
     public static function createInvoice($id, $save = true)
     {
+        $site = Request()->get('_site');
         $booking = Bookings::findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $id)
@@ -24,13 +24,9 @@ class pdf
             ->where('number', '!=', '0')
             ->get();
 
-        $hiresID = Settings::where('name', 'hiresManager')
-              ->where('site', $booking->site)
-              ->firstOrFail()->value;
+        $hiresID = $site->hiresManager;
         $hiresManager = Admin::findOrFail(intval($hiresID));
-        $hiresEmail = Settings::where('name', 'hiresEmail')
-              ->where('site', $booking->site)
-              ->firstOrFail()->value;
+        $hiresEmail = $site->hiresEmail;
 
         Common::calcAllCosts($booking, $bookedItems, $customItems);
 

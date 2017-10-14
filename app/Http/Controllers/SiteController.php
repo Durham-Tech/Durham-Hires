@@ -6,7 +6,6 @@ use App\Site;
 use View;
 use App\Admin;
 use App\content;
-use App\Settings;
 use App\Classes\Common;
 use Illuminate\Http\Request;
 use App\Http\Requests\NewSite;
@@ -54,6 +53,8 @@ class SiteController extends Controller
         $site = new Site;
         $site->name = $request->name;
         $site->slug = str_slug($request->slug, "-");
+        $site->hiresEmail = "";
+        $site->hiresManager = "";
         $site->save();
 
         $user = Common::getDetailsEmail($request->email);
@@ -65,17 +66,20 @@ class SiteController extends Controller
         $admin->site = $site->id;
         $admin->save();
 
-        $hm = new Settings;
-        $hm->name = "hiresManager";
-        $hm->value = $admin->id;
-        $hm->site = $site->id;
-        $hm->save();
+        Site::where('site', $site->id)->update(['hiresManager' => $admin->id]);
+        Site::where('site', $site->id)->update(['hiresEmail' => $admin->email]);
 
-        $he = new Settings;
-        $he->name = "hiresEmail";
-        $he->value = $admin->email;
-        $he->site = $site->id;
-        $he->save();
+        // $hm = new Settings;
+        // $hm->name = "hiresManager";
+        // $hm->value = $admin->id;
+        // $hm->site = $site->id;
+        // $hm->save();
+        //
+        // $he = new Settings;
+        // $he->name = "hiresEmail";
+        // $he->value = $admin->email;
+        // $he->site = $site->id;
+        // $he->save();
 
         $home = new content;
         $home->page = "home";
