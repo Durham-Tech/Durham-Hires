@@ -11,9 +11,6 @@
 |
 */
 
-/*Route::get('/', ['as' => 'home', function () {
-    return view('home');
-}]);*/
 Route::get('admin', 'SiteController@index');
 Route::resource('admin/users', 'SuperAdminController');
 

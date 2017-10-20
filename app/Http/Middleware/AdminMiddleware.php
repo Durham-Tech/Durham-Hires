@@ -19,10 +19,10 @@ class AdminMiddleware
         $site = $request->get('_site');
         if (!CAuth::checkAdmin()) {
             if (CAuth::check()) {
-                return redirect()->action('publicController@index');
+                return redirect()->route('home', [$site->slug]);
             } else {
                 session(['target' => $request->path()]);
-                return redirect()->route(['login', $site]);
+                return redirect()->route('login', [$site->slug]);
             }
         } else {
             return $next($request);

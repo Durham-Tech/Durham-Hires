@@ -53,7 +53,7 @@ class SiteController extends Controller
         $site = new Site;
         $site->name = $request->name;
         $site->slug = str_slug($request->slug, "-");
-        $site->hiresEmail = "";
+        $site->hiresEmail = 0;
         $site->hiresManager = "";
         $site->save();
 

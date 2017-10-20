@@ -18,6 +18,7 @@ class CustomAuth
     public function handle($request, Closure $next)
     {
         // $noAuth = array('login', '/', 'items');
+        $site = $request->get('_site');
         $auth = session('auth', '0');
 
         // if (in_array($request->path(), $noAuth)){
@@ -27,7 +28,7 @@ class CustomAuth
             return $next($request);
         } else {
             session(['target' => $request->path()]);
-            return redirect()->route('login', 'trevs');
+            return redirect()->route('login', $site->slug);
         }
         // }
     }

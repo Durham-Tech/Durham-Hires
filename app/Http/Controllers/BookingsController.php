@@ -6,6 +6,7 @@ use App\Bookings;
 use App\booked_items;
 use App\custom_items;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use View;
 use App\Classes\Items;
 use App\Classes\CAuth;
@@ -39,13 +40,18 @@ class BookingsController extends Controller
         //
         $site = Request()->get('_site');
         if (CAuth::checkAdmin()) {
-            $data = Bookings::orderBy('start')->get()
+            $data = Bookings::orderBy('start')
                 ->where('site', $site->id)
                 ->where('internal', 0)
                 ->where('template', 0)
                 ->where('status', '<', 4)
-                ->where('status', '>', 0)
-                ->orWhere('end', '<=', date());
+                ->Where(
+                    function ($query) {
+                        $query->where('status', '>', 0)
+                            ->orWhere('end', '>=', date('Y-m-d H:i:s'));
+                    }
+                )
+                ->get();
         } else {
             $data = Bookings::orderBy('start', 'DESC')
                 ->where('site', $site->id)
