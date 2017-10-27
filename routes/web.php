@@ -82,4 +82,5 @@ Route::get('{site}/logout', 'customAuth@logout')
 
 // testing routes
 Route::get('/calendar/{type}', 'CalendarController@downloadCalendar');
-Route::get('invoice_test', 'AdminController@pdfTest');
+Route::get('{site}/invoice_demo', 'AdminController@pdfTest')
+          ->name('demoInvoice');

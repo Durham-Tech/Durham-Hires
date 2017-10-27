@@ -28,6 +28,9 @@ class CustomAuth
             return $next($request);
         } else {
             session(['target' => $request->path()]);
+            if ($site == null) {
+                return redirect()->route('admin.login');
+            }
             return redirect()->route('login', $site->slug);
         }
         // }

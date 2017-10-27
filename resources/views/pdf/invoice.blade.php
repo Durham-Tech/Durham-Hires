@@ -5,15 +5,13 @@
   <table align="center">
     <tr>
       <td class="img">
-      <img src="{{ public_path() . '/images/content/logo.png' }}">
+        @if ($site->logo != null)
+      <img src="{{ public_path() . '/images/content/logo/' . $site->logo }}">
+      @endif
       </td>
       <td class="address">
         <p>
-          Trevelyan College<br>
-          Durham University<br>
-          Elvet Hill Road<br>
-          DURHAM<br>
-          DH1 3LN
+          {!! nl2br($site->address) !!}
         </p>
       </td>
     </tr>
@@ -58,7 +56,7 @@
         </p>
         <p id='invoiceNo'>
             <b>Invoice referance: </b>
-              {{ 'TechHires'.$booking->id  }}
+              {{ $site->invoicePrefix . $booking->id  }}
         </p>
       </td>
     </tr>
@@ -131,26 +129,26 @@
 
 <div id="info">
 <p>
-  Payment is due no later than <b>28 days</b> from invoice date.<br><br>
+  Payment is due no later than <b>{{ $site->dueTime }}</b> from invoice date.<br><br>
 
   Please pay by bank transfer:
 </p>
   <ul>
-    <li>Sort Code: 20-27-41</li>
-    <li>Account Number: 43547930</li>
-    <li>Reference: {{ 'TechHires'.$booking->id }}</li>
+    <li>Sort Code: {{ $site->sortCode }}</li>
+    <li>Account Number: {{ $site->accountNumber }}</li>
+    <li>Reference: {{ $site->invoicePrefix . $booking->id }}</li>
   </ul>
 <p>
   <br>
 
   <b>{{ $manager->name }}</b><br>
-  Technical Hires and Equipment Coordinator<br>
+  {{ $site->managerTitle }}<br>
   {{ $hiresEmail }}
 </p>
 </div>
 
 <div class="footer">
-Trevelyan College Junior Common Room<br>
-VAT Reg. No. 675 5425 10
+{{ $site->vatName }}<br>
+VAT Reg. No. {{ $site->vatNumber }}
 </div>
 @endsection

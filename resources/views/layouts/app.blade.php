@@ -14,7 +14,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} | @yield('title', 'Home')</title>
+    <title>{{ $site->name }} | @yield('title', 'Home')</title>
 
     <!-- Scripts -->
     <script>

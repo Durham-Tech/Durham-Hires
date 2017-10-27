@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Site;
 
+// Controller for customizing site look and feel on a site by site basis
+
 class StyleController extends Controller
 {
     public function __construct()
@@ -63,6 +65,8 @@ class StyleController extends Controller
         $accent = $request->input('accent');
         $accentText = $request->input('accentText');
 
+        // UI settings
+
         if (is_null($accent)) {
             $accent = "";
             $accentDark = "";
@@ -93,7 +97,27 @@ class StyleController extends Controller
         $site->accentDark = $accentDark;
         $site->accentLight = $accentLight;
         $site->accentTextDark = $accentTextDark;
+
+        // Site settings
         $site->name = $request->input('name');
+        $site->dueTime = $request->input('dueTime');
+        $site->invoicePrefix = $request->input('invoicePrefix');
+        $site->address = $request->input('address');
+        $site->managerTitle = $request->input('managerTitle');
+        $site->vatName = $request->input('vatName');
+        $site->vatNumber = $request->input('vatNumber');
+        $site->sortCode = $request->input('sortCode');
+        $site->accountNumber = $request->input('accountNumber');
+
+        if (!empty($request->logo)) {
+            $imageName = $site->slug . '.' .
+                $request->file('logo')->getClientOriginalExtension();
+
+            $request->file('logo')->move(
+                base_path() . '/public/images/content/logo/', $imageName
+            );
+            $site->logo = $imageName;
+        }
 
         $site->save();
 

@@ -23,13 +23,14 @@ $active = 'style';
                 'files' => 'true')
             ) !!}
 
-    <h2>Site Name</h2>
+    <h1>Site Name</h1>
               {{ Form::text('name', $site->name,
               array(
                   'class'=>'form-control',
               )) }}
 
 
+<h1>Style</h1>
 <div class="row">
   <div class="col-sm-6">
     <center>
@@ -45,28 +46,121 @@ $active = 'style';
   </div>
 </div>
 
+<h2>Custom CSS</h2>
 <div>
-    <h2>Custom CSS</h2>
 
-              @if (!empty($site->styleSheet))
-                <a href="/css/sites/{{ $site->styleSheet }}" style="font-weight: bold;">{{ $site->styleSheet }}</a>
+  @if (!empty($site->styleSheet))
+    <a href="/css/sites/{{ $site->styleSheet }}" style="font-weight: bold;">{{ $site->styleSheet }}</a>
 
-                <a href="#" class="deleteLink" style="color:red;padding-left:15px;">Delete</a>
-              @endif
+      <a href="#" class="deleteLink" style="color:red;padding-left:15px;">Delete</a>
+    @endif
 
-              {{ Form::file('stylesheet',
-              array(
-              'accept' => '.css'
-              )) }}
-            </div>
+    {{ Form::file('stylesheet',
+    array(
+    'accept' => '.css'
+    )) }}
+</div>
 
+<h1>Invoice Options</h1>
+<p><b><a href='{{ route('demoInvoice', $site->slug) }}' target="_blank">Demo Invoice</a></b></p>
 
-            <div class="form-group" id="buttons" style="padding-top:20px;">
-                {!! Form::submit('Save',
-                array('class'=>'btn btn-primary'
-                )) !!}
-        {!! Form::close() !!}
+  <h3>General</h3>
+
+  <div class='form-group'>
+      {{ Form::label('logo', 'Logo') }}
+      <div>
+      @if (!empty($site->logo))
+      {{ Html::image('images/content/logo/' . $site->logo,
+        'Site Logo',
+        array(
+        'class' => 'imageThumb'
+        )
+      ) }}
+      @endif
+
+      {{ Form::file('logo',
+      array(
+          'style' => 'display:inline;'
+      )) }}
       </div>
+  </div>
+
+  <div class='form-group'>
+    {{ Form::label('managerTitle', 'Hires manager title:') }}
+    {{ Form::text('managerTitle', $site->managerTitle,
+    array(
+        'class'=>'form-control',
+    )) }}
+  </div>
+
+  <div class='form-group'>
+    {{ Form::label('address', 'Address:') }}
+    {{ Form::textarea('address', $site->address,
+    array(
+        'class'=>'form-control',
+        'size' => '30x5'
+    )) }}
+  </div>
+
+  <h3>Payment</h3>
+  <div class='form-group form-inline'>
+    {{ Form::label('accountNumber', 'Account Number') }}
+    {{ Form::text('accountNumber', $site->accountNumber,
+    array(
+        'class'=>'form-control',
+    )) }}
+  </div>
+
+  <div class='form-group form-inline'>
+    {{ Form::label('sortCode', 'Sort Code') }}
+    {{ Form::text('sortCode', $site->sortCode,
+    array(
+        'class'=>'form-control',
+    )) }}
+  </div>
+
+  <div class='form-group form-inline'>
+    {{ Form::label('invoicePrefix', 'Payment referance prefix: ') }}
+    {{ Form::text('invoicePrefix', $site->invoicePrefix,
+    array(
+        'class'=>'form-control',
+    )) }}
+  </div>
+
+  {{ Form::label('dueTime', 'Payment due:') }}
+  <div class='form-group form-inline'>
+    Payment is due no later than
+    {{ Form::text('dueTime', $site->dueTime,
+            array(
+                'class'=>'form-control',
+            )) }}
+   from invoice date.
+  </div>
+
+
+  <h3>VAT</h3>
+  <div class='form-group'>
+    {{ Form::label('vatName', 'VAT Name') }}
+    {{ Form::text('vatName', $site->vatName,
+    array(
+        'class'=>'form-control',
+    )) }}
+  </div>
+
+  <div class='form-group form-inline'>
+    {{ Form::label('vatNumber', 'VAT Number') }}
+    {{ Form::text('vatNumber', $site->vatNumber,
+    array(
+        'class'=>'form-control',
+    )) }}
+  </div>
+
+<div class="form-group" id="buttons" style="padding-top:20px;">
+  {!! Form::submit('Save',
+      array('class'=>'btn btn-primary'
+      )) !!}
+  {!! Form::close() !!}
+</div>
 
 @endsection
 
