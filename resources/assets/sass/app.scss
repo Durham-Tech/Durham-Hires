@@ -21,8 +21,13 @@ a,
 a:focus {
   outline: none;
 }
+// Settings
+.settings {
+  h1 {
+    font-weight: bold;
+  }
+}
 // Error page
-
 .errorPage {
   &#errorImage img {
     width: 100%;

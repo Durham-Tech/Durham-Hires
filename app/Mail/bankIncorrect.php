@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Request;
 use App\Classes\Common;
 
 class bankIncorrect extends Mailable
@@ -24,6 +25,7 @@ class bankIncorrect extends Mailable
         //
         $this->ref = $ref;
         $this->amount = $amount;
+        $this->site = Request()->get('_site');
     }
 
     /**

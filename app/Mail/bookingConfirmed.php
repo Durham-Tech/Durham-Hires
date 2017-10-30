@@ -6,8 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Request;
 use App\Classes\Common;
 use App\Bookings;
+use App\Admin;
 use App\Site;
 
 class bookingConfirmed extends Mailable
@@ -15,7 +17,7 @@ class bookingConfirmed extends Mailable
     use Queueable, SerializesModels;
     public $id;
     public $booking;
-    public $hiresEmail;
+    public $hiresManager;
     public $site;
     /**
      * Create a new message instance.
@@ -27,9 +29,8 @@ class bookingConfirmed extends Mailable
         //
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
-        $this->site = Site::findOrFail($this->booking->site);
-
-        $this->hiresEmail = $site->hiresEmail;
+        $this->site = Request()->get('_site');
+        $this->hiresManager = Admin::findOrFail($this->site->hiresManager)->name;
     }
 
     /**
@@ -40,7 +41,7 @@ class bookingConfirmed extends Mailable
     public function build()
     {
         return $this->replyTo(Common::hiresEmail())
-            ->subject('Trevs Tech booking conformation')
+            ->subject('Tech hire booking conformation')
             ->markdown('emails.bookingConfirmed');
     }
 }

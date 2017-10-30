@@ -129,7 +129,9 @@
 
 <div id="info">
 <p>
+  @if ($site->dueTime != null)
   Payment is due no later than <b>{{ $site->dueTime }}</b> from invoice date.<br><br>
+  @endif
 
   Please pay by bank transfer:
 </p>
@@ -142,13 +144,19 @@
   <br>
 
   <b>{{ $manager->name }}</b><br>
+  @if ($site->managerTitle != null)
   {{ $site->managerTitle }}<br>
+  @endif
   {{ $hiresEmail }}
 </p>
 </div>
 
 <div class="footer">
-{{ $site->vatName }}<br>
-VAT Reg. No. {{ $site->vatNumber }}
+  @if ($site->vatName != null)
+    {{ $site->vatName }}<br>
+  @endif
+  @if ($site->vatNumber != null)
+    VAT Reg. No. {{ $site->vatNumber }}
+  @endif
 </div>
 @endsection

@@ -98,6 +98,17 @@ class StyleController extends Controller
         $site->accentLight = $accentLight;
         $site->accentTextDark = $accentTextDark;
 
+        if (!empty($request->favicon)) {
+            $iconName = $site->slug . '.' .
+                $request->file('favicon')->getClientOriginalExtension();
+
+            $request->file('favicon')->move(
+                base_path() . '/public/images/content/favicon/', $iconName
+            );
+            $site->favicon = $iconName;
+        }
+
+
         // Site settings
         $site->name = $request->input('name');
         $site->dueTime = $request->input('dueTime');

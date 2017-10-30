@@ -23,6 +23,10 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
         ]) !!};
     </script>
 
+    @if ($site->favicon != null)
+    <link rel="shortcut icon" href="{{ '/images/content/favicon/' . $site->favicon }}" type="image/x-icon" />
+    @endif
+
     <!-- Styles -->
     @yield('styles')
     <link href="/css/app.css" rel="stylesheet">

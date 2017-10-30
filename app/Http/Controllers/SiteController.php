@@ -165,7 +165,7 @@ class SiteController extends Controller
         $userDetails = Common::getDetailsEmail($requestUser->email);
         $user->email = $userDetails->email;
         $user->user = $userDetails->username;
-        $user->privileges = 1;
+        $user->privileges = 5;
         $user->name = $userDetails->name;
         $user->site = $site->id;
         $user->save();

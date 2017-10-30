@@ -31,6 +31,7 @@ $active = 'style';
 
 
 <h1>Style</h1>
+<h3>Colours</h3>
 <div class="row">
   <div class="col-sm-6">
     <center>
@@ -46,7 +47,28 @@ $active = 'style';
   </div>
 </div>
 
-<h2>Custom CSS</h2>
+<h3>Favicon</h3>
+  <div class='form-group'>
+      <div>
+      @if (!empty($site->favicon))
+      {{ Html::image('images/content/favicon/' . $site->favicon,
+        'Site Favicon',
+        array(
+        'class' => 'imageThumb'
+        )
+      ) }}
+      @endif
+
+      {{ Form::file('favicon',
+      array(
+          'style' => 'display:inline;',
+          'accept' => '.ico'
+      )) }}
+      </div>
+  </div>
+
+
+<h3>Custom CSS</h3>
 <div>
 
   @if (!empty($site->styleSheet))
@@ -67,7 +89,7 @@ $active = 'style';
   <h3>General</h3>
 
   <div class='form-group'>
-      {{ Form::label('logo', 'Logo') }}
+      {{ Form::label('logo', 'Logo:') }}
       <div>
       @if (!empty($site->logo))
       {{ Html::image('images/content/logo/' . $site->logo,

@@ -1,3 +1,3 @@
-<b>Hires Coordinator</b><br>
-Trevelyan College Technical Equipment Hire<br>
-<a href='mailto:{{ $slot }}'>{{ $slot }}</a>
+<b>{{ $slot }}</b><br>
+{{ $title }}<br>
+<a href='mailto:{{ $email }}'>{{ $email }}</a>

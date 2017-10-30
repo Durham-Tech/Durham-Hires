@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Classes\Common;
 use App\Site;
+use App\Admin;
 use App\Bookings;
 
 class paymentReceived extends Mailable
@@ -17,6 +18,7 @@ class paymentReceived extends Mailable
     public $hiresEmail;
     public $name;
     public $site;
+    public $hiresManager;
 
     /**
      * Create a new message instance.
@@ -28,6 +30,7 @@ class paymentReceived extends Mailable
         $this->site = Request()->get('_site');
         $this->hiresEmail = $this->site->hiresEmail;
         $this->name = $name;
+        $this->hiresManager = Admin::findOrFail($this->site->hiresManager)->name;
         //
     }
 

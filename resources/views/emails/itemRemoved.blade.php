@@ -1,6 +1,6 @@
-@component('mail::message')
+@component('emails.components.layout', ['site' => $site])
 
-Some of the items you had requested from Trevelyan College equipment hires (booking name: {{ $booking->name }}) has become unavailable. The following items have been removed from your booking, apologies for any inconveniences caused.
+Some of the items you had requested from {{ $site->name }} equipment hires (booking name: {{ $booking->name }}) has become unavailable. The following items have been removed from your booking, apologies for any inconveniences caused.
 The equipment is reserved once your booking is confirmed.
 
 
@@ -13,12 +13,12 @@ The equipment is reserved once your booking is confirmed.
 @endcomponent
 
 @if ($booking->isDurham)
-@component('mail::button', ['url' => URL::to('/bookings/' . $id)])
+@component('mail::button', ['url' => URL::to('/' . $site->slug . '/bookings/' . $id)])
 Your booking
 @endcomponent
 @endif
 
-<b>Hires Coordinator</b><br>
-Trevelyan College Technical Equipment Hire<br>
-{{ $hiresEmail }}
+@component('emails.components.sign', ['email' => $site->hiresEmail, 'title' => $site->managerTitle])
+{{ $hiresManager }}
+@endcomponent
 @endcomponent

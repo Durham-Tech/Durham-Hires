@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Bookings;
+use App\Admin;
 use App\Classes\Common;
 
 class sendInvoice extends Mailable
@@ -15,7 +16,7 @@ class sendInvoice extends Mailable
     use Queueable, SerializesModels;
     public $id;
     public $booking;
-    public $hiresEmail;
+    public $hiresManager;
 
     /**
      * Create a new message instance.
@@ -28,7 +29,7 @@ class sendInvoice extends Mailable
         $site = Request()->get('_site');
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
-        $this->hiresEmail = $site->hiresEmail;
+        $this->hiresManager = Admin::findOrFail($this->site->hiresManager)->name;
     }
 
     /**
@@ -38,7 +39,7 @@ class sendInvoice extends Mailable
      */
     public function build()
     {
-        return $this->subject('Tech hire invoice')
+        return $this->subject($this->site->name . ' hire invoice')
             ->replyTo(Common::hiresEmail())
             ->attach(base_path() . '/storage/invoices/' . $this->booking->invoice)
             ->markdown('emails.sendInvoice');

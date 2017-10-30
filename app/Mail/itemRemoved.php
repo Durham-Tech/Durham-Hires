@@ -6,9 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Request;
 use App\Classes\Common;
 use App\Bookings;
 use App\Site;
+use App\Admin;
 
 class itemRemoved extends Mailable
 {
@@ -16,7 +18,7 @@ class itemRemoved extends Mailable
     public $id;
     public $booking;
     public $errorList;
-    public $hiresEmail;
+    public $hiresManager;
     public $site;
 
     /**
@@ -29,9 +31,9 @@ class itemRemoved extends Mailable
         //
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
-        $this->site = Site::findOrFail($this->booking->site);
+        $this->site = Request()->get('_site');
         $this->errorList = $errorList;
-        $this->hiresEmail = $site->hiresEmail;
+        $this->hiresManager = Admin::findOrFail($this->site->hiresManager)->name;
     }
 
     /**

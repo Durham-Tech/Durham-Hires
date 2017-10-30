@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('emails.components.layout', ['site' => $site])
 
 The treasurer has tried to submit an invoice payment, but something didn't match up.
 

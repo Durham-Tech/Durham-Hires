@@ -14,7 +14,7 @@
       </ul>
     </div>
 
-    <div class="col-md-9 borderLeft">
+    <div class="col-md-9 borderLeft settings">
       @yield('page')
     </div>
 

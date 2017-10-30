@@ -1,10 +1,10 @@
-@component('mail::message')
+@component('emails.components.layout', ['site' => $site])
 
-Your payment for hire "{{ $name }}" has been received and processed.
+Your payment to {{ $site->name }} for hire "{{ $name }}" has been received and processed.
 
-Thank you for using Trevelyan College equipment hire.
+Thank you for your payment.
 
-@component('emails.components.sign')
-{{ $hiresEmail }}
+@component('emails.components.sign', ['email' => $site->hiresEmail, 'title' => $site->managerTitle])
+{{ $hiresManager }}
 @endcomponent
 @endcomponent
