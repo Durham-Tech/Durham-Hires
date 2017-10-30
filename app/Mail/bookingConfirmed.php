@@ -41,7 +41,7 @@ class bookingConfirmed extends Mailable
     public function build()
     {
         return $this->replyTo(Common::hiresEmail())
-            ->subject('Tech hire booking conformation')
+            ->subject('Tech hire booking confirmation')
             ->markdown('emails.bookingConfirmed');
     }
 }

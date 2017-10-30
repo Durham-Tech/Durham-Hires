@@ -8,15 +8,18 @@ use App\Bookings;
 class CalendarController extends Controller
 {
     //
-    public function downloadCalendar(Request $request, $type)
+    public function downloadCalendar(Request $request, $s, $type)
     {
+        $site = Request()->get('_site');
         if ($type == 'hires') {
             $bookings = Bookings::where('template', 0)
+            ->where('site', $site->id)
             ->where('internal', 0)
             ->where('status', '>', 1)
             ->get();
         } elseif ($type == 'internal') {
             $bookings = Bookings::where('internal', 1)
+            ->where('site', $site->id)
             ->get();
         } else {
             die();
@@ -30,7 +33,7 @@ class CalendarController extends Controller
         // 1. Create new calendar
         $vCalendar = new \Eluceo\iCal\Component\Calendar($request->url());
         $vCalendar->setPublishedTTL('PT1H');
-        $vCalendar->setName('Trevs Techcomm Calendar');
+        $vCalendar->setName($site->name . ' Hires Calendar');
 
 
         foreach ($bookings as $booking){

@@ -79,8 +79,8 @@ Route::post('{site}/login', 'customAuth@checkAuth');
 Route::get('{site}/logout', 'customAuth@logout')
           ->name('logout');
 
+Route::get('{site}/calendar/{type}', 'CalendarController@downloadCalendar');
 
 // testing routes
-Route::get('/calendar/{type}', 'CalendarController@downloadCalendar');
 Route::get('{site}/invoice_demo', 'AdminController@pdfTest')
           ->name('demoInvoice');
