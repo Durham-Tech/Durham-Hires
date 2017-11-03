@@ -3,14 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use View;
 use App\Bookings;
+use App\Site;
+use App\Classes\Common;
 
 class CalendarController extends Controller
 {
-    //
-    public function downloadCalendar(Request $request, $s, $type)
+    public function __construct()
+    {
+        $this->middleware('login', ['except' => ['downloadCalendar']]);
+        $this->middleware('admin', ['except' => ['downloadCalendar']]);
+    }
+
+    public function viewSettings(Request $request)
     {
         $site = Request()->get('_site');
+
+        return View::make('settings.calendar')
+            ->with(['site' => $site]);
+    }
+
+    public function updateAuth()
+    {
+        $s = Request()->get('_site');
+        $site = Site::find($s->id);
+        $site->calAuth = Common::generateCalendarAuth();
+        $site->save();
+    }
+
+    // Creates webcal calendar with specified options if authed
+    public function downloadCalendar(Request $request, $s, $auth, $type)
+    {
+        $site = Request()->get('_site');
+        if ($auth != $site->calAuth) {
+            abort(403, 'Forbidden.');
+        }
         if ($type == 'hires') {
             $bookings = Bookings::where('template', 0)
             ->where('site', $site->id)
@@ -22,7 +50,7 @@ class CalendarController extends Controller
             ->where('site', $site->id)
             ->get();
         } else {
-            die();
+            abort(404);
         }
 
         // set default timezone (PHP 5.4)

@@ -106,4 +106,9 @@ class Common
                 ->firstOrFail()->content;
         return $data;
     }
+
+    public static function generateCalendarAuth()
+    {
+        return str_random(12);
+    }
 }

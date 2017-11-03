@@ -7,6 +7,7 @@ use View;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\Common;
+use App\Site;
 
 class publicController extends Controller
 {
@@ -35,6 +36,14 @@ class publicController extends Controller
         } else {
             return view('superAdmin.login');
         }
+    }
+
+    // Landing page if not site specified
+    public function sitelessIndex(Request $request)
+    {
+        $sites = Site::all();
+        return view('siteless')
+          ->with(['sites' => $sites]);
     }
 
 }

@@ -22,12 +22,14 @@ a:focus {
   outline: none;
 }
 // Settings
+
 .settings {
   h1 {
     font-weight: bold;
   }
 }
 // Error page
+
 .errorPage {
   &#errorImage img {
     width: 100%;
@@ -41,6 +43,25 @@ a:focus {
 
   h2 {
     text-align: center;
+  }
+}
+// Siteless index
+
+.siteList {
+  text-align: center;
+  padding: 20px;
+
+  .siteButton {
+    margin: auto;
+    padding: 10px;
+    display: block;
+  }
+
+  a {
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 20px;
+    padding: 10px 20px;
   }
 }
 // Treasurer interface

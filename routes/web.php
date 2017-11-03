@@ -58,6 +58,10 @@ Route::get('{site}/settings/content', 'ContentController@index')
 Route::post('{site}/settings/content/{page}', 'ContentController@getPage');
 Route::patch('{site}/settings/content', 'ContentController@savePage');
 
+Route::get('{site}/settings/calendar', 'CalendarController@viewSettings')
+          ->name('settings.calendar');
+Route::post('{site}/settings/calendar/refreshAuth', 'CalendarController@updateAuth');
+
 
 Route::get('{site}/treasurer', 'treasurerController@index')
           ->name('bank.index');
@@ -79,7 +83,10 @@ Route::post('{site}/login', 'customAuth@checkAuth');
 Route::get('{site}/logout', 'customAuth@logout')
           ->name('logout');
 
-Route::get('{site}/calendar/{type}', 'CalendarController@downloadCalendar');
+Route::get('{site}/calendar/{auth}/{type}', 'CalendarController@downloadCalendar')
+          ->name('calendar');
 
 Route::get('{site}/invoice_demo', 'AdminController@pdfTest')
           ->name('demoInvoice');
+
+Route::get('/', 'publicController@sitelessIndex');
