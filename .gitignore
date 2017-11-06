@@ -15,3 +15,5 @@ Homestead.yaml
 updateGit.txt
 public/css/app.css
 public/js/app.js
+
+composer\.lock

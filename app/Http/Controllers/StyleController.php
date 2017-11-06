@@ -130,6 +130,15 @@ class StyleController extends Controller
             $site->logo = $imageName;
         }
 
+
+        // Set flags
+        // Enable hires
+        if ($request->allowHires == 1) {
+            $site->flags |= 1;
+        } else {
+            $site->flags = $site->flags & (~1);
+        }
+
         $site->save();
 
         return redirect()->route('style.index', ['site' => $site->slug]);

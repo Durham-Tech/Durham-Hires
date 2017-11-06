@@ -107,7 +107,7 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li>{{ link_to_route('items.index', 'Catalog', $site->slug) }}</li>
-                        @if (CAuth::check())
+                        @if (CAuth::check() && (($site->flags & 1) || CAuth::checkAdmin()))
                         <li>{{ link_to_route('bookings.index', 'Bookings', $site->slug) }}</li>
                         @endif
                         @if (CAuth::checkAdmin())

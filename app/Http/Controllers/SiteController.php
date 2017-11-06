@@ -55,6 +55,7 @@ class SiteController extends Controller
         $site->slug = str_slug($request->slug, "-");
         $site->hiresEmail = 0;
         $site->hiresManager = "";
+        $site->flags = 1;
         $site->calAuth = Common::generateCalendarAuth();
         $site->save();
 

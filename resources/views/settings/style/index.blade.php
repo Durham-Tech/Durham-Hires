@@ -23,11 +23,19 @@ $active = 'style';
                 'files' => 'true')
             ) !!}
 
-    <h1>Site Name</h1>
-              {{ Form::text('name', $site->name,
-              array(
-                  'class'=>'form-control',
-              )) }}
+<h1>Site Settings</h1>
+  <div class='form-group'>
+      {{ Form::label('name', 'Site Name') }}
+      {{ Form::text('name', $site->name,
+        array(
+            'class'=>'form-control',
+      )) }}
+  </div>
+
+  <div class='form-group'>
+      {{ Form::label('allowHires', 'Enable external hires:  ') }}
+      {{ Form::checkbox('allowHires', 1, $site->flags & 1) }}
+  </div>
 
 
 <h1>Style</h1>

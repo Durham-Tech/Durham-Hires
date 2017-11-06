@@ -4,10 +4,12 @@
 
 @section('content')
   @if (CAuth::checkAdmin(4))
-  
+
     <div class="col-md-3 submenu">
       <ul class="nav nav-pills nav-stacked">
+        @if ($site->flags & 1)
         <li class="{{ ($active == 'new') ? 'active' : '' }}">{{ link_to_route('bookings.create', 'New Hire', $site->slug) }}</li>
+        @endif
         <li class="{{ ($active == 'current') ? 'active' : '' }}">{{ link_to_route('bookings.index', 'Current Hires', $site->slug) }}</li>
         <li class="{{ ($active == 'old') ? 'active' : '' }}">{{ link_to_route('bookings.complete', 'Completed Hires', $site->slug) }}</li>
         <li class="{{ ($active == 'internal') ? 'active' : '' }}">{{ link_to_route('internal.index', 'Internal Events', $site->slug) }}</li>

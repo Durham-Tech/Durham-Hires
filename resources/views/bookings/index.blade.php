@@ -6,7 +6,7 @@ $active = 'current';
 
 @section('page')
 
-            @if (!CAuth::checkAdmin(4))
+            @if (!CAuth::checkAdmin(4) && ($site->flags & 1))
               <a class="btn btn-primary" href="{{ route('bookings.create', $site->slug) }}">Add new</a>
             @endif
 

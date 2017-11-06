@@ -85,6 +85,10 @@ class BookingsController extends Controller
     public function create()
     {
         $site = Request()->get('_site');
+        // Reject if bookings diabled
+        if (!($site->flags & 1)) {
+            return redirect()->route('home', ['site' => $site->slug]);
+        }
         return View::make('bookings.edit')
                 ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'site' => $site]);
     }
@@ -98,6 +102,12 @@ class BookingsController extends Controller
     public function store(NewBooking $request)
     {
         $site = Request()->get('_site');
+
+        // Reject if bookings diabled
+        if (!($site->flags & 1)) {
+            return redirect()->route('home', ['site' => $site->slug]);
+        }
+        
         $booking = new Bookings;
         $booking->name = $request->name;
         $start = strtotime($request->start)+43200;
