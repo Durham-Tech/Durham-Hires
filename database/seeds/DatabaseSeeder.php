@@ -11,37 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('content')->insert(
-            [
-            'page' => 'home',
-            'name' => 'Home Page',
-            'content' => '<div align="center"><h1><font face="Raleway">Welcome to the best hires site around!</font></h1></div>',
-            'site' => 1
-            ]
-        );
-        DB::table('content')->insert(
-            [
-            'page' => 'tc',
-            'name' => 'Terms and Conditions',
-            'content' => '<h1>Ts and Cs fun and games!</h1>',
-            'site' => 1
-            ]
-        );
         DB::table('admins')->insert(
             [
-            'name' => 'Test Admin User',
-            'user' => 'nwng84',
-            'email' => 'jonathan.salmon@hotmail.co.uk',
-            'privileges' => '5',
-            'site' => 1
-            ]
-        );
-        DB::table('sites')->insert(
-            [
-            'name' => 'Trevs',
-            'slug' => 'trevs',
-            'hiresManager' => 1,
-            'hiresEmail' => 'test@example.com'
+            'name' => 'Your name here',
+            'user' => 'Your CIS account here',
+            'email' => 'Your email here',
+            'privileges' => '1',
+            'site' => 0
             ]
         );
     }
