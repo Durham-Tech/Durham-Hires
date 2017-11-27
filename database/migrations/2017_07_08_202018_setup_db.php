@@ -102,14 +102,6 @@ class SetupDb extends Migration
             }
         );
         Schema::create(
-            'settings', function (Blueprint $table) {
-                $table->increments('id');
-                $table->string('name', 255)->index();
-                $table->string('value', 255);
-                $table->integer('site');
-            }
-        );
-        Schema::create(
             'sites', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name', 255);
