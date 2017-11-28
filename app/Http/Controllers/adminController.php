@@ -95,17 +95,17 @@ class AdminController extends Controller
             $user->privileges = $priv;
             $user->save();
         }
+
+        // Sets hires manager details
         if (!empty($hiresEmail)) {
 
             Site::where('id', $site->id)->update(['hiresManager' => $request->hires]);
-            Site::where('id', $site->id)->update(['hiresEmail' => $hiresEmail]);
 
-            // $hires = Settings::where('name', 'hiresManager')
-            //                 ->where('site', $site->id)
-            //                 ->update(['value' => $request->hires]);
-            // $hires = Settings::where('name', 'hiresEmail')
-            //                 ->where('site', $site->id)
-            //                 ->update(['value' => $hiresEmail]);
+            // Only change hires email if custom emails are disabled
+            if ($site->flags & 2 == 0) {
+                Site::where('id', $site->id)->update(['hiresEmail' => $hiresEmail]);
+            }
+
         }
         return redirect()->route('admin.index', $site->slug);
     }
