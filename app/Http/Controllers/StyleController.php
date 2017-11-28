@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Site;
+use App\Admin;
 
 // Controller for customizing site look and feel on a site by site basis
 
@@ -43,7 +44,8 @@ class StyleController extends Controller
     public function index()
     {
         $site = Request()->get('_site');
-        return view('settings.style.index')->with(['site' => $site]);
+        $defaultEmail = Admin::find($site->hiresManager)->email;
+        return view('settings.style.index')->with(['site' => $site, 'defaultEmail' => $defaultEmail]);
     }
 
     /**
@@ -56,7 +58,8 @@ class StyleController extends Controller
     {
         $this->validate(
             $request, [
-            'name' => 'required|max:255'
+            'name' => 'required|max:255',
+            'hiresEmail' => 'email'
             ]
         );
         //
@@ -137,6 +140,19 @@ class StyleController extends Controller
             $site->flags |= 1;
         } else {
             $site->flags = $site->flags & (~1);
+        }
+
+        // Enable custom hires email
+        if ($request->customEmail == 1) {
+            $site->flags |= 2;
+        } else {
+            $site->flags = $site->flags & (~2);
+        }
+        // Set hires email address if alowd
+        if ($request->customEmail == 1 && $request->hiresEmail != null) {
+            $site->hiresEmail = $request->hiresEmail;
+        } else {
+            $site->hiresEmail = Admin::find($site->hiresManager)->email;
         }
 
         $site->save();

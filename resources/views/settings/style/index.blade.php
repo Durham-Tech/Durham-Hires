@@ -37,6 +37,19 @@ $active = 'style';
       {{ Form::checkbox('allowHires', 1, $site->flags & 1) }}
   </div>
 
+  <div class='form-group'>
+      {{ Form::label('customEmail', 'Customize hires email:  ') }}
+      {{ Form::checkbox('customEmail', 1, $site->flags & 2,
+        array(
+            'id' => 'hiresEmailCheck'
+      )) }}
+      {{ Form::text('hiresEmail', $site->hiresEmail,
+        array(
+            'class'=>'form-control',
+            'id' => 'hiresEmail'
+      )) }}
+  </div>
+
 
 <h1>Style</h1>
 <h3>Colours</h3>
@@ -211,8 +224,18 @@ $active = 'style';
       $(".navbar-default .navbar-nav li a").css('color', color.toHexString());
   }
 
+  function updateHiresEmail(){
+    if ($("#hiresEmailCheck").prop('checked')){
+      $("#hiresEmail").prop('disabled', false);
+    } else {
+      $("#hiresEmail").prop('disabled', true);
+      $("#hiresEmail").val('{{ $defaultEmail }}');
+    }
+  }
+
   window.onload = function() {
       $.ajaxSetup({ headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } });
+      updateHiresEmail();
     };
 
     $("#colourPicker").spectrum({
@@ -247,6 +270,10 @@ $active = 'style';
             window.location.reload();
           }
       });
+  });
+
+  $('#hiresEmailCheck').on('change',function(){
+      updateHiresEmail();
   });
 
   </script>
