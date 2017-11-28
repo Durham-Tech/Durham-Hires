@@ -16,7 +16,12 @@ class Common
         curl_setopt($ch, CURLOPT_URL, $remote_url);
         curl_setopt(
             $ch, CURLOPT_POSTFIELDS,
-            http_build_query(array('email' => $email))
+            http_build_query( 
+                array(
+                'email' => $email,
+                'key' => env("UserDetailsSecretKey", "")
+                )
+            )
         );
         curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
