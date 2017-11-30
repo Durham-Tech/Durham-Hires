@@ -16,7 +16,7 @@ class Common
         curl_setopt($ch, CURLOPT_URL, $remote_url);
         curl_setopt(
             $ch, CURLOPT_POSTFIELDS,
-            http_build_query( 
+            http_build_query(
                 array(
                 'email' => $email,
                 'key' => env("UserDetailsSecretKey", "")
@@ -90,7 +90,7 @@ class Common
         $booking->total = $booking->subTotal + $booking->vatValue;
 
 
-        if ($booking->status != 4) {
+        if ($booking->status < 4) {
             $book = \App\Bookings::findOrFail($booking->id);
             $book->totalPrice = $booking->total;
             $book->save();

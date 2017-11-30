@@ -14,6 +14,7 @@ class requestConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
     public $id;
+    public $site;
     /**
      * Create a new message instance.
      *

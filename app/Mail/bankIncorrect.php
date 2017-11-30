@@ -14,6 +14,7 @@ class bankIncorrect extends Mailable
     use Queueable, SerializesModels;
     public $ref;
     public $amount;
+    public $site;
 
     /**
      * Create a new message instance.

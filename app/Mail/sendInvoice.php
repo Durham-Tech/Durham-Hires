@@ -16,20 +16,23 @@ class sendInvoice extends Mailable
     use Queueable, SerializesModels;
     public $id;
     public $booking;
+    public $site;
     public $hiresManager;
+    public $updated;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($id)
+    public function __construct($id, $updated)
     {
         //
-        $site = Request()->get('_site');
+        $this->site = Request()->get('_site');
         $this->id = $id;
         $this->booking = Bookings::findOrFail($id);
         $this->hiresManager = Admin::findOrFail($this->site->hiresManager)->name;
+        $this->updated = $updated;
     }
 
     /**

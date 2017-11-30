@@ -20,6 +20,15 @@ use App\Mail\paymentReceived;
 
 class BookingsController extends Controller
 {
+
+    // Booking status:
+    // 0 Unconfirmed
+    // 1 Submitted
+    // 2 Confirmed
+    // 3 Returned
+    // 4 Paid
+    // 5 Paid and VAT sorted
+
     public function __construct()
     {
         $this->middleware('login');
@@ -236,7 +245,7 @@ class BookingsController extends Controller
         case 3:
             if ($booking->status != 3) {
                 pdf::createInvoice($booking->id);
-                \Mail::to($booking->email)->send(new sendInvoice($booking->id));
+                \Mail::to($booking->email)->send(new sendInvoice($booking->id, false));
             }
             break;
         case 4:
@@ -267,7 +276,7 @@ class BookingsController extends Controller
         $booking->name = $request->name;
         $booking->user = $request->user;
 
-        if ($request->status <= 2) {
+        if ($request->status <= 3) {
             $booking->vat = $request->vat;
         }
 
@@ -308,6 +317,16 @@ class BookingsController extends Controller
         $booking->fineValue = $request->fineValue;
 
         $booking->save();
+
+        if ($booking->status == 3) {
+            $oldCost = $booking->totalPrice;
+            pdf::createInvoice($booking->id);
+            $newCost = Bookings::find($booking->id)->totalPrice;
+            if($oldCost != $newCost) {
+                \Mail::to($booking->email)->send(new sendInvoice($booking->id, true));
+            }
+        }
+
         return redirect('/' . $site->slug . '/bookings/' . $booking->id);
 
     }
