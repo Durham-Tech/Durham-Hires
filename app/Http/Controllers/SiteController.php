@@ -57,6 +57,7 @@ class SiteController extends Controller
         $site->hiresManager = 0;
         $site->flags = 1;
         $site->calAuth = Common::generateCalendarAuth();
+        $site->invoicePrefix = "TechHire";
         $site->save();
 
         $user = Common::getDetailsEmail($request->email);

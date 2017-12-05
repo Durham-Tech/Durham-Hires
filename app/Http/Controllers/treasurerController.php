@@ -32,15 +32,17 @@ class treasurerController extends Controller
     public function submit(Treasurer $request)
     {
         $site = Request()->get('_site');
-        $pregSuc = preg_match('/^techhires[0-9]+$/', strtolower(str_replace(' ', '', $request->ref)), $temp);
+        $prefix = strtolower(str_replace(' ', '', $site->invoicePrefix));
+        $pregSuc = preg_match('/(?:' . preg_quote($prefix, '/') . ')?([0-9]+)/', strtolower(str_replace(' ', '', $request->ref)), $temp);
         if ($pregSuc) {
-            $id = intval(str_replace('techhires', '', $temp[0]));
+            $id = intval($temp[1]);
         } else {
             $id = 0;
         }
         $success = 2;
         try {
             $booking = Bookings::where('id', $id)
+                              ->where('site', $site->id)
                               ->where('status', 3)
                               ->firstOrFail();
 

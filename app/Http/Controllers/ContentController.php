@@ -71,7 +71,5 @@ class ContentController extends Controller
         $page->content = $content;
         $page->save();
 
-
-
     }
 }
