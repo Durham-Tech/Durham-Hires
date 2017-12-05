@@ -139,7 +139,7 @@ if ($edit) {
                         )) }}
                       </div>
                       <div class="table-delete">
-                        <a href="#" class="delete-row">Delete</a>
+                        <a href="#" class="delete-row" onclick="deleteCustomItem(this);return false;">Delete</a>
                       </div>
                     </div>
                   @endforeach
@@ -169,7 +169,7 @@ if ($edit) {
                         )) }}
                       </div>
                       <div class="table-delete">
-                        <a href="#" class="delete-row">Delete</a>
+                        <a href="#" class="delete-row" onclick="deleteCustomItem(this);return false;">Delete</a>
                       </div>
                     </div>
                 </div>
@@ -219,13 +219,12 @@ if ($edit) {
 
     $(".add-button").click(function(e){ //on add input button click
         e.preventDefault();
-            $(".custom-item-table").append('<div class="table-row"> <input name="id[]" type="hidden"> <div class="table-max"> <input class="form-control" placeholder="Item Description" name="description[]" type="text"> </div> <div class="table-set"> <input class="form-control" placeholder="Quantity" name="quantity[]" type="number"> </div> <div class="table-pound">£</div> <div class="table-set"> <input class="form-control" placeholder="Item Price" onchange="moneyInput(this)" name="price[]" type="text"> </div> <div class="table-delete"> <a href="#" class"delete-row"="">Delete</a> </div> </div>'); //add input box
+            $(".custom-item-table").append('<div class="table-row"> <input name="id[]" type="hidden"> <div class="table-max"> <input class="form-control" placeholder="Item Description" name="description[]" type="text"> </div> <div class="table-set"> <input class="form-control" placeholder="Quantity" name="quantity[]" type="number"> </div> <div class="table-pound">£</div> <div class="table-set"> <input class="form-control" placeholder="Item Price" onchange="moneyInput(this)" name="price[]" type="text"> </div> <div class="table-delete"> <a href="#" class="delete-row" onclick="deleteCustomItem(this);return false;">Delete</a> </div> </div>'); //add input box
     });
 
-    $(".delete-row").click(function(e){ //on add input button click
-        e.preventDefault();
-        $(this).parent('div').parent('div').remove();;
-    });
+function deleteCustomItem(row){
+    $(row).parent('div').parent('div').remove();;
+}
 
 function plus(ref)
 {
