@@ -46,7 +46,7 @@ if ($booking->status < 4){
         <p id='invoice'>
             <b>Invoice: </b>
 
-            {!! link_to_route('bookings.invoice', $booking->invoice, array($site->slug, $booking->id, str_random(5))) !!}
+            {!! link_to_route('bookings.invoice', 'invoice_' . $booking->invoiceNum . '.pdf', array($site->slug, $booking->id, str_random(5))) !!}
         </p>
         @endif
 

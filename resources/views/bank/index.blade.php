@@ -90,7 +90,7 @@
           <tr>
               <td>{{ $booking->name }}</td>
               <td>
-                {!! link_to_route('bookings.invoice', $booking->invoice, array($site->slug, $booking->id, str_random(5))) !!}
+                {!! link_to_route('bookings.invoice', 'invoice_' . $booking->invoiceNum . '.pdf', array($site->slug, $booking->id, str_random(5))) !!}
               </td>
               <td>
                 £{{ number_format(((float)$booking->totalPrice)/6.0, 2) }}

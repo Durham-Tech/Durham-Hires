@@ -14,13 +14,23 @@ class pdf
         $site = Request()->get('_site');
 
         if (!$demo) {
+            // Finds booking
             $booking = Bookings::findOrFail($id);
+
+            // Sets booking number if not already set
+            if($booking->invoiceNum == 0) {
+                $booking->invoiceNum = Bookings::where('site', $booking->site)->max('invoiceNum') + 1;
+                $booking->save();
+            }
+
+            // Finds all booked items
             $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
               ->where('booked_items.bookingID', '=', $id)
               ->where('booked_items.number', '!=', '0')
               ->join('catalog', 'booked_items.item', '=', 'catalog.id')
               ->get();
 
+            // Finds all custom items
             $customItems = custom_items::select('description', 'number', 'price')
               ->where('booking', $id)
               ->where('number', '!=', '0')
@@ -52,7 +62,7 @@ class pdf
 
         Common::calcAllCosts($booking, $bookedItems, $customItems);
 
-        $name = 'invoice_' . $id . '.pdf';
+        $name = $id . '.pdf';
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView(

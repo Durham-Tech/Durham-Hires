@@ -37,11 +37,11 @@ class treasurerController extends Controller
         if ($pregSuc) {
             $id = intval($temp[1]);
         } else {
-            $id = 0;
+            $id = -1;
         }
         $success = 2;
         try {
-            $booking = Bookings::where('id', $id)
+            $booking = Bookings::where('invoiceNum', $id)
                               ->where('site', $site->id)
                               ->where('status', 3)
                               ->firstOrFail();

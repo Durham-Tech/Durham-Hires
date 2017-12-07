@@ -116,7 +116,7 @@ class BookingsController extends Controller
         if (!($site->flags & 1)) {
             return redirect()->route('home', ['site' => $site->slug]);
         }
-        
+
         $booking = new Bookings;
         $booking->name = $request->name;
         $start = strtotime($request->start)+43200;
@@ -467,7 +467,7 @@ class BookingsController extends Controller
             $invoice = $booking->invoice;
             if (!empty($invoice)) {
                 $file = base_path() . '/storage/invoices/' . $invoice;
-                return response()->file($file, ['Content-Disposition' => 'inline; filename="'.$booking->invoice.'"']);
+                return response()->file($file, ['Content-Disposition' => 'inline; filename="invoice_'.$booking->invoiceNum.'.pdf"']);
             }
         }
     }

@@ -56,7 +56,7 @@
         </p>
         <p id='invoiceNo'>
             <b>Invoice referance: </b>
-              {{ $site->invoicePrefix . $booking->id  }}
+              {{ $site->invoicePrefix . $booking->invoiceNum  }}
         </p>
       </td>
     </tr>
@@ -138,7 +138,7 @@
   <ul>
     <li>Sort Code: {{ $site->sortCode }}</li>
     <li>Account Number: {{ $site->accountNumber }}</li>
-    <li>Reference: {{ $site->invoicePrefix . $booking->id }}</li>
+    <li>Reference: {{ $site->invoicePrefix . $booking->invoiceNum }}</li>
   </ul>
 <p>
   <br>
