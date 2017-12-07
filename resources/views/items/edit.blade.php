@@ -2,6 +2,26 @@
 
 @section('title', 'Settings')
 
+@section('styles')
+<link href="/summernote/summernote.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+<script src="/summernote/summernote.min.js"></script>
+<script>
+const app = new Vue({
+    el: '#app',
+
+    mounted: function () {
+      $('#summernote').summernote({
+        minHeight: 250,
+        fontNames: ['Raleway', 'Arial', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+      });
+    }
+});
+</script>
+@endsection
+
 @section('content')
 <div class="limWidth">
 
@@ -50,6 +70,7 @@
                 {!! Form::textarea('details', null,
                 array(
                     'class'=>'form-control',
+                    'id'=>'summernote',
                     'placeholder'=>'Item Details'
                 )) !!}
             </div>

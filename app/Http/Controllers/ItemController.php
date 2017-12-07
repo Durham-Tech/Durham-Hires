@@ -8,6 +8,7 @@ use App\Classes\Items;
 use View;
 use App\Http\Requests\NewItem;
 use Image;
+use App\Classes\Common;
 
 class ItemController extends Controller
 {
@@ -75,7 +76,7 @@ class ItemController extends Controller
         $item = new catalog;
 
         $item->description = $request->description;
-        $item->details = $request->details;
+        $item->details = Common::CleanEditorContent($request->details);
         $item->quantity = $request->quantity;
         $item->category = $request->category;
         $item->dayPrice = $request->dayPrice;
@@ -125,7 +126,7 @@ class ItemController extends Controller
     {
         $site = Request()->get('_site');
         $item = catalog::findOrFail($id);
-        if ($item->site == $site->id){
+        if ($item->site == $site->id) {
             return View::make('items.view')->with(['item' => $item, 'site' => $site]);
         } else {
             abort(404);
@@ -194,7 +195,7 @@ class ItemController extends Controller
 
 
         $cat->description = $request->description;
-        $cat->details = $request->details;
+        $cat->details = Common::CleanEditorContent($request->details);
         $cat->quantity = $request->quantity;
         $cat->category = $request->category;
         $cat->dayPrice = $request->dayPrice;

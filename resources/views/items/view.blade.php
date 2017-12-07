@@ -22,7 +22,7 @@
             {{ $item->description }}
         </h1>
         <p id='details'>
-            {!! nl2br(strip_tags($item->details, '<br><a><b><strong><i><sub><sup>')) !!}
+            {!! $item->details !!}
         </p>
         <p id='quantity'>
             <b>Available: </b>{{ $item->quantity }}

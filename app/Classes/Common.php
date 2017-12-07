@@ -5,6 +5,7 @@ namespace App\Classes;
 use App\Bookings;
 use App\Admin;
 use App\content;
+use Image;
 
 class Common
 {
@@ -116,4 +117,41 @@ class Common
     {
         return str_random(12);
     }
+
+    // WYSIWYG Editor
+    private static function FileExt($contentType)
+    {
+        $map = array(
+            'image/gif'         => '.gif',
+            'image/jpeg'        => '.jpg',
+            'image/png'         => '.png',
+            'image/bmp'         => '.bmp',
+            'image/tiff'        => '.tif',
+        );
+        if (isset($map[$contentType])) {
+            return $map[$contentType];
+        }
+
+        // HACKISH CATCH ALL (WHICH IN MY CASE IS
+        // PREFERRED OVER THROWING AN EXCEPTION)
+        $pieces = explode('/', $contentType);
+        return '.' . array_pop($pieces);
+    }
+
+    public static function CleanEditorContent($content)
+    {
+        $clean = strip_tags($content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe>');
+        return preg_replace_callback(
+            '/<img.+?src="(data:image\/[A-Za-z]+;base64,[^\"]+)".+?>/',
+            function ($matches) {
+                // $name = uniqid() . str_random(5) . '.' . $matches[2];
+                $img = Image::make($matches[1]);
+                $name = uniqid() . str_random(5) . self::FileExt($img->mime());
+                $img->save('images/content/' . $name);
+                return str_replace($matches[1], '/images/content/' . $name, $matches[0]);
+            },
+            $clean
+        );
+    }
+
 }
