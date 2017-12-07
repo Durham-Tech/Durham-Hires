@@ -11,10 +11,10 @@
 <script>
 const app = new Vue({
     el: '#app',
-
     mounted: function () {
       $('#summernote').summernote({
         minHeight: 250,
+        linkTargetBlank: true,
         fontNames: ['Raleway', 'Arial', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
       });
     }
