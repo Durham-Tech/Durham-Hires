@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Site;
 use App\Admin;
+use App\File;
 
 // Controller for customizing site look and feel on a site by site basis
 
@@ -44,8 +45,13 @@ class StyleController extends Controller
     public function index()
     {
         $site = Request()->get('_site');
+
+        $files = File::where('site', $site->id)
+                      ->where('item', null)
+                      ->get();
+
         $defaultEmail = Admin::find($site->hiresManager)->email;
-        return view('settings.style.index')->with(['site' => $site, 'defaultEmail' => $defaultEmail]);
+        return view('settings.style.index')->with(['defaultEmail' => $defaultEmail, 'files' => $files]);
     }
 
     /**
@@ -59,7 +65,9 @@ class StyleController extends Controller
         $this->validate(
             $request, [
             'name' => 'required|max:255',
-            'hiresEmail' => 'email'
+            'hiresEmail' => 'email',
+            'files.*' => 'file',
+            'fileNames.*' => 'string|nullable'
             ]
         );
         //
@@ -156,6 +164,46 @@ class StyleController extends Controller
         }
 
         $site->save();
+
+        // Uploads all relevant files
+        if (!empty($request->file('files'))) {
+            foreach ($request->file('files') as $doc) {
+                if ($doc->isValid()) {
+
+                    $file = new File;
+
+                    $file->site = $site->id;
+                    $file->name = $doc->getClientOriginalName();
+
+                    // if ($request->has('displayName') && !empty($request->displayName)) {
+                    //     $file->displayName = $request->displayName;
+                    // } else {
+                    $file->displayName = $file->name;
+                    // }
+
+                    $file->filename = uniqid() . str_random(5) . '.' . $doc->getClientOriginalExtension();
+
+                    $doc->storeAs('files', $file->filename);
+
+                    $file->save();
+                }
+            }
+        }
+
+        $allFiles = File::where('site', $site->id)
+                      ->where('item', null)
+                      ->get();
+
+        foreach ($allFiles as $key => $file){
+            if(count($request->fileNames) > $key) {
+                if($request->fileNames[$key] != null) {
+                    $file->displayName = $request->fileNames[$key];
+                } else {
+                    $file->displayName = $file->name;
+                }
+                $file->save();
+            }
+        }
 
         return redirect()->route('style.index', ['site' => $site->slug]);
     }

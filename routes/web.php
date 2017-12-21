@@ -88,10 +88,17 @@ Route::post('{site}/login', 'customAuth@checkAuth');
 Route::get('{site}/logout', 'customAuth@logout')
           ->name('logout');
 
+// other routes
 Route::get('{site}/calendar/{auth}/{type}', 'CalendarController@downloadCalendar')
           ->name('calendar');
 
 Route::get('{site}/invoice_demo', 'AdminController@pdfTest')
           ->name('demoInvoice');
+
+// Files routes
+Route::get('{site}/files/{file}', 'FilesController@download')->name('files.download');
+Route::delete('{site}/files/{file}', 'FilesController@destroy');
+
+
 
 Route::get('/', 'publicController@sitelessIndex');

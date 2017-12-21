@@ -39,7 +39,7 @@ function deleteFile(row, id){
 
 function fileInputChange(item){
   $(item).removeAttr('onchange');
-  $(item).parent('div').prepend('<a href="#" onclick="deleteFile(this, null);return false;"><i class="material-icons">delete</i></a>');
+  $(item).parent('div').prepend('<a href="#" onclick="deleteFile(this, null);return false;"><i class="material-icons">delete</i></a><input class="form-control" placeholder="Display name" name="fileNames[]" type="text">');
   $("#filesGroup").append('<div class="files-inline"><input onchange="fileInputChange(this);" name="files[]" style="display: inline;" type="file"></div>');
 }
 
@@ -122,6 +122,11 @@ function fileInputChange(item){
                 @foreach($files as $file)
                   <div class='files-inline'>
                     <a href="#" onclick="deleteFile(this, {{ $file->id }});return false;"><i class="material-icons">delete</i></a>
+                    {{ Form::text('fileNames[]', $file->displayName,
+                    array(
+                        'class'=>'form-control',
+                        'placeholder'=>'Display name',
+                    )) }}
                     <a href="/{{ $site->slug . '/files/' . $file->id}}">{{ $file->name }}</a>
                   </div>
                 @endforeach

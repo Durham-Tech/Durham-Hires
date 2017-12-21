@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App;
 use App\Site;
+use App\File;
 use View;
 
 class siteMiddleware
@@ -39,7 +40,11 @@ class siteMiddleware
                 // Add site data to session for use later
                 $request->attributes->add(['_site' => $site]);
 
+                $files = File::where('site', $site->id)
+                        ->where('item', null)
+                        ->get();
                 View::share('site', $site);
+                View::share('files', $files);
 
                 return $next($request);
             } else {

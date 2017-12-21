@@ -95,6 +95,13 @@ a:focus {
         @include linkOnBackground($navbar-text-colour);
       }
     }
+
+    > .open {
+      > a,
+      > a:focus {
+        @include linkOnBackground($navbar-text-colour);
+      }
+    }
   }
 
   .navbar-brand {
@@ -344,6 +351,7 @@ div#files {
 
 .files-inline {
   @extend .form-inline;
+  margin-bottom: 8px;
 
   i {
     vertical-align: middle;
