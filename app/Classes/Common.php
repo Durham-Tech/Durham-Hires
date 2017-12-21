@@ -140,7 +140,7 @@ class Common
 
     public static function CleanEditorContent($content)
     {
-        $clean = strip_tags($content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe>');
+        $clean = strip_tags($content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe><b><strong><i><em><mark><small><del><ins><sub><sup><u>');
         return preg_replace_callback(
             '/<img.+?src="(data:image\/[A-Za-z]+;base64,[^\"]+)".+?>/',
             function ($matches) {
