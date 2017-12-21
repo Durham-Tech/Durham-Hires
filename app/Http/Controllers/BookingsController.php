@@ -99,7 +99,7 @@ class BookingsController extends Controller
             return redirect()->route('home', ['site' => $site->slug]);
         }
         return View::make('bookings.edit')
-                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]]]);
+                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'allowDateEdit' => true]);
     }
 
     /**
@@ -212,6 +212,12 @@ class BookingsController extends Controller
         $site = Request()->get('_site');
         $old = Bookings::where('site', $site->id)->findOrFail($id);
 
+        $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
+            ->where('booked_items.bookingID', '=', $id)
+            ->where('booked_items.number', '!=', '0')
+            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+            ->get();
+
         // $start = date_create($old->start);
         // $old->start = date_format($start, "d/m/Y");
         //
@@ -228,7 +234,7 @@ class BookingsController extends Controller
             $old->status = 4;
         }
         return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->status]);
+                      ->with(['old' => $old, 'statusArray' => $this->status, 'allowDateEdit' => (count($bookedItems) == 0)]);
     }
 
     private function manageStatusChange(&$booking, $status)
@@ -282,9 +288,20 @@ class BookingsController extends Controller
             $booking->vat = $request->vat;
         }
 
-        // Need to check for colitions before changing dates!
-        // $booking->start = $request->start;
-        // $booking->end = $request->end;
+        // Only allow date change if no items are in the order
+        $itemCount = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
+            ->where('booked_items.bookingID', '=', $booking->id)
+            ->where('booked_items.number', '!=', '0')
+            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+            ->count();
+        if ($itemCount == 0) {
+            $start = strtotime($request->start)+43200;
+            $end = strtotime($request->end)+43200;
+            $booking->start = date("Y-m-d H:i:s", $start);
+            $booking->end = date("Y-m-d H:i:s", $end);
+            $booking->days = ($end - $start)/(86400);
+        }
+
 
         if (!($booking->status == 5 && $request->status == 4)) {
             $this->manageStatusChange($booking, $request->status);

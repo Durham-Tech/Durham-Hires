@@ -36,6 +36,12 @@ if (isset($old)){
             </div>
             @endif
 
+            @if(!$allowDateEdit)
+            <div class='alert alert-info'>
+              <b>Info:</b> Date edits are not allowed as there are items in the order.
+            </div>
+            @endif
+
             <div class='form-group'>
                 {{ Form::label('', 'Set the details',
                   array(
@@ -43,6 +49,7 @@ if (isset($old)){
                   )
                 ) }}
             </div>
+
             <div class="form-group">
                 {{ Form::label('name', 'Booking Name') }}
                 {{ Form::text('name', NULL,
@@ -73,7 +80,7 @@ if (isset($old)){
             <!-- TODO: Display today's date on datepicker -->
             <div class='form-group form-inline'>
                 {{ Form::label('start', 'Start date: ') }}
-                <vue-datepicker name="start" :highlighted="highlighted" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
+                <vue-datepicker name="start" :highlighted="highlighted" :disabled="disabled" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
                 <!-- <div class="input-group date" id="start">
                   {{ Form::date('start', \Carbon\Carbon::now(),
                   array(
@@ -84,7 +91,7 @@ if (isset($old)){
             </div>
             <div class='form-group form-inline'>
                 {{ Form::label('end', 'Return date: ') }}
-                <vue-datepicker name="end" :highlighted="highlighted" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
+                <vue-datepicker name="end" :highlighted="highlighted" :disabled="endDisabled" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
                 <!-- <div class="input-group date" id="end">
                   {{ Form::date('end', \Carbon\Carbon::now(),
                   array(
@@ -196,6 +203,18 @@ const app = new Vue({
       start:'{{ $old->start }}',
       end:'{{ $old->end }}',
       discountType:{{ $old->discType }},
+      @if(!$allowDateEdit)
+      disabled: {
+          to: new Date('9999-12-31'),
+      },
+      endDisabled: {
+          to: new Date('9999-12-31'),
+      },
+      @else
+      endDisabled: {
+          to: new Date('{{ $old->end }}'),
+      },
+      @endif
       @else
       start:'',
       end:'',
@@ -222,11 +241,12 @@ const app = new Vue({
         var start = new Date(val);
         var temp = new Date(this.start);
         temp.setDate(temp.getDate() + 1);
-        if (start.toISOString() > this.end){
-          this.end = temp.toISOString();
-        }
+        if (start >= this.end){
+          this.end = temp;
+        };
+        this.endDisabled = {to: temp};
       }
-    }
+    },
 });
 </script>
 @endsection
