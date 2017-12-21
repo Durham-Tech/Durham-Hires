@@ -4,6 +4,10 @@
 $active = 'style';
 @endphp
 
+@section('styles')
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+@endsection
+
 @section('page')
 
 @if ($errors->any())
@@ -49,6 +53,25 @@ $active = 'style';
             'id' => 'hiresEmail'
       )) }}
   </div>
+
+  <div class='form-group' id='filesGroup'>
+      {{ Form::label('files', 'Upload files (public):') }}
+      @foreach($files as $file)
+        <div class='files-inline'>
+          <a href="#" onclick="deleteFile(this, {{ $file->id }});return false;"><i class="material-icons">delete</i></a>
+          <a href="/{{ $site->slug . '/files/' . $file->id}}">{{ $file->name }}</a>
+        </div>
+      @endforeach
+
+      <div class='files-inline'>
+        {{ Form::file('files[]',
+            array(
+            'style' => 'display:inline;',
+            'onchange' => 'fileInputChange(this);'
+        )) }}
+      </div>
+  </div>
+
 
 
 <h1>Style</h1>
@@ -275,6 +298,28 @@ $active = 'style';
   $('#hiresEmailCheck').on('change',function(){
       updateHiresEmail();
   });
+
+  function deleteFile(row, id){
+    if (Number.isInteger(id)){
+      $.ajax({
+          url: "/{{ $site->slug }}/files/" + id,
+          type: 'post',
+          data: {_method: 'delete'},
+          success: function(text){
+            $(row).parent('div').remove();
+          }
+      });
+    } else {
+      $(row).parent('div').remove();
+    }
+  }
+
+  function fileInputChange(item){
+    $(item).removeAttr('onchange');
+    $(item).parent('div').prepend('<a href="#" onclick="deleteFile(this, null);return false;"><i class="material-icons">delete</i></a>');
+    $("#filesGroup").append('<div class="files-inline"><input onchange="fileInputChange(this);" name="files[]" style="display: inline;" type="file"></div>');
+  }
+
 
   </script>
 @endsection

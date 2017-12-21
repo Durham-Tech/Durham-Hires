@@ -21,7 +21,7 @@ class ContentController extends Controller
     {
         $site = Request()->get('_site');
         $pages = content::where('site', $site->id)->get();
-        return View::make('settings.content')->with(['pages' => $pages, 'site' => $site]);
+        return View::make('settings.content')->with(['pages' => $pages]);
     }
 
     public function getPage($s, $page)

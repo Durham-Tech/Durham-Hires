@@ -31,7 +31,7 @@ class InternalEventController extends Controller
             ->get();
 
         return View::make('bookings.internal.index')
-            ->with(['data' => $data, 'site' => $site]);
+            ->with(['data' => $data]);
     }
 
 
@@ -42,7 +42,7 @@ class InternalEventController extends Controller
             ->where('template', '1')
             ->get();
         return View::make('bookings.internal.edit')
-            ->with(['templates' => $templates, 'site' => $site]);
+            ->with(['templates' => $templates]);
     }
 
     public function store(NewInternal $request)
@@ -92,9 +92,9 @@ class InternalEventController extends Controller
     public function show($s, $id)
     {
         $site = Request()->get('_site');
-        $booking = Bookings::findOrFail($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
-            ->where('booked_items.bookingID', '=', $id)
+            ->where('booked_items.bookingID', '=', $booking->id)
             ->where('booked_items.number', '!=', '0')
             ->join('catalog', 'booked_items.item', '=', 'catalog.id')
             ->get();
@@ -103,8 +103,7 @@ class InternalEventController extends Controller
                           ->with(
                               [
                               'booking' => $booking,
-                              'items' => $bookedItems,
-                              'site' => $site
+                              'items' => $bookedItems
                               ]
                           );
 
@@ -112,23 +111,24 @@ class InternalEventController extends Controller
 
     public function destroy($site, $id)
     {
-        $booking = Bookings::findOrFail($id);
+        $site = Request()->get('_site');
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         if ($booking->internal == '1') {
             $booking->delete();
         }
-        return redirect('/' . $site . '/internal');
+        return redirect('/' . $site->slug . '/internal');
     }
 
     public function addItems($id)
     {
         $site = Request()->get('_site');
         $items = new Items;
-        $booking = Bookings::find($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $data = $items->getAvalible($booking);
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
             return View::make('items.index')
-                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'site' => $site]);
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking]);
         } else {
             return redirect()->route('items.index', $site->slug);
         }
@@ -138,7 +138,7 @@ class InternalEventController extends Controller
     {
         $site = Request()->get('_site');
         $items = new Items;
-        $booking = Bookings::find($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $data = $items->getAvalibleArray($booking);
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {

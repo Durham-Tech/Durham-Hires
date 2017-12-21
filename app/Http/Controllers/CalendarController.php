@@ -18,10 +18,7 @@ class CalendarController extends Controller
 
     public function viewSettings(Request $request)
     {
-        $site = Request()->get('_site');
-
-        return View::make('settings.calendar')
-            ->with(['site' => $site]);
+        return View::make('settings.calendar');
     }
 
     public function updateAuth()

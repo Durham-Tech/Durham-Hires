@@ -30,7 +30,7 @@ class AdminController extends Controller
         $users = Admin::where('site', $site->id)->get();
         $hires = $site->hiresManager;
 
-        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires, 'error' => $error, 'site' => $site]);
+        return view('settings.users.index')->with(['users' => $users, 'hires' => (int)$hires, 'error' => $error]);
     }
 
     /**
@@ -41,8 +41,7 @@ class AdminController extends Controller
     public function create(Request $request)
     {
         //
-        $site = $request->get('_site');
-        return View::make('settings.users.new')->with(['site' => $site]);
+        return View::make('settings.users.new');
     }
 
     /**

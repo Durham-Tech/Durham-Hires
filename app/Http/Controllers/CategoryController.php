@@ -41,7 +41,7 @@ class CategoryController extends Controller
             }
         }
 
-        return view('settings.categories.view')->with(['cats'=>$cats, 'site' => $site]);
+        return view('settings.categories.view')->with(['cats'=>$cats]);
     }
 
     /**
@@ -67,7 +67,7 @@ class CategoryController extends Controller
         }
 
         return View::make('settings.categories.edit')
-        ->with(['cats' => $cats, 'site' => $site]);
+        ->with(['cats' => $cats]);
     }
 
     /**
@@ -131,7 +131,7 @@ class CategoryController extends Controller
             $old->orderOf = '';
         }
 
-        return View::make('settings.categories.edit')->with(['old' => $old, 'cats' => $cats, 'site' => $site]);
+        return View::make('settings.categories.edit')->with(['old' => $old, 'cats' => $cats]);
     }
 
     /**

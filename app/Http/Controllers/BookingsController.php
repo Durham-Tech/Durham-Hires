@@ -71,7 +71,7 @@ class BookingsController extends Controller
         }
 
         return View::make('bookings.index')
-            ->with(['data' => $data, 'statusArray' => $this->status, 'site' => $site]);
+            ->with(['data' => $data, 'statusArray' => $this->status]);
     }
 
     public function indexComplete()
@@ -83,7 +83,7 @@ class BookingsController extends Controller
               ->get();
 
         return View::make('bookings.old')
-            ->with(['data' => $data, 'site' => $site]);
+            ->with(['data' => $data]);
     }
 
     /**
@@ -99,7 +99,7 @@ class BookingsController extends Controller
             return redirect()->route('home', ['site' => $site->slug]);
         }
         return View::make('bookings.edit')
-                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'site' => $site]);
+                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]]]);
     }
 
     /**
@@ -165,7 +165,7 @@ class BookingsController extends Controller
     public function show($site, $id)
     {
         $site = Request()->get('_site');
-        $booking = Bookings::findOrFail($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $id)
             ->where('booked_items.number', '!=', '0')
@@ -193,8 +193,7 @@ class BookingsController extends Controller
                               'booking' => $booking,
                               'items' => $bookedItems,
                               'custom' => $customItems,
-                              'next' => $this->nextStatus,
-                              'site' => $site
+                              'next' => $this->nextStatus
                               ]
                           );
         } else {
@@ -211,7 +210,7 @@ class BookingsController extends Controller
     public function edit($site, $id)
     {
         $site = Request()->get('_site');
-        $old = Bookings::findOrFail($id);
+        $old = Bookings::where('site', $site->id)->findOrFail($id);
 
         // $start = date_create($old->start);
         // $old->start = date_format($start, "d/m/Y");
@@ -229,7 +228,7 @@ class BookingsController extends Controller
             $old->status = 4;
         }
         return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->status, 'site' => $site]);
+                      ->with(['old' => $old, 'statusArray' => $this->status]);
     }
 
     private function manageStatusChange(&$booking, $status)
@@ -268,6 +267,9 @@ class BookingsController extends Controller
     public function update(NewBooking $request, $site, Bookings $booking)
     {
         $site = Request()->get('_site');
+        if ($booking->site != $site->id) {
+            abort(403);
+        }
         $this->validate(
             $request, [
             'email' => 'required|email'
@@ -363,7 +365,7 @@ class BookingsController extends Controller
     public function destroy($site, Bookings $booking)
     {
         $site = Request()->get('_site');
-        if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3)) {
+        if (($booking->email == CAuth::user()->email && $booking->status < 2) || (CAuth::checkAdmin() && $booking->status < 3 && $booking->site == $site->id)) {
             $booking->delete();
         }
         return redirect('/' . $site->slug . '/bookings');
@@ -373,13 +375,13 @@ class BookingsController extends Controller
     {
         $site = Request()->get('_site');
         $items = new Items;
-        $booking = Bookings::find($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $data = $items->getAvalible($booking);
         $custom_items = custom_items::where('booking', $booking->id)->get();
 
         if (($booking->email == CAuth::user()->email && $booking->status < 2) || CAuth::checkAdmin()) {
             return View::make('items.index')
-                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items, 'site' => $site]);
+                          ->with(['data'=>$data, 'edit'=>true, 'booking'=>$booking, 'custom'=>$custom_items]);
         } else {
             return redirect()->route('items.index', ['site' => $site->slug]);
         }
@@ -389,7 +391,7 @@ class BookingsController extends Controller
     {
         $site = Request()->get('_site');
         $items = new Items;
-        $booking = Bookings::find($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $data = $items->getAvalibleArray($booking);
         $custom_items = custom_items::where('booking', $booking->id)->get();
 
@@ -462,7 +464,8 @@ class BookingsController extends Controller
 
     public function getInvoice($site, $id)
     {
-        $booking = Bookings::findOrFail($id);
+        $site = Request()->get('_site');
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         if (($booking->email == CAuth::user()->email) || (CAuth::checkAdmin([1,4]))) {
             $invoice = $booking->invoice;
             if (!empty($invoice)) {

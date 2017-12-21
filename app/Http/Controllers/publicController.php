@@ -17,22 +17,21 @@ class publicController extends Controller
         $site = $request->get('_site');
         $data = Common::getContent('home', $site->id);
         return View::make('home')
-            ->with(['data' => $data, 'site' => $site]);
+            ->with(['data' => $data]);
     }
     public function terms(Request $request)
     {
         $site = $request->get('_site');
         $data = Common::getContent('tc', $site->id);
         return View::make('terms')
-            ->with(['data' => $data, 'site' => $site]);
+            ->with(['data' => $data]);
     }
 
     public function login(Request $request)
     {
         $site = $request->get('_site');
         if(!is_null($site)) {
-            return view('login')
-            ->with(['site' => $site]);
+            return view('login');
         } else {
             return view('superAdmin.login');
         }

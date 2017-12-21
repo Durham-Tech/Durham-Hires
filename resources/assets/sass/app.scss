@@ -89,8 +89,9 @@ a:focus {
 
 .navbar-default {
   .navbar-nav {
-    li {
-      a {
+    > li {
+      > a,
+      a:focus {
         @include linkOnBackground($navbar-text-colour);
       }
     }
@@ -305,6 +306,20 @@ img#homeLogo {
 .modal-dialog .img-responsive {
   margin: auto;
 }
+
+div#files {
+  padding-bottom: 10px;
+
+  p {
+    font-weight: bold;
+    margin: 0;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 20px;
+  }
+}
 // Summernote styling
 
 .panel-default .panel-heading {
@@ -325,6 +340,18 @@ img#homeLogo {
 .imageThumb {
   max-width: 54px;
   max-height: 54px;
+}
+
+.files-inline {
+  @extend .form-inline;
+
+  i {
+    vertical-align: middle;
+  }
+
+  > * {
+    margin-right: 5px;
+  }
 }
 // Custom Items table
 

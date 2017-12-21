@@ -26,14 +26,14 @@ class TemplateController extends Controller
         $templates = Bookings::where('template', '1')
           ->where('site', $site->id)
           ->get();
-        return view('bookings.templates.index')->with(['templates'=>$templates, 'site' => $site]);
+        return view('bookings.templates.index')->with(['templates'=>$templates]);
     }
 
 
     public function create($s)
     {
         $site = Request()->get('_site');
-        return View::make('bookings.templates.edit')->with(['site' => $site]);
+        return View::make('bookings.templates.edit');
     }
 
     public function store(NewTemplate $request)
@@ -60,7 +60,7 @@ class TemplateController extends Controller
     public function show($s, $id)
     {
         $site = Request()->get('_site');
-        $template = Bookings::findOrFail($id);
+        $template = Bookings::where('site', $site->id)->findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $id)
             ->where('booked_items.number', '!=', '0')
@@ -70,8 +70,7 @@ class TemplateController extends Controller
                       ->with(
                           [
                           'template' => $template,
-                          'items' => $bookedItems,
-                          'site' => $site
+                          'items' => $bookedItems
                           ]
                       );
     }
@@ -79,16 +78,16 @@ class TemplateController extends Controller
     public function edit($s, $id)
     {
         $site = Request()->get('_site');
-        $old = Bookings::findOrFail($id);
+        $old = Bookings::where('site', $site->id)->findOrFail($id);
 
         return View::make('bookings.templates.edit')
-                      ->with(['old' => $old, 'site' => $site]);
+                      ->with(['old' => $old]);
     }
 
     public function update(NewTemplate $request, $s, $id)
     {
         $site = Request()->get('_site');
-        $booking = Bookings::findOrFail($id);
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $booking->name = $request->name;
         $booking->days = $request->days;
         $booking->site = $site->id;
@@ -100,11 +99,12 @@ class TemplateController extends Controller
 
     public function destroy($site, $id)
     {
-        $booking = Bookings::findOrFail($id);
+        $site = Request()->get('_site');
+        $booking = Bookings::where('site', $site->id)->findOrFail($id);
         if ($booking->template == '1') {
             $booking->delete();
         }
-        return redirect('/' . $site . '/templates');
+        return redirect('/' . $site->slug . '/templates');
     }
 
 }

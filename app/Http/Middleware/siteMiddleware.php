@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App;
 use App\Site;
+use View;
 
 class siteMiddleware
 {
@@ -37,6 +38,9 @@ class siteMiddleware
             if ($site) {
                 // Add site data to session for use later
                 $request->attributes->add(['_site' => $site]);
+
+                View::share('site', $site);
+
                 return $next($request);
             } else {
                 // throw 404 if site not found

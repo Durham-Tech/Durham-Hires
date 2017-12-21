@@ -26,7 +26,7 @@ class treasurerController extends Controller
               ->where('vat', '=', 1)
               ->get();
 
-        return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => 0, 'bookings' => $bookings, 'site' => $site]);
+        return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => 0, 'bookings' => $bookings]);
     }
 
     public function submit(Treasurer $request)
@@ -62,18 +62,19 @@ class treasurerController extends Controller
               ->get();
 
         if ($success == 1) {
-            return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success, 'bookings' => $vatBookings, 'site' => $site]);
+            return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success, 'bookings' => $vatBookings]);
         } else {
             if ($request->attempt == 2) {
                 \Mail::send(new bankIncorrect($request->ref, $request->amount));
             }
-            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success, 'bookings' => $vatBookings, 'site' => $site]);
+            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success, 'bookings' => $vatBookings]);
         }
     }
 
     public function vatSorted($site, Bookings $booking)
     {
-        if ($booking->status == 4) {
+        $site = Request()->get('_site');
+        if ($booking->status == 4 && $booking->site == $site->id) {
             $booking->status = 5;
             $booking->save();
         }

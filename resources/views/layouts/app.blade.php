@@ -42,7 +42,10 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     color: {{ $site->accentDark }};
     }
 
-    .navbar-default, .btn-primary
+    .navbar-default, .btn-primary,
+    .navbar-default .navbar-nav > .open > a,
+    .navbar-default .navbar-nav > .open > a:focus,
+    .navbar-default .navbar-nav > .open > a:hover
     {
     background-color: {{ $site->accent }};
     }
@@ -59,7 +62,9 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     background-color: {{ $site->accentDark }};
     }
 
-    .navbar-brand, .navbar-default .navbar-brand, .navbar-default .navbar-nav li a,
+    .navbar-brand, .navbar-default .navbar-brand,
+    .navbar-default .navbar-nav > li > a,
+    .navbar-default .navbar-nav > .open > a,
     .btn-primary,
     .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover
     {
@@ -67,7 +72,9 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
     }
 
     .navbar-default .navbar-nav li a:hover,
-    .navbar-default .navbar-brand:hover
+    .navbar-default .navbar-brand:hover,
+    .navbar-default .navbar-nav > .open > a:hover,
+    .navbar-default .navbar-nav > .open > a:focus
     {
     color: {{ $site->accentTextDark }};
     }
@@ -115,6 +122,19 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                         @endif
                         @if (CAuth::checkAdmin(1))
                         <li>{{ link_to_route('bank.index', 'Treasurer', $site->slug) }}</li>
+                        @endif
+                        @if (count($files) == 1)
+                        <li>{{ link_to_route('files.download', $files[0]->displayName, [$site->slug, $files[0]->id]) }}</li>
+                        @elseif (count($files) > 1)
+                        <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Documents
+                          <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            @foreach($files as $file)
+                              <li>{{ link_to_route('files.download', $file->displayName, [$site->slug, $file->id]) }}</li>
+                            @endforeach
+                          </ul>
+                        </li>
                         @endif
                         <li>{{ link_to_route('terms', 'Terms & Conditions', $site->slug) }}</li>
                     </ul>

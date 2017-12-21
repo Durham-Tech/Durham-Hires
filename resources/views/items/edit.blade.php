@@ -4,6 +4,7 @@
 
 @section('styles')
 <link href="/summernote/summernote.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 @endsection
 
 @section('scripts')
@@ -17,8 +18,31 @@ const app = new Vue({
         linkTargetBlank: true,
         fontNames: ['Raleway', 'Arial', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
       });
+      $.ajaxSetup({ headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } });
     }
 });
+
+function deleteFile(row, id){
+  if (Number.isInteger(id)){
+    $.ajax({
+        url: "/{{ $site->slug }}/files/" + id,
+        type: 'post',
+        data: {_method: 'delete'},
+        success: function(text){
+          $(row).parent('div').remove();
+        }
+    });
+  } else {
+    $(row).parent('div').remove();
+  }
+}
+
+function fileInputChange(item){
+  $(item).removeAttr('onchange');
+  $(item).parent('div').prepend('<a href="#" onclick="deleteFile(this, null);return false;"><i class="material-icons">delete</i></a>');
+  $("#filesGroup").append('<div class="files-inline"><input onchange="fileInputChange(this);" name="files[]" style="display: inline;" type="file"></div>');
+}
+
 </script>
 @endsection
 
@@ -92,6 +116,25 @@ const app = new Vue({
                 )) }}
                 </div>
             </div>
+
+            <div class='form-group' id='filesGroup'>
+                {{ Form::label('files', 'Files:') }}
+                @foreach($files as $file)
+                  <div class='files-inline'>
+                    <a href="#" onclick="deleteFile(this, {{ $file->id }});return false;"><i class="material-icons">delete</i></a>
+                    <a href="/{{ $site->slug . '/files/' . $file->id}}">{{ $file->name }}</a>
+                  </div>
+                @endforeach
+
+                <div class='files-inline'>
+                  {{ Form::file('files[]',
+                      array(
+                      'style' => 'display:inline;',
+                      'onchange' => 'fileInputChange(this);'
+                  )) }}
+                </div>
+            </div>
+
             <div class='form-group form-inline number'>
                 {{ Form::label('quantity', 'Quantity avalible: ') }}
                 {{ Form::number('quantity', NULL,

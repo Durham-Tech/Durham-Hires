@@ -27,7 +27,7 @@ class ItemController extends Controller
         $site = Request()->get('_site');
         $Items = new Items;
         $data = $Items->getAll($site->id);
-        return View::make('items.index')->with(['data'=>$data, 'edit'=>false, 'site' => $site]);
+        return View::make('items.index')->with(['data'=>$data, 'edit'=>false]);
     }
 
     /**
@@ -40,9 +40,9 @@ class ItemController extends Controller
         $site = Request()->get('_site');
         $cats = [];
         $data = \App\Category::orderBy('orderOf')
-              ->where('site', $site->id)
-              ->orderBy('id')
-              ->get();
+          ->where('site', $site->id)
+          ->orderBy('id')
+          ->get();
 
         foreach ($data as $cat) {
             if (empty($cat->subCatOf)) {
@@ -181,7 +181,7 @@ class ItemController extends Controller
     public function update($s, NewItem $request, catalog $catalog, $id)
     {
         $site = Request()->get('_site');
-        $cat = catalog::findOrFail($id);
+        $cat = catalog::where('site', $site->id)->findOrFail($id);
 
         if (!empty($request->image)) {
             // if (!isset($cat->image)){
@@ -234,7 +234,7 @@ class ItemController extends Controller
     public function destroy($s, catalog $catalog, $id)
     {
         $site = Request()->get('_site');
-        $cat = catalog::findOrFail($id);
+        $cat = catalog::where('site', $site-id)->findOrFail($id);
         if ($cat->site == $site->id) {
             $cat->delete();
         }

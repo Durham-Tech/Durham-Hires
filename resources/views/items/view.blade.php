@@ -24,6 +24,18 @@
         <p id='details'>
             {!! $item->details !!}
         </p>
+        @if (count($files) > 0)
+        <div id='files'>
+          <p style="font-weight:bold;">Files:</p>
+          <ul>
+            @foreach ($files as $file)
+            <li>
+              <a href="files/{{ $file->id }}">{{ $file->displayName }}</a>
+            </li>
+            @endforeach
+          </ul>
+        </div>
+        @endif
         <p id='quantity'>
             <b>Available: </b>{{ $item->quantity }}
         </p>
