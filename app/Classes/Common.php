@@ -109,8 +109,11 @@ class Common
         $site = Request()->get('_site');
         $data = content::where('page', $page)
                 ->where('site', $site->id)
-                ->firstOrFail()->content;
-        return $data;
+                ->first();
+        if ($data == null) {
+            return "";
+        }
+        return $data->content;
     }
 
     public static function generateCalendarAuth()
@@ -140,6 +143,9 @@ class Common
 
     public static function CleanEditorContent($content)
     {
+        if ($content == "<br>") {
+            return "";
+        }
         $clean = strip_tags($content, '<p><a><span><h1><h2><h3><h4><h5><h6><li><ol><ul><br><div><blockquote><pre><font><table><tbody><thead><tr><td><th><img><iframe><b><strong><i><em><mark><small><del><ins><sub><sup><u>');
         return preg_replace_callback(
             '/<img.+?src="(data:image\/[A-Za-z]+;base64,[^\"]+)".+?>/',

@@ -98,8 +98,9 @@ class BookingsController extends Controller
         if (!($site->flags & 1)) {
             return redirect()->route('home', ['site' => $site->slug]);
         }
+        $msg = Common::getContent('newBook');
         return View::make('bookings.edit')
-                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'allowDateEdit' => true]);
+                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'allowDateEdit' => true, 'msg' => $msg]);
     }
 
     /**
@@ -233,8 +234,9 @@ class BookingsController extends Controller
         if ($old->status == 5) {
             $old->status = 4;
         }
+        $msg = Common::getContent('newBook');
         return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->status, 'allowDateEdit' => (count($bookedItems) == 0)]);
+                      ->with(['old' => $old, 'statusArray' => $this->status, 'allowDateEdit' => (count($bookedItems) == 0), 'msg' => $msg]);
     }
 
     private function manageStatusChange(&$booking, $status)

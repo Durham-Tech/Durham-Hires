@@ -50,6 +50,13 @@ if (isset($old)){
                 ) }}
             </div>
 
+            <!-- Message if it is set -->
+            @if ($msg)
+            <div class="form-group">
+              {!! $msg !!}
+            </div>
+            @endif
+
             <div class="form-group">
                 {{ Form::label('name', 'Booking Name') }}
                 {{ Form::text('name', NULL,
