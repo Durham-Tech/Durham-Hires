@@ -101,7 +101,7 @@ class AdminController extends Controller
             Site::where('id', $site->id)->update(['hiresManager' => $request->hires]);
 
             // Only change hires email if custom emails are disabled
-            if ($site->flags & 2 == 0) {
+            if (($site->flags & 2) == 0) {
                 Site::where('id', $site->id)->update(['hiresEmail' => $hiresEmail]);
             }
 
