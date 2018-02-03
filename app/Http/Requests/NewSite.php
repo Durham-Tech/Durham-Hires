@@ -43,8 +43,13 @@ class NewSite extends FormRequest
                 if ($slug == 'admin') {
                     $validator->errors()->add('email', 'This slug cannot be used.');
                 }
-                if (Site::where('slug', $slug)->count() > 0) {
+                if (Site::where('slug', $slug)->where('deleted', 0)->count() > 0) {
                     $validator->errors()->add('email', 'This slug is already in use.');
+                }
+                if (Site::where('slug', $slug)->where('deleted', 1)->count() > 0) {
+                    $old = Site::where('slug', $slug)->where('deleted', 1)->first();
+                    $old->slug = $slug . str_random(8);
+                    $old->save();
                 }
             }
         );

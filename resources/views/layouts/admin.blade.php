@@ -52,6 +52,14 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                     <ul class="nav navbar-nav">
                         <li>{{ link_to_route('sites.index', 'Sites') }}</li>
                         <li>{{ link_to_route('users.index', 'Global Admins') }}</li>
+                        <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools
+                          <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li>{{ link_to_route('sites.restore', 'Restore deleted sites') }}</li>
+                            <li>{{ link_to_route('sites.email', 'Email all admins') }}</li>
+                          </ul>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

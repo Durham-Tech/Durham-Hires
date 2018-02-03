@@ -10,6 +10,10 @@
 
             @if ($sites)
 
+            @if (!$delete)
+              <h1>Restore deleted sites</h1>
+            @endif
+
                 <table class="table userTable">
                 <thead>
                     <tr>
@@ -26,14 +30,16 @@
                         </td>
                         <td><a href="{{ route('home', ['site' => $site->slug]) }}">{{ route('home', ['site' => $site->slug]) }}</a></td>
                         <td>
-                          <a href="#" class="deleteLink" data-idvalue="{{ $site->id }}">Delete</a>
+                          <a href="#" class="deleteLink" data-idvalue="{{ $site->id }}">{{ $delete ? 'Delete' : 'Restore' }}</a>
                         </td>
                     </tr>
                     @endforeach
                     </tbody>
                   </table>
 
+                @if ($delete)
                 <a class="btn btn-primary" href="{{ route('sites.create') }}">Add new</a>
+                @endif
 
         {!! Form::close() !!}
             @endif
@@ -50,7 +56,7 @@
       e.preventDefault();
       var id = $(this).data('idvalue');
       var ajax = $.ajax({
-          url: "/admin/sites/" + id,
+          url: "/admin/sites/{{ !$delete ? 'restore/' : ''}}" + id,
           type: 'post',
           data: {_method: 'delete'},
           success: function(){

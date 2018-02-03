@@ -15,7 +15,11 @@
 Route::get('admin', 'SiteController@index');
 Route::resource('admin/users', 'SuperAdminController');
 
+Route::get('admin/email', 'SiteController@emailAll')->name('sites.email');
+Route::get('admin/sites/restore', 'SiteController@restoreIndex')->name('sites.restore');
+Route::delete('admin/sites/restore/{site}', 'SiteController@restore');
 Route::resource('admin/sites', 'SiteController');
+
 Route::get('admin/sites/{site}/addUser', 'SiteController@createAddUser')
           ->name('sites.addUser');
 Route::post('admin/sites/{site}/addUser', 'SiteController@storeUser')
@@ -87,6 +91,8 @@ Route::get('{site}/login', 'publicController@login')
 Route::post('{site}/login', 'customAuth@checkAuth');
 Route::get('{site}/logout', 'customAuth@logout')
           ->name('logout');
+
+
 
 // other routes
 Route::get('{site}/calendar/{auth}/{type}', 'CalendarController@downloadCalendar')

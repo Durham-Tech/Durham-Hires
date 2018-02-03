@@ -28,7 +28,14 @@ class SiteController extends Controller
     {
         $error = session()->get('error', '');
         $sites = Site::where('deleted', 0)->get();
-        return view('superAdmin.sites.index')->with(['sites' => $sites, 'error' => $error]);
+        return view('superAdmin.sites.index')->with(['sites' => $sites, 'error' => $error, 'delete' => true]);
+    }
+
+    public function restoreIndex()
+    {
+        $error = session()->get('error', '');
+        $sites = Site::where('deleted', 1)->get();
+        return view('superAdmin.sites.index')->with(['sites' => $sites, 'error' => $error, 'delete' => false]);
     }
 
     /**
@@ -150,8 +157,13 @@ class SiteController extends Controller
      */
     public function destroy(Site $site)
     {
-        //
         $site->deleted = 1;
+        $site->save();
+    }
+
+    public function restore(Site $site)
+    {
+        $site->deleted = 0;
         $site->save();
     }
 
@@ -183,4 +195,21 @@ class SiteController extends Controller
             // return redirect()->route('users.index');
         }
     }
+
+    public function emailAll()
+    {
+        $admins = Admin::all();
+        $nameArray = array();
+        $str = 'mailto:';
+        foreach($admins as $admin){
+            if($admin->site == 0 || (Site::find($admin->site) != null && Site::find($admin->site)->deleted == 0)) {
+                if (!in_array($admin->email, $nameArray)) {
+                    $nameArray[] = $admin->email;
+                    $str .= $admin->email . ';';
+                }
+            }
+        }
+        return redirect($str);
+    }
+
 }
