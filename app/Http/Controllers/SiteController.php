@@ -69,8 +69,8 @@ class SiteController extends Controller
         $admin->site = $site->id;
         $admin->save();
 
-        Site::where('site', $site->id)->update(['hiresManager' => $admin->id]);
-        Site::where('site', $site->id)->update(['hiresEmail' => $admin->email]);
+        Site::where('id', $site->id)->update(['hiresManager' => $admin->id]);
+        Site::where('id', $site->id)->update(['hiresEmail' => $admin->email]);
 
         // $hm = new Settings;
         // $hm->name = "hiresManager";
