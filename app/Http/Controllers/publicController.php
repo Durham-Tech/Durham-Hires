@@ -40,7 +40,7 @@ class publicController extends Controller
     // Landing page if not site specified
     public function sitelessIndex(Request $request)
     {
-        $sites = Site::all();
+        $sites = Site::where('deleted', 0)->get();
         return view('siteless')
           ->with(['sites' => $sites]);
     }

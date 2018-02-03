@@ -28,6 +28,12 @@ class customAuth extends Controller
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
+        if ($site == null) {
+            $slug = 'admin';
+        } else {
+            $slug = $site->slug;
+        }
+
         $result=curl_exec($ch);
         $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
         curl_close($ch);
@@ -48,7 +54,7 @@ class customAuth extends Controller
 
             $path = session('target', '');
             if (empty($path)) {
-                return redirect()->route('home', $site->slug);
+                return redirect()->route('home', $slug);
             } else {
                 session(['target' => '']);
                 return redirect($path);
@@ -57,7 +63,7 @@ class customAuth extends Controller
             $request->session()->put('auth', '0');
             $request->session()->forget('user_data');
             $request->session()->forget('privileges');
-            return redirect()->route('login', $site->slug);
+            return redirect()->route('login', $slug);
         }
     }
 
@@ -65,8 +71,12 @@ class customAuth extends Controller
     {
         $site = $request->get('_site');
         CAuth::logout();
-        var_dump($site);
-        return redirect()->route('home', $site->slug);
+        if ($site == null) {
+            $slug = 'admin';
+        } else {
+            $slug = $site->slug;
+        }
+        return redirect()->route('home', $slug);
     }
 
     public function index(Request $request)
