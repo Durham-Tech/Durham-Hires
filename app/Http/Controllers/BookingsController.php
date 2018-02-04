@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Bookings;
 use App\booked_items;
 use App\custom_items;
+use App\Http\Requests\addItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use View;
@@ -406,7 +407,7 @@ class BookingsController extends Controller
         }
     }
 
-    public function updateItems(Request $request, $site, $id)
+    public function updateItems(addItems $request, $site, $id)
     {
         $site = Request()->get('_site');
         $items = new Items;

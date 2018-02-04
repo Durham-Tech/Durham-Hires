@@ -11,6 +11,17 @@ if ($edit) {
 
 @section('content')
 <div class="limWidth">
+
+              @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @if ($data)
             @if ($edit == TRUE)
             {!! Form::open(['url' => $site->slug . '/bookings/' . $booking->id . '/add']) !!}
@@ -200,7 +211,9 @@ if ($edit) {
 @section('scripts')
   <script>
     window.onload = function() {
-      if(window.location.hash) {
+      if({{ json_encode($errors->any()) }}) {
+        $('.nav-tabs a[href="#custom"]').tab('show');
+      } else if(window.location.hash) {
         var hash = window.location.hash;
         $('.nav-tabs a[href="' + hash + '"]').tab('show');
       }
