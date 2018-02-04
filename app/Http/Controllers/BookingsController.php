@@ -437,20 +437,27 @@ class BookingsController extends Controller
             }
 
             if (!$booking->internal && !$booking->template) {
+                // Update existing custom items / delete removed items by looping database
                 foreach ($custom_items as $item){
+                    // Does the database item exist in the request
                     $key = array_search($item->id, $request->id);
                     if ($key !== false) {
+                        // Item exists so update
                         $item->description = $request->description[$key];
                         $item->number = $request->quantity[$key];
                         $item->price = $request->price[$key];
                         $item->save();
                     } else {
+                        // Item doesn't exist so delete
                         $item->delete();
                     }
                 }
+
+                // Add any new items to database
                 $request->id = (array)$request->id; // Make sure array of item ids is actually an array instead of single value
-                foreach ($request->id as $key => $cus_id){
+                foreach ($request->id as $key => $cus_id){ // Loop request items
                     if (is_null($cus_id)) {
+                        // Item doesn't exist in database so check valid and add to database
                         if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {
                             $item = new custom_items;
                             $item->booking = $booking->id;
@@ -463,8 +470,8 @@ class BookingsController extends Controller
                 }
             }
 
+            // If booking confirmed, remove duplicated items from unconfirmed bookings
             if ($booking->status >= 2) {
-                // $booking->save();
                 $items->correctDuplicateBookings($booking);
             }
 

@@ -67,13 +67,19 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
         <div class="container">
             <div class="row">
               <div class="limWidth">
+                      @if($errors->any())
+                        <div class="alert alert-danger">
+                          {{ $errors->first() }}
+                        </div>
+                      @endif
+
                       <form class="form-horizontal" role="form" method="POST" action="{{ url('/admin/login') }}">
                           {{ csrf_field() }}
 
                         <div class="login">
                           <h1>Login</h1>
                           <div class="form-group">
-                            <input placeholder="Durham Username" id="email" type="text" class="form-control" name="user" value="{{ old('email') }}" required autofocus>
+                            <input placeholder="Durham Username" id="email" type="text" class="form-control" name="user" value="{{ session('user') }}" required autofocus>
                           </div>
 
                           <div class="form-group">

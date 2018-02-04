@@ -63,7 +63,7 @@ class customAuth extends Controller
             $request->session()->put('auth', '0');
             $request->session()->forget('user_data');
             $request->session()->forget('privileges');
-            return redirect()->route('login', $slug);
+            return redirect()->route('login', $slug)->withErrors(['Incorrect username or password'])->with('user', $user);;
         }
     }
 
