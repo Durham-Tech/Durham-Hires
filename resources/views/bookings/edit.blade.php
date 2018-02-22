@@ -218,6 +218,9 @@ const app = new Vue({
           to: new Date('9999-12-31'),
       },
       @else
+      disabled: {
+          to: (function(d){ d.setDate(d.getDate()-1); return d})(new Date),
+      },
       endDisabled: {
           to: new Date('{{ $old->end }}'),
       },
@@ -231,13 +234,19 @@ const app = new Vue({
               new Date(),
           ]
       },
+      disabled: {
+          to: (function(d){ d.setDate(d.getDate()-1); return d})(new Date),
+      },
+      endDisabled: {
+          to: new Date(),
+      },
     },
 
     methods: {
-      fineUpdate() {
+      fineUpdate: function() {
         this.fine = parseFloat(this.fine).toFixed(2);
       },
-      discUpdate() {
+      discUpdate: function() {
         if (this.discountType == '0'){
           this.disc = parseFloat(this.disc).toFixed(2);
         }
