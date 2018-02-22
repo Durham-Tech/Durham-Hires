@@ -228,17 +228,17 @@ const app = new Vue({
       @else
       start:'',
       end:'',
-      @endif
-      highlighted: {
-          dates: [ // Highlight an array of dates
-              new Date(),
-          ]
-      },
       disabled: {
           to: (function(d){ d.setDate(d.getDate()-1); return d})(new Date),
       },
       endDisabled: {
           to: new Date(),
+      },
+      @endif
+      highlighted: {
+          dates: [ // Highlight an array of dates
+              new Date(),
+          ]
       },
     },
 

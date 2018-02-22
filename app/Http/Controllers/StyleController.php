@@ -150,6 +150,13 @@ class StyleController extends Controller
             $site->flags = $site->flags & (~1);
         }
 
+        // List Site
+        if ($request->listSite == 1) {
+            $site->flags |= 4;
+        } else {
+            $site->flags = $site->flags & (~4);
+        }
+
         // Enable custom hires email
         if ($request->customEmail == 1) {
             $site->flags |= 2;
