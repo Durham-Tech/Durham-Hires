@@ -42,6 +42,7 @@ class paymentReceived extends Mailable
     public function build()
     {
         return $this->replyTo(Common::hiresEmail())
+            ->from($this->site->slug . "@" . env('MAIL_FROM_DOMAIN', '@example.com'), $this->site->name)
             ->subject('Thank you for your payment')
             ->markdown('emails.paymentReceived');
     }

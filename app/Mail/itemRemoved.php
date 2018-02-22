@@ -44,6 +44,7 @@ class itemRemoved extends Mailable
     public function build()
     {
         return $this->subject('Items Unavailable - Tech Hire')
+            ->from($this->site->slug . "@" . env('MAIL_FROM_DOMAIN', '@example.com'), $this->site->name)
             ->replyTo(Common::hiresEmail())
             ->markdown('emails.itemRemoved');
     }
