@@ -41,6 +41,7 @@ class bookingConfirmed extends Mailable
     public function build()
     {
         return $this->replyTo(Common::hiresEmail())
+            ->from($this->site->slug . "@" . env('MAIL_FROM_DOMAIN', '@example.com'), $this->site->name)
             ->subject('Tech hire booking confirmation')
             ->markdown('emails.bookingConfirmed');
     }

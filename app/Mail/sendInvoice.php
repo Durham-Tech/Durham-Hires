@@ -44,6 +44,7 @@ class sendInvoice extends Mailable
     {
         return $this->subject($this->site->name . ' hire invoice')
             ->replyTo(Common::hiresEmail())
+            ->from($this->site->slug . "@" . env('MAIL_FROM_DOMAIN', '@example.com'), $this->site->name)
             ->attach(
                 base_path() . '/storage/invoices/' . $this->booking->invoice,
                 ['as' => 'invoice_' . $this->booking->invoiceNum . '.pdf']

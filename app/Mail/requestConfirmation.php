@@ -35,6 +35,7 @@ class requestConfirmation extends Mailable
     public function build()
     {
         return $this->to(Common::hiresEmail())
+            ->from("no-reply@" . env('MAIL_FROM_DOMAIN', '@example.com'))
             ->replyTo(CAuth::user()->email)
             ->subject('New hire request')
             ->markdown('emails.requestConfirmation');

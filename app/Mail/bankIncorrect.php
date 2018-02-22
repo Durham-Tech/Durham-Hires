@@ -37,6 +37,7 @@ class bankIncorrect extends Mailable
     public function build()
     {
         return $this->to(Common::hiresEmail())
+            ->from("no-reply@" . env('MAIL_FROM_DOMAIN', '@example.com'))
             ->subject('Hires Payment Error')
             ->markdown('emails.bankIncorrect');
     }

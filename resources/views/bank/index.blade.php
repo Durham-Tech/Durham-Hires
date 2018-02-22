@@ -32,7 +32,8 @@
     'route' => ['bank.submit', $site->slug],
     'class' => 'form')
   ) !!}
-  {{ Form::Hidden('attempt', $attempt)}}
+  
+  <input name="attempt" value="{{ $attempt }}" type="hidden">
 
     @if (count($errors) > 0)
     <div class="alert alert-danger">
