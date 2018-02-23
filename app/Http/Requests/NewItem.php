@@ -30,7 +30,7 @@ class NewItem extends FormRequest
             'image' => 'image',
             'dayPrice' => 'required|numeric|between:0,999.99',
             'weekPrice' => 'required|numeric|between:0,999.99',
-            'order' => 'nullable|integer',
+            'orderOf' => 'nullable|integer',
             'files.*' => 'file',
             'fileNames.*' => 'nullable|string',
             //
