@@ -184,6 +184,17 @@ if (isset($old)){
                 )) }}
             </div>
             @endif
+
+            @else
+            <!-- Discount Codes -->
+            <div class="form-group form-inline">
+                {{ Form::label('discountCode', 'Discount Code:') }}
+                {{ Form::text('discountCode', NULL,
+                array(
+                    'class'=>'form-control'
+                )) }}
+            </div>
+
             @endif
 
             <div class="form-group" id="buttons">

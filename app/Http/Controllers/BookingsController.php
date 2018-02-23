@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Bookings;
 use App\booked_items;
 use App\custom_items;
+use App\Discount;
 use App\Http\Requests\addItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -151,6 +152,17 @@ class BookingsController extends Controller
             $booking->email = $temp->email;
             $booking->isDurham = 1;
             $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
+
+            if ($request->discountCode != "") {
+                $discount = Discount::where('site', $site->id)
+                                      ->where('code', $request->discountCode)
+                                      ->first();
+                if ($discount) {
+                    $booking->discType = $discount->type;
+                    $booking->discValue = $discount->value;
+                    $booking->discName = $discount->name;
+                }
+            }
         }
         $booking->save();
         if ($booking->status == 2 && CAuth::checkAdmin(4)) {
