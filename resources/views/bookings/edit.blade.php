@@ -219,10 +219,10 @@ const app = new Vue({
       },
       @else
       disabled: {
-          to: (function(d){ d.setDate(d.getDate()-1); return d})(new Date),
+          to: new Date('0001-12-31'),
       },
       endDisabled: {
-          to: new Date('{{ $old->end }}'),
+          to: new Date('0001-12-31'),
       },
       @endif
       @else

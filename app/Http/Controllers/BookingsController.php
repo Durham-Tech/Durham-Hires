@@ -36,6 +36,7 @@ class BookingsController extends Controller
         $this->middleware('admin', ['only' => ['edit', 'update', 'indexComplete']]);
 
         $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid', 'Paid'];
+        $this->statusEdit = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid', 'Paid (VAT Sorted)'];
         $this->nextStatus = ['Confirm Booking', 'Booking Returned', 'Booking Paid'];
     }
 
@@ -237,7 +238,7 @@ class BookingsController extends Controller
         }
         $msg = Common::getContent('newBook');
         return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->status, 'allowDateEdit' => (count($bookedItems) == 0), 'msg' => $msg]);
+                      ->with(['old' => $old, 'statusArray' => $this->statusEdit, 'allowDateEdit' => (count($bookedItems) == 0), 'msg' => $msg]);
     }
 
     private function manageStatusChange(&$booking, $status)
