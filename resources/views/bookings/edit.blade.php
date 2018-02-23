@@ -218,13 +218,22 @@ const app = new Vue({
           to: new Date('9999-12-31'),
       },
       @else
+      disabled: {
+          to: new Date('0001-12-31'),
+      },
       endDisabled: {
-          to: new Date('{{ $old->end }}'),
+          to: new Date('0001-12-31'),
       },
       @endif
       @else
       start:'',
       end:'',
+      disabled: {
+          to: (function(d){ d.setDate(d.getDate()-1); return d})(new Date),
+      },
+      endDisabled: {
+          to: new Date(),
+      },
       @endif
       highlighted: {
           dates: [ // Highlight an array of dates
@@ -234,10 +243,10 @@ const app = new Vue({
     },
 
     methods: {
-      fineUpdate() {
+      fineUpdate: function() {
         this.fine = parseFloat(this.fine).toFixed(2);
       },
-      discUpdate() {
+      discUpdate: function() {
         if (this.discountType == '0'){
           this.disc = parseFloat(this.disc).toFixed(2);
         }

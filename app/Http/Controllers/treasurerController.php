@@ -61,13 +61,14 @@ class treasurerController extends Controller
               ->where('vat', '=', 1)
               ->get();
 
+        $attempt = intval($request->attempt);
         if ($success == 1) {
             return view('bank.index')->with(['ref' => '', 'amount' => '', 'attempt' => 1, 'success' => $success, 'bookings' => $vatBookings]);
         } else {
-            if ($request->attempt == 2) {
+            if ($attempt == 2) {
                 \Mail::send(new bankIncorrect($request->ref, $request->amount));
             }
-            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $request->attempt + 1, 'success' => $success, 'bookings' => $vatBookings]);
+            return view('bank.index')->with(['ref' => $request->ref, 'amount' => $request->amount, 'attempt' => $attempt + 1, 'success' => $success, 'bookings' => $vatBookings]);
         }
     }
 

@@ -40,6 +40,10 @@ $active = 'style';
       {{ Form::label('allowHires', 'Enable external hires:  ') }}
       {{ Form::checkbox('allowHires', 1, $site->flags & 1) }}
   </div>
+  <div class='form-group'>
+      {{ Form::label('listSite', 'List site on homepage:  ') }}
+      {{ Form::checkbox('listSite', 1, $site->flags & 4) }}
+  </div>
 
   <div class='form-group'>
       {{ Form::label('customEmail', 'Customize hires email:  ') }}

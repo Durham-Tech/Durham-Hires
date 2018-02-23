@@ -21,7 +21,7 @@
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
-            © 2017 {{ $site->name }}. All rights reserved.
+            © 2018 {{ $site->name }}. All rights reserved.
         @endcomponent
     @endslot
 @endcomponent
