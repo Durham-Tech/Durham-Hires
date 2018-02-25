@@ -40,6 +40,7 @@ Route::resource('{site}/bookings', 'BookingsController');
 Route::resource('{site}/templates', 'TemplateController');
 Route::resource('{site}/internal', 'InternalEventController');
 Route::resource('{site}/settings/style', 'StyleController');
+Route::resource('{site}/settings/discounts', 'DiscountController');
 
 // Booking routes
 Route::get('{site}/bookings/index/complete', 'BookingsController@indexComplete')
