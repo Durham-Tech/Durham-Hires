@@ -133,11 +133,14 @@ if (isset($old)){
                   )
                 ) }}
             </div>
-            <div class='form-group form-inline'>
-                {{ Form::label('discDays', 'Free days: ') }}
-                {{ Form::text('discDays', NULL,
+
+            <!-- Description -->
+            <div class="form-group form-inline">
+                {{ Form::label('discName', 'Description: ') }}
+                {{ Form::text('discName', NULL,
                 array(
-                    'class'=>'form-control customNum',
+                    'class'=>'form-control',
+                    'placeholder'=>'Discount'
                 )) }}
             </div>
             <div class='form-group form-inline'>
@@ -162,6 +165,14 @@ if (isset($old)){
                 <span v-text="(discountType == '1')?'%':''"></span>
             </div>
 
+            <div class='form-group form-inline'>
+                {{ Form::label('discDays', 'Free days: ') }}
+                {{ Form::text('discDays', NULL,
+                array(
+                    'class'=>'form-control customNum',
+                )) }}
+            </div>
+
             <div class='form-group'>
                 {{ Form::label('fineDesc', 'Add a fine',
                   array(
@@ -184,6 +195,17 @@ if (isset($old)){
                 )) }}
             </div>
             @endif
+
+            @else
+            <!-- Discount Codes -->
+            <div class="form-group form-inline">
+                {{ Form::label('discountCode', 'Discount Code:') }}
+                {{ Form::text('discountCode', NULL,
+                array(
+                    'class'=>'form-control'
+                )) }}
+            </div>
+
             @endif
 
             <div class="form-group" id="buttons">

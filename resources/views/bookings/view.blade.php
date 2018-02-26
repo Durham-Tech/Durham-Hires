@@ -81,7 +81,7 @@ if ($booking->status < 4){
               @endforeach
               @if ($booking->discount != 0)
               <tr id="discRow">
-                <td colspan="3"><b>Discount</b></td>
+                <td colspan="3"><b>{{ empty($booking->discName) ? 'Discount' : $booking->discName }}</b></td>
                 <td>-£{{ number_format((float)$booking->discount, 2) }}</td>
               </tr>
               @endif

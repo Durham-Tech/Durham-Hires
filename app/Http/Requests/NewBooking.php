@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use App\Classes\CAuth;
 use App\Classes\Common;
 
@@ -36,6 +37,21 @@ class NewBooking extends FormRequest
             'fineValue' => 'numeric|min:0',
             'status' => 'integer|min:0',
             'VAT' => 'boolean|min:0',
+            'discountCode' => [
+                'nullable',
+                Rule::exists('discountcodes', 'code')->where(
+                    function ($query) {
+                        $query->where('site', Request()->get('_site')->id);
+                    }
+                ),
+              ]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'discountCode.exists' => 'The discount code doesn\'t exist.',
         ];
     }
 
