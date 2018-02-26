@@ -189,6 +189,7 @@ if (isset($old)){
 
             @else
             <!-- Discount Codes -->
+            @if(!isset($old) || $old->discValue == 0)
             <div class="form-group form-inline">
                 {{ Form::label('discountCode', 'Discount Code:') }}
                 {{ Form::text('discountCode', NULL,
@@ -196,6 +197,12 @@ if (isset($old)){
                     'class'=>'form-control'
                 )) }}
             </div>
+            @else
+            <div class="form-group">
+              <span class="discountName">{{ $old->discName == "" ? "Discount:" : $old->discName }}</span>
+              {{ $old->discType == 0 ? "£" : ""}}{{ $old->discValue}}{{ $old->discType == 1 ? "%" : ""}}
+            </div>
+            @endif
 
             @endif
 

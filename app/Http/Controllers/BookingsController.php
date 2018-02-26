@@ -34,7 +34,7 @@ class BookingsController extends Controller
     public function __construct()
     {
         $this->middleware('login');
-        $this->middleware('admin', ['only' => ['edit', 'update', 'indexComplete']]);
+        $this->middleware('admin', ['only' => ['indexComplete']]);
 
         $this->status = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid', 'Paid'];
         $this->statusEdit = ['Unconfirmed', 'Submitted', 'Confirmed', 'Returned', 'Paid', 'Paid (VAT Sorted)'];
@@ -53,27 +53,27 @@ class BookingsController extends Controller
         $site = Request()->get('_site');
         if (CAuth::checkAdmin()) {
             $data = Bookings::orderBy('start')
-                ->where('site', $site->id)
-                ->where('internal', 0)
-                ->where('template', 0)
-                ->where('status', '<', 4)
-                ->Where(
-                    function ($query) {
-                        $query->where('status', '>', 0)
-                            ->orWhere('end', '>=', date('Y-m-d H:i:s'));
-                    }
-                )
+            ->where('site', $site->id)
+            ->where('internal', 0)
+            ->where('template', 0)
+            ->where('status', '<', 4)
+            ->Where(
+                function ($query) {
+                    $query->where('status', '>', 0)
+                        ->orWhere('end', '>=', date('Y-m-d H:i:s'));
+                }
+            )
                 ->get();
         } else {
             $data = Bookings::orderBy('start', 'DESC')
-                ->where('site', $site->id)
-                ->where('email', '=', CAuth::user()->email)
-                ->where('internal', 0)
-                ->where('template', 0)
-                ->get();
+            ->where('site', $site->id)
+            ->where('email', '=', CAuth::user()->email)
+            ->where('internal', 0)
+            ->where('template', 0)
+            ->get();
         }
 
-        return View::make('bookings.index')
+            return View::make('bookings.index')
             ->with(['data' => $data, 'statusArray' => $this->status]);
     }
 
@@ -81,12 +81,12 @@ class BookingsController extends Controller
     {
         $site = Request()->get('_site');
         $data = Bookings::orderBy('start', 'DESC')
-              ->where('site', $site->id)
-              ->where('status', '>=', 4)
-              ->get();
+          ->where('site', $site->id)
+          ->where('status', '>=', 4)
+          ->get();
 
         return View::make('bookings.old')
-            ->with(['data' => $data]);
+        ->with(['data' => $data]);
     }
 
     /**
@@ -103,7 +103,7 @@ class BookingsController extends Controller
         }
         $msg = Common::getContent('newBook');
         return View::make('bookings.edit')
-                ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'allowDateEdit' => true, 'msg' => $msg]);
+        ->with(['statusArray' => [0 => $this->status[0], 2 => $this->status[2]], 'allowDateEdit' => true, 'msg' => $msg]);
     }
 
     /**
@@ -141,10 +141,10 @@ class BookingsController extends Controller
             $booking->email = $request->email;
             $details = Common::getDetailsEmail($request->email);
             if ($details) {
-                $booking->user = $details->name;
-                $booking->isDurham = 1;
+                    $booking->user = $details->name;
+                    $booking->isDurham = 1;
             } else {
-                $booking->isDurham = 0;
+                    $booking->isDurham = 0;
             }
         } else {
             $booking->status = 0;
@@ -155,8 +155,8 @@ class BookingsController extends Controller
 
             if ($request->discountCode != "") {
                 $discount = Discount::where('site', $site->id)
-                                      ->where('code', $request->discountCode)
-                                      ->first();
+                                  ->where('code', $request->discountCode)
+                                  ->first();
                 if ($discount) {
                     $booking->discType = $discount->type;
                     $booking->discValue = $discount->value;
@@ -164,11 +164,11 @@ class BookingsController extends Controller
                 }
             }
         }
-        $booking->save();
+            $booking->save();
         if ($booking->status == 2 && CAuth::checkAdmin(4)) {
             \Mail::to($booking->email)->send(new bookingConfirmed($booking->id));
         }
-        return redirect('/' . $site->slug . '/bookings/' . $booking->id);
+            return redirect('/' . $site->slug . '/bookings/' . $booking->id);
     }
 
     /**
@@ -182,15 +182,15 @@ class BookingsController extends Controller
         $site = Request()->get('_site');
         $booking = Bookings::where('site', $site->id)->findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
-            ->where('booked_items.bookingID', '=', $id)
-            ->where('booked_items.number', '!=', '0')
-            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
-            ->get();
+        ->where('booked_items.bookingID', '=', $id)
+        ->where('booked_items.number', '!=', '0')
+        ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+        ->get();
 
         $customItems = custom_items::select('description', 'number', 'price')
-            ->where('booking', $id)
-            ->where('number', '!=', '0')
-            ->get();
+        ->where('booking', $id)
+        ->where('number', '!=', '0')
+        ->get();
 
         Common::calcAllCosts($booking, $bookedItems, $customItems);
 
@@ -203,14 +203,14 @@ class BookingsController extends Controller
 
         if ($booking->email == CAuth::user()->email || CAuth::checkAdmin()) {
             return View::make('bookings.view')
-                          ->with(
-                              [
-                              'booking' => $booking,
-                              'items' => $bookedItems,
-                              'custom' => $customItems,
-                              'next' => $this->nextStatus
-                              ]
-                          );
+                      ->with(
+                          [
+                          'booking' => $booking,
+                          'items' => $bookedItems,
+                          'custom' => $customItems,
+                          'next' => $this->nextStatus
+                          ]
+                      );
         } else {
             return redirect()->route('items.index', ['site' => $site->slug]);
         }
@@ -228,10 +228,10 @@ class BookingsController extends Controller
         $old = Bookings::where('site', $site->id)->findOrFail($id);
 
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
-            ->where('booked_items.bookingID', '=', $id)
-            ->where('booked_items.number', '!=', '0')
-            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
-            ->get();
+        ->where('booked_items.bookingID', '=', $id)
+        ->where('booked_items.number', '!=', '0')
+        ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+        ->get();
 
         // $start = date_create($old->start);
         // $old->start = date_format($start, "d/m/Y");
@@ -249,8 +249,19 @@ class BookingsController extends Controller
             $old->status = 4;
         }
         $msg = Common::getContent('newBook');
-        return View::make('bookings.edit')
-                      ->with(['old' => $old, 'statusArray' => $this->statusEdit, 'allowDateEdit' => (count($bookedItems) == 0), 'msg' => $msg]);
+
+        if ($old->email == CAuth::user()->email || CAuth::checkAdmin()) {
+            return View::make('bookings.edit')->with(
+                [
+                'old' => $old,
+                'statusArray' => $this->statusEdit,
+                'allowDateEdit' => (count($bookedItems) == 0),
+                'msg' => $msg
+                ]
+            );
+        } else {
+            return redirect()->route('items.index', ['site' => $site->slug]);
+        }
     }
 
     private function manageStatusChange(&$booking, $status)
@@ -289,16 +300,10 @@ class BookingsController extends Controller
     public function update(NewBooking $request, $site, Bookings $booking)
     {
         $site = Request()->get('_site');
-        if ($booking->site != $site->id) {
+        if ($booking->site != $site->id || ((CAuth::user()->email != CAuth::user()->email || $booking->staus > 0) && !CAuth::checkAdmin())) {
             abort(403);
         }
-        $this->validate(
-            $request, [
-            'email' => 'required|email'
-            ]
-        );
         $booking->name = $request->name;
-        $booking->user = $request->user;
 
         if ($request->status <= 3) {
             $booking->vat = $request->vat;
@@ -306,10 +311,10 @@ class BookingsController extends Controller
 
         // Only allow date change if no items are in the order
         $itemCount = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
-            ->where('booked_items.bookingID', '=', $booking->id)
-            ->where('booked_items.number', '!=', '0')
-            ->join('catalog', 'booked_items.item', '=', 'catalog.id')
-            ->count();
+        ->where('booked_items.bookingID', '=', $booking->id)
+        ->where('booked_items.number', '!=', '0')
+        ->join('catalog', 'booked_items.item', '=', 'catalog.id')
+        ->count();
         if ($itemCount == 0) {
             $start = strtotime($request->start)+43200;
             $end = strtotime($request->end)+43200;
@@ -318,41 +323,61 @@ class BookingsController extends Controller
             $booking->days = ($end - $start)/(86400);
         }
 
+        if (CAuth::checkAdmin()) {
+            $booking->user = $request->user;
 
-        if (!($booking->status == 5 && $request->status == 4)) {
-            $this->manageStatusChange($booking, $request->status);
-            $booking->status = $request->status;
-        }
+            if (!($booking->status == 5 && $request->status == 4)) {
+                $this->manageStatusChange($booking, $request->status);
+                $booking->status = $request->status;
+            }
 
-        if ($booking->email != $request->email) {
             $this->validate(
                 $request, [
                 'email' => 'required|email'
                 ]
             );
-            $booking->email = $request->email;
-            $details = Common::getDetailsEmail($request->email);
-            if ($details) {
-                $booking->user = $details->name;
-                $booking->isDurham = 1;
-            } else {
-                $booking->isDurham = 0;
+            if ($booking->email != $request->email) {
+                $this->validate(
+                    $request, [
+                    'email' => 'required|email'
+                    ]
+                );
+                    $booking->email = $request->email;
+                    $details = Common::getDetailsEmail($request->email);
+                if ($details) {
+                    $booking->user = $details->name;
+                    $booking->isDurham = 1;
+                } else {
+                    $booking->isDurham = 0;
+                }
+                    // $details = Common::getDetailsEmail($request->email);
+                    // if ($details) {
+                    //     $booking->email = $request->email;
+                    //     $booking->user = $details->name;
+                    // }
             }
-            // $details = Common::getDetailsEmail($request->email);
-            // if ($details) {
-            //     $booking->email = $request->email;
-            //     $booking->user = $details->name;
-            // }
+
+            $booking->discName = $request->discName;
+            $booking->discType = $request->discType;
+            $booking->discValue = $request->discValue;
+
+            $booking->discDays = $request->discDays;
+
+            $booking->fineDesc = $request->fineDesc;
+            $booking->fineValue = $request->fineValue;
+        } else {
+            if ($request->discountCode != "") {
+                $discount = Discount::where('site', $site->id)
+                                  ->where('code', $request->discountCode)
+                                  ->first();
+                if ($discount) {
+                    $booking->discType = $discount->type;
+                    $booking->discValue = $discount->value;
+                    $booking->discName = $discount->name;
+                }
+            }
         }
 
-        $booking->discName = $request->discName;
-        $booking->discType = $request->discType;
-        $booking->discValue = $request->discValue;
-
-        $booking->discDays = $request->discDays;
-
-        $booking->fineDesc = $request->fineDesc;
-        $booking->fineValue = $request->fineValue;
 
         $booking->save();
 
