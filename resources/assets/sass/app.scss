@@ -300,7 +300,7 @@ a:focus {
     color: $statusGreen;
   }
 }
-// Home paeg styleing
+// Home page styleing
 
 img#homeLogo {
   max-width: 100%;
@@ -427,5 +427,12 @@ div#files {
 
   button {
     display: table-cell;
+  }
+}
+// Form Styles
+
+.form-group {
+  .discountName {
+    font-weight: bold;
   }
 }

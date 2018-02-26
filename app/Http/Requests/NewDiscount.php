@@ -37,7 +37,7 @@ class NewDiscount extends FormRequest
         'code' => [
         'required',
         Rule::unique('discount_codes', 'code')->ignore($id, 'id')->where(
-            function ($query) use (&$id) {
+            function ($query) {
                 $query->where('site', Request()->get('_site')->id);
             }
         ),
