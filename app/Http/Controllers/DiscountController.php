@@ -84,7 +84,7 @@ class DiscountController extends Controller
      * @param  \App\Discount            $discount
      * @return \Illuminate\Http\Response
      */
-    public function update($s, Request $request, Discount $discount)
+    public function update($s, NewDiscount $request, Discount $discount)
     {
         $site = Request()->get('_site');
         if ($site->id == $discount->site) {

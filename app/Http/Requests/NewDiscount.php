@@ -24,13 +24,20 @@ class NewDiscount extends FormRequest
      */
     public function rules()
     {
+        // Get current row id for uniqueness check on update
+        if (count($this->discount)) {
+            $id = $this->discount->id;
+        } else {
+            $id = 0;
+        }
+
         return [
         'discType' => 'integer|min:0|max:1',
         'discValue' => 'numeric|min:0',
         'code' => [
         'required',
-        Rule::unique('discount_codes', 'code')->where(
-            function ($query) {
+        Rule::unique('discount_codes', 'code')->ignore($id, 'id')->where(
+            function ($query) use (&$id) {
                 $query->where('site', Request()->get('_site')->id);
             }
         ),
