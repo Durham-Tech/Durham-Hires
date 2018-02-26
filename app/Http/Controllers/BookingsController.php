@@ -6,7 +6,7 @@ use App\Bookings;
 use App\booked_items;
 use App\custom_items;
 use App\Discount;
-use App\Http\Requests\addItems;
+use App\Http\Requests\AddItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use View;
@@ -448,7 +448,7 @@ class BookingsController extends Controller
         }
     }
 
-    public function updateItems(addItems $request, $site, $id)
+    public function updateItems(AddItems $request, $site, $id)
     {
         $site = Request()->get('_site');
         $items = new Items;
