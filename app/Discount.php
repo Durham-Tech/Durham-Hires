@@ -8,6 +8,6 @@ class Discount extends Model
 {
     //
     protected $guarded = ['id'];
-    protected $table = 'discountCodes';
+    protected $table = 'discount_codes';
     public $timestamps = false;
 }

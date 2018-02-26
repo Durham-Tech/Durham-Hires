@@ -39,7 +39,7 @@ class NewBooking extends FormRequest
             'VAT' => 'boolean|min:0',
             'discountCode' => [
                 'nullable',
-                Rule::exists('discountcodes', 'code')->where(
+                Rule::exists('discount_codes', 'code')->where(
                     function ($query) {
                         $query->where('site', Request()->get('_site')->id);
                     }

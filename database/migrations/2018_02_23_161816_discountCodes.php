@@ -14,7 +14,7 @@ class DiscountCodes extends Migration
     public function up()
     {
         Schema::create(
-            'discountCodes', function (Blueprint $table) {
+            'discount_codes', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('code', 255);
                 $table->string('name', 255);
@@ -37,6 +37,6 @@ class DiscountCodes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('discountCodes');
+        Schema::dropIfExists('discount_codes');
     }
 }

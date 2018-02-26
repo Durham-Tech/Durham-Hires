@@ -29,7 +29,7 @@ class NewDiscount extends FormRequest
         'discValue' => 'numeric|min:0',
         'code' => [
         'required',
-        Rule::unique('discountcodes', 'code')->where(
+        Rule::unique('discount_codes', 'code')->where(
             function ($query) {
                 $query->where('site', Request()->get('_site')->id);
             }
@@ -41,7 +41,7 @@ class NewDiscount extends FormRequest
     public function messages()
     {
         return [
-        'discountCode.unique' => 'This code is already in use.',
+        'code.unique' => 'This code is already in use.',
         'discValue.numeric' => 'The discount value is invalid.',
         'discValue.min' => 'The discount value cannot be negative.',
         ];
