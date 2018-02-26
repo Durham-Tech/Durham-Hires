@@ -76,8 +76,9 @@ $active = 'discounts';
                 {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'
                 )) !!}
+                <a class="btn btn-primary" href="{{ route('discounts.index', $site->slug) }}">Cancel</a>
+            </div>
         {!! Form::close() !!}
-        <a class="btn btn-primary" href="{{ route('discounts.index', $site->slug) }}">Cancel</a>
 @endsection
 
 @section('scripts')
@@ -86,12 +87,11 @@ const app = new Vue({
     el: '#app',
     data: {
       @if (isset($old))
-      disc:'{{ $old->discValue }}',
-      discountType:{{ $old->discType }},
-      @else {
-      disc:'',
-      discountType: '0',
-      }
+        disc:'{{ $old->value }}',
+        discountType:{{ $old->type }}
+      @else
+        disc:'',
+        discountType: 0
       @endif
     },
 

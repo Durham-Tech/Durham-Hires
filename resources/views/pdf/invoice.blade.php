@@ -95,7 +95,7 @@
               @endforeach
               @if ($booking->discount != 0)
               <tr id="discRow">
-                <td colspan="3" class="tblBold">Discount</td>
+                <td colspan="3" class="tblBold">{{ empty($booking->discName) ? 'Discount' : $booking->discName }}</td>
                 <td>-£{{ number_format((float)$booking->discount, 2) }}</td>
               </tr>
               @endif

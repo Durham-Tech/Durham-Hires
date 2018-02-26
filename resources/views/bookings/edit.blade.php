@@ -133,11 +133,14 @@ if (isset($old)){
                   )
                 ) }}
             </div>
-            <div class='form-group form-inline'>
-                {{ Form::label('discDays', 'Free days: ') }}
-                {{ Form::text('discDays', NULL,
+
+            <!-- Description -->
+            <div class="form-group form-inline">
+                {{ Form::label('discName', 'Description: ') }}
+                {{ Form::text('discName', NULL,
                 array(
-                    'class'=>'form-control customNum',
+                    'class'=>'form-control',
+                    'placeholder'=>'Discount'
                 )) }}
             </div>
             <div class='form-group form-inline'>
@@ -160,6 +163,14 @@ if (isset($old)){
                     '@change'=>'discUpdate',
                 )) }}
                 <span v-text="(discountType == '1')?'%':''"></span>
+            </div>
+
+            <div class='form-group form-inline'>
+                {{ Form::label('discDays', 'Free days: ') }}
+                {{ Form::text('discDays', NULL,
+                array(
+                    'class'=>'form-control customNum',
+                )) }}
             </div>
 
             <div class='form-group'>

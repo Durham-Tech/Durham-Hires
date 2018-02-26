@@ -345,9 +345,12 @@ class BookingsController extends Controller
             // }
         }
 
-        $booking->discDays = $request->discDays;
+        $booking->discName = $request->discName;
         $booking->discType = $request->discType;
         $booking->discValue = $request->discValue;
+
+        $booking->discDays = $request->discDays;
+
         $booking->fineDesc = $request->fineDesc;
         $booking->fineValue = $request->fineValue;
 

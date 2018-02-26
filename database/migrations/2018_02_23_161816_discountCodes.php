@@ -25,7 +25,7 @@ class DiscountCodes extends Migration
         );
         Schema::table(
             'bookings', function (Blueprint $table) {
-                $table->string('discName')->default('');
+                $table->string('discName')->nullable();
             }
         );
     }
