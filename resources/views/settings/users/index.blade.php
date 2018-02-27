@@ -26,8 +26,8 @@ $active = 'admin';
                         <th>Name</th>
                         <th>Email</th>
                         <th>Hires Manager</th>
-                        <th>Treasuer</th>
-                        <th>Admin</th>
+                        <th>Treasurer</th>
+                        <th>Permission Level</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -41,7 +41,10 @@ $active = 'admin';
                           {{ Form::checkbox('treasurer['. $user->id .']', 1, $user->privileges & 1)}}
                         </td>
                         <td>
-                          {{ Form::checkbox('admin['. $user->id .']', 1, $user->privileges & 4)}}
+                          <!-- {{ Form::checkbox('admin['. $user->id .']', 1, $user->privileges & 4)}} -->
+                          {{ Form::select('permission['. $user->id .']', [0 => 'None', 2 => 'Internal Only', 4 => 'Admin'],
+                              ($user->privileges & 4) ? 4 : ($user->privileges & 2 ? 2 : 0)
+                           ) }}
                         </td>
                         <td>
                           <a href="#" class="deleteLink" data-idvalue="{{ $user->id }}">Delete</a>
