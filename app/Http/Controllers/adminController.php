@@ -86,7 +86,7 @@ class AdminController extends Controller
                 $priv += 1;
             }
             if ($request->hires == $user->id) {
-                if ($priv & 4 == 4) {
+                if (($priv & 4) == 4) {
                     $hiresEmail = $user->email;
                 } else {
                     return redirect()->route('admin.index', $site->slug)->with(['error' => 'The hires manager has to be an admin.']);
