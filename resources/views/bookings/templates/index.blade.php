@@ -13,6 +13,7 @@ $active = 'internal';
 
             @if ($templates)
 
+            <div class="table-responsive">
                 <table class="table">
                 <thead>
                     <tr>
@@ -31,6 +32,7 @@ $active = 'internal';
                     @endforeach
                     </tbody>
                   </table>
+                </div>
 
             @endif
 

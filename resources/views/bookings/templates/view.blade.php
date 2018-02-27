@@ -16,7 +16,7 @@ $active = 'internal';
 
         @if (count($items) > 0)
         <?php $total = 0; ?>
-        <div id="items_table">
+        <div id="items_table table-responsive">
           <table class="table table-bordered">
             <thead>
               <tr>

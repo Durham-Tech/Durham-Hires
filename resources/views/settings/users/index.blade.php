@@ -19,6 +19,7 @@ $active = 'admin';
                 'route' => ['admin.save', $site->slug],
                 'class' => 'form')
             ) !!}
+            <div class="table-responsive">
                 <table class="table userTable">
                 <thead>
                     <tr>
@@ -49,6 +50,7 @@ $active = 'admin';
                     @endforeach
                     </tbody>
                   </table>
+                </div>
 
                 {!! Form::submit('Save',
                 array('class'=>'btn btn-primary'

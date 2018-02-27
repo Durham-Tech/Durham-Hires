@@ -6,6 +6,7 @@ $active = 'discounts';
 
 @section('page')
 
+            <div class="table-responsive">
                 <table class="table">
                 <thead>
                     <tr>
@@ -32,6 +33,7 @@ $active = 'discounts';
                   @endforeach
                   </tbody>
                 </table>
+              </div>
 
               <a class="btn btn-primary" href="{{ route('discounts.create', $site->slug) }}">Add new</a>
 

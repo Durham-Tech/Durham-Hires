@@ -12,6 +12,7 @@ $active = 'current';
 
             @if (!($data->isEmpty()))
 
+              <div class="table-responsive">
                 <table class="table">
                 <thead>
                     <tr>
@@ -34,6 +35,7 @@ $active = 'current';
                 @endforeach
                 </tbody>
               </table>
+            </div>
 
             @else
 
