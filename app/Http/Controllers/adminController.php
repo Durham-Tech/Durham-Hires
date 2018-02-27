@@ -58,7 +58,7 @@ class AdminController extends Controller
         $userDetails = Common::getDetailsEmail($requestUser->email);
         $user->email = $userDetails->email;
         $user->user = $userDetails->username;
-        $user->privileges = 4;
+        $user->privileges = 0;
         $user->name = $userDetails->name;
         $user->site = $site->id;
         $user->save();
@@ -74,25 +74,27 @@ class AdminController extends Controller
     public function save(Request $request)
     {
         $site = $request->get('_site');
-        if (!isset($request->admin)) {
+        if (!in_array('4', $request->permission)) {
             return redirect()->route('admin.index', $site->slug)->with(['error' => 'At least one user needs to be an admin.']);
         }
         $hiresEmail = '';
         $users = Admin::where('site', $site->id)
-            ->get();
+        ->get();
         foreach ($users as $user) {
-            $priv = 0;
+            $priv = intval($request->permission[$user->id]);
             if (isset($request->treasurer[$user->id])) {
                 $priv += 1;
             }
-            if (isset($request->admin[$user->id])) {
-                $priv += 4;
-                if ($request->hires == $user->id) {
+            if ($request->hires == $user->id) {
+                if ($priv & 4 == 4) {
                     $hiresEmail = $user->email;
+                } else {
+                    return redirect()->route('admin.index', $site->slug)->with(['error' => 'The hires manager has to be an admin.']);
                 }
             }
-            $user->privileges = $priv;
-            $user->save();
+
+                $user->privileges = $priv;
+                $user->save();
         }
 
         // Sets hires manager details
