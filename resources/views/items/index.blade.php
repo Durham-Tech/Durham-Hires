@@ -30,7 +30,7 @@ if ($edit) {
               <ul class="nav nav-tabs">
                 @foreach($data as $category)
                     @if ($category->sub == 0)
-                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ str_slug($category->name, '-').'_'.$loop->iteration }}">{{ $category->name }}</a></li>
+                    <li {{ ($loop->first) ? 'class=active' : '' }} ><a href="#{{ $category->slug }}">{{ $category->name }}</a></li>
                     @endif
                 @endforeach
                 @if ($edit && $external)
@@ -43,7 +43,7 @@ if ($edit) {
 
                 @if ($category->sub == 0)
                 {!! ($loop->first) ? '' : '</table></div>' !!}
-                <div id="{{ str_slug($category->name, '-').'_'.$loop->iteration }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
+                <div id="{{ $category->slug }}" class="tab-pane fade table-responsive {{ ($loop->first) ? 'in active' : '' }} ">
                 <table class="table ItemsTable">
                 <thead>
                     <tr>
