@@ -7,6 +7,7 @@ $active = 'old';
 @section('page')
             @if ($data)
 
+              <div class="table-responsive">
                 <table class="table">
                 <thead>
                     <tr>
@@ -29,6 +30,7 @@ $active = 'old';
                 @endforeach
                 </tbody>
               </table>
+            </div>
 
             @endif
 

@@ -63,7 +63,7 @@ class SetupDb extends Migration
             'catalog', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('description', 255);
-                $table->string('details', 2000)->nullable();
+                $table->text('details')->nullable();
                 $table->string('image', 255)->nullable();
                 $table->integer('quantity');
                 $table->integer('category');
@@ -95,7 +95,7 @@ class SetupDb extends Migration
         Schema::create(
             'custom_items', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('booking')->unique();
+                $table->integer('booking')->index();
                 $table->string('description', 255);
                 $table->integer('number');
                 $table->float('price');

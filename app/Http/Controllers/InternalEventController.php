@@ -17,7 +17,7 @@ class InternalEventController extends Controller
     public function __construct()
     {
         $this->middleware('login');
-        $this->middleware('admin');
+        $this->middleware('admin:6');
     }
 
     public function index()
@@ -92,7 +92,7 @@ class InternalEventController extends Controller
     public function show($s, $id)
     {
         $site = Request()->get('_site');
-        $booking = Bookings::where('site', $site->id)->findOrFail($id);
+        $booking = Bookings::where('site', $site->id)->where('internal', 1)->findOrFail($id);
         $bookedItems = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
             ->where('booked_items.bookingID', '=', $booking->id)
             ->where('booked_items.number', '!=', '0')

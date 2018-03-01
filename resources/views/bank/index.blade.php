@@ -32,7 +32,7 @@
     'route' => ['bank.submit', $site->slug],
     'class' => 'form')
   ) !!}
-  
+
   <input name="attempt" value="{{ $attempt }}" type="hidden">
 
     @if (count($errors) > 0)
@@ -77,6 +77,7 @@
 
   <div class='vatTable'>
     <h1>Paid VAT</h1>
+    <div class="table-responsive">
     <table class="table">
       <thead>
           <tr>
@@ -105,6 +106,7 @@
       @endforeach
       </tbody>
     </table>
+  </div>
 
   </div>
 </div>

@@ -115,6 +115,7 @@ class CategoryController extends Controller
         $site = Request()->get('_site');
         $cats = [];
         $data = Category::where('site', $site->id)
+          ->where('id', '!=', $id)
           ->orderBy('orderOf')
           ->get();
 

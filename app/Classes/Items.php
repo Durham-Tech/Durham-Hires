@@ -35,14 +35,16 @@ class Category
 {
     public $all = [];
     public $name;
+    public $slug;
     public $sub;
     public $id;
 
-    public function __construct($id, $name, $sub)
+    public function __construct($id, $name, $sub, $slug = "")
     {
         $this->id = $id;
         $this->name = $name;
         $this->sub = $sub;
+        $this->slug = $slug;
     }
 }
 
@@ -66,6 +68,9 @@ class Items
     {
         $all = [];
 
+        $slugs = ['custom'];
+        $slugItter = 2;
+
         $cats = \App\Category::where('site', $site)
               ->orderBy('orderOf')
               ->orderBy('id')
@@ -75,7 +80,14 @@ class Items
 
         foreach ($cats as $cat) {
             if (empty($cat->subCatOf)) {
-                $all[$cat->id] = new Category($cat->id, $cat->name, false);
+                $slug = str_slug($cat->name, '-');
+                if (in_array($slug, $slugs)) {
+                    $slug .= '_' . $slugItter;
+                    $slugItter++;
+                } else {
+                    $slugs[] = $slug;
+                }
+                $all[$cat->id] = new Category($cat->id, $cat->name, false, $slug);
                 // $all[] = array($cat->name, FALSE);
 
                 foreach ($cats as $subCat) {

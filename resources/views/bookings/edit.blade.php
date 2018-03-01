@@ -84,30 +84,19 @@ if (isset($old)){
               </div>
             @endif
 
+            <!-- Date pickers -->
             <!-- TODO: Display today's date on datepicker -->
             <div class='form-group form-inline'>
                 {{ Form::label('start', 'Start date: ') }}
                 <vue-datepicker name="start" :highlighted="highlighted" :disabled="disabled" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
-                <!-- <div class="input-group date" id="start">
-                  {{ Form::date('start', \Carbon\Carbon::now(),
-                  array(
-                      'class'=>'form-control datepicker',
-                  )) }}
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                </div> -->
             </div>
+
             <div class='form-group form-inline'>
                 {{ Form::label('end', 'Return date: ') }}
                 <vue-datepicker name="end" :highlighted="highlighted" :disabled="endDisabled" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
-                <!-- <div class="input-group date" id="end">
-                  {{ Form::date('end', \Carbon\Carbon::now(),
-                  array(
-                      'class'=>'form-control',
-                  )) }}
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                </div> -->
             </div>
 
+            <!-- VAT Options -->
             <div class='form-group form-inline'>
                 {{ Form::label('vat', 'VAT Rate: ') }}
                 {{ Form::select('vat', [0 => '0% VAT', 1 => '20% VAT'], (isset($old)) ? $old->vat : '0',
@@ -116,7 +105,9 @@ if (isset($old)){
                 )) }}
             </div>
 
+            <!-- Admin only options -->
             @if (CAuth::checkAdmin(4))
+            <!-- Set hire status -->
             <div class='form-group form-inline'>
                 {{ Form::label('status', 'Hire Status: ') }}
                 {{ Form::select('status', $statusArray, (isset($old)) ? $old->status : '2',
@@ -133,11 +124,14 @@ if (isset($old)){
                   )
                 ) }}
             </div>
-            <div class='form-group form-inline'>
-                {{ Form::label('discDays', 'Free days: ') }}
-                {{ Form::text('discDays', NULL,
+
+            <!-- Description -->
+            <div class="form-group form-inline">
+                {{ Form::label('discName', 'Description: ') }}
+                {{ Form::text('discName', NULL,
                 array(
-                    'class'=>'form-control customNum',
+                    'class'=>'form-control',
+                    'placeholder'=>'Discount'
                 )) }}
             </div>
             <div class='form-group form-inline'>
@@ -162,6 +156,14 @@ if (isset($old)){
                 <span v-text="(discountType == '1')?'%':''"></span>
             </div>
 
+            <div class='form-group form-inline'>
+                {{ Form::label('discDays', 'Free days: ') }}
+                {{ Form::text('discDays', NULL,
+                array(
+                    'class'=>'form-control customNum',
+                )) }}
+            </div>
+
             <div class='form-group'>
                 {{ Form::label('fineDesc', 'Add a fine',
                   array(
@@ -184,6 +186,24 @@ if (isset($old)){
                 )) }}
             </div>
             @endif
+
+            @else
+            <!-- Discount Codes -->
+            @if(!isset($old) || $old->discValue == 0)
+            <div class="form-group form-inline">
+                {{ Form::label('discountCode', 'Discount Code:') }}
+                {{ Form::text('discountCode', NULL,
+                array(
+                    'class'=>'form-control'
+                )) }}
+            </div>
+            @else
+            <div class="form-group">
+              <span class="discountName">{{ $old->discName == "" ? "Discount:" : $old->discName }}</span>
+              {{ $old->discType == 0 ? "£" : ""}}{{ $old->discValue}}{{ $old->discType == 1 ? "%" : ""}}
+            </div>
+            @endif
+
             @endif
 
             <div class="form-group" id="buttons">
@@ -219,10 +239,10 @@ const app = new Vue({
       },
       @else
       disabled: {
-          to: (function(d){ d.setDate(d.getDate()-1); return d})(new Date),
+          to: new Date('0001-12-31'),
       },
       endDisabled: {
-          to: new Date('{{ $old->end }}'),
+          to: new Date('0001-12-31'),
       },
       @endif
       @else

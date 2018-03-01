@@ -8,6 +8,7 @@ $active = 'categories';
 
             @if ($cats)
 
+            <div class="table-responsive">
                 <table class="table">
                 <thead>
                     <tr>
@@ -24,6 +25,7 @@ $active = 'categories';
                     @endforeach
                     </tbody>
                   </table>
+                </div>
 
             @endif
             <a class="btn btn-primary" href="{{ route('categories.create', $site->slug) }}">Add new</a>

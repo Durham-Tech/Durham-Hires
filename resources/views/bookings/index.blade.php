@@ -6,12 +6,13 @@ $active = 'current';
 
 @section('page')
 
-            @if (!CAuth::checkAdmin(4) && ($site->flags & 1))
+            @if (!CAuth::checkAdmin(6) && ($site->flags & 1))
               <a class="btn btn-primary" href="{{ route('bookings.create', $site->slug) }}">Add new</a>
             @endif
 
             @if (!($data->isEmpty()))
 
+              <div class="table-responsive">
                 <table class="table">
                 <thead>
                     <tr>
@@ -34,6 +35,7 @@ $active = 'current';
                 @endforeach
                 </tbody>
               </table>
+            </div>
 
             @else
 
