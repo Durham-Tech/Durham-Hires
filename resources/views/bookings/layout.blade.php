@@ -28,7 +28,7 @@
     <div class="col-md-3 submenu">
       <ul class="nav nav-pills nav-stacked">
         @if ($site->flags & 1)
-        <li class="{{ ($active == 'new') ? 'active' : '' }}">{{ link_to_route('bookings.create', 'New Hire', $site->slug) }}</li>
+        <li class="{{ ($active == 'new') ? 'active' : '' }}">{{ link_to_route('bookings.create', 'New External Hire', $site->slug) }}</li>
         <li class="{{ ($active == 'current') ? 'active' : '' }}">{{ link_to_route('bookings.index', 'My Hires', $site->slug) }}</li>
         @endif
         <li class="{{ ($active == 'internal') ? 'active' : '' }}">{{ link_to_route('internal.index', 'Internal Events', $site->slug) }}</li>

@@ -68,7 +68,7 @@ class Items
     {
         $all = [];
 
-        $slugs = [];
+        $slugs = ['custom'];
         $slugItter = 2;
 
         $cats = \App\Category::where('site', $site)
