@@ -114,8 +114,15 @@ class BookingsController extends Controller
      */
     public function store(NewBooking $request)
     {
-        $site = Request()->get('_site');
+        $this->validate(
+            $request, [
+            'start' => 'nullable|date',
+            'end' => 'nullable|date|after:start',
+            ]
+        );
 
+        $site = Request()->get('_site');
+        
         // Reject if bookings diabled
         if (!($site->flags & 1)) {
             return redirect()->route('home', ['site' => $site->slug]);
@@ -308,6 +315,7 @@ class BookingsController extends Controller
         if ($request->status <= 3) {
             $booking->vat = $request->vat;
         }
+        var_dump($request->end);
 
         // Only allow date change if no items are in the order
         $itemCount = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
@@ -315,7 +323,7 @@ class BookingsController extends Controller
         ->where('booked_items.number', '!=', '0')
         ->join('catalog', 'booked_items.item', '=', 'catalog.id')
         ->count();
-        if ($itemCount == 0) {
+        if ($itemCount == 0 && !is_null($request->start) && !is_null($request->end)) {
             $start = strtotime($request->start)+43200;
             $end = strtotime($request->end)+43200;
             $booking->start = date("Y-m-d H:i:s", $start);
@@ -391,7 +399,6 @@ class BookingsController extends Controller
         }
 
         return redirect('/' . $site->slug . '/bookings/' . $booking->id);
-
     }
 
     public function updateStatus(Request $request, $site, Bookings $booking)
