@@ -136,7 +136,7 @@ if ($booking->status < 4){
 
   <!-- Delete -->
   @if ($booking->status < 3)
-  {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+  {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm']) }}
     <button class="btn btn-primary" type="submit">Delete</button>
   {{ Form::close() }}
   @endif
@@ -163,7 +163,7 @@ if ($booking->status < 4){
     {{ Form::close() }}
 
     <!-- Delete -->
-    {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+    {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm']) }}
       <button class="btn btn-primary" type="submit">Delete</button>
     {{ Form::close() }}
   @endif
@@ -174,4 +174,13 @@ if ($booking->status < 4){
   {!! link_to_route('bookings.index', 'Back', array($site->slug), array('class' => 'btn btn-primary')) !!}
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+$('.reqConfirm').submit(function() {
+    var c = confirm("Are you sure you want to delete?");
+    return c; //you can just return c because it will be true or false
+});
+</script>
 @endsection
