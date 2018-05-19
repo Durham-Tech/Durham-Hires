@@ -114,6 +114,13 @@ class BookingsController extends Controller
      */
     public function store(NewBooking $request)
     {
+        $this->validate(
+            $request, [
+            'start' => 'nullable|date',
+            'end' => 'nullable|date|after:start',
+            ]
+        );
+
         $site = Request()->get('_site');
 
         // Reject if bookings diabled
@@ -308,6 +315,7 @@ class BookingsController extends Controller
         if ($request->status <= 3) {
             $booking->vat = $request->vat;
         }
+        var_dump($request->end);
 
         // Only allow date change if no items are in the order
         $itemCount = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')
@@ -315,7 +323,7 @@ class BookingsController extends Controller
         ->where('booked_items.number', '!=', '0')
         ->join('catalog', 'booked_items.item', '=', 'catalog.id')
         ->count();
-        if ($itemCount == 0) {
+        if ($itemCount == 0 && !is_null($request->start) && !is_null($request->end)) {
             $start = strtotime($request->start)+43200;
             $end = strtotime($request->end)+43200;
             $booking->start = date("Y-m-d H:i:s", $start);
@@ -391,7 +399,6 @@ class BookingsController extends Controller
         }
 
         return redirect('/' . $site->slug . '/bookings/' . $booking->id);
-
     }
 
     public function updateStatus(Request $request, $site, Bookings $booking)
@@ -478,11 +485,14 @@ class BookingsController extends Controller
                 }
             }
 
-            if (!$booking->internal && !$booking->template) {
+            if (!$booking->internal && !$booking->template && CAuth::checkAdmin()) {
                 // Update existing custom items / delete removed items by looping database
+
+                $request->cid = (array)$request->cid; // Make sure array of item ids is actually an array instead of single value or null
+
                 foreach ($custom_items as $item){
                     // Does the database item exist in the request
-                    $key = array_search($item->id, $request->id);
+                    $key = array_search($item->id, $request->cid);
                     if ($key !== false) {
                         // Item exists so update
                         $item->description = $request->description[$key];
@@ -496,8 +506,7 @@ class BookingsController extends Controller
                 }
 
                 // Add any new items to database
-                $request->id = (array)$request->id; // Make sure array of item ids is actually an array instead of single value
-                foreach ($request->id as $key => $cus_id){ // Loop request items
+                foreach ($request->cid as $key => $cus_id){ // Loop request items
                     if (is_null($cus_id)) {
                         // Item doesn't exist in database so check valid and add to database
                         if(!empty($request->description[$key]) && !empty($request->price[$key]) && !empty($request->quantity[$key])) {

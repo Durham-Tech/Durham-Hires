@@ -19,3 +19,5 @@ public/js/app.js
 composer\.lock
 
 authFiles/
+
+package-lock\.json

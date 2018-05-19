@@ -125,7 +125,7 @@ if ($edit) {
                     </div>
                   @foreach ($custom as $item)
                     <div class="table-row">
-                        {{ Form::hidden('id[]', $item->id) }}
+                        {{ Form::hidden('cid[]', $item->id) }}
                         <div class="table-max">
                         {{ Form::text('description[]', $item->description,
                         array(
@@ -155,7 +155,7 @@ if ($edit) {
                     </div>
                   @endforeach
                     <div class="table-row">
-                        {{ Form::hidden('id[]', NULL) }}
+                        {{ Form::hidden('cid[]', NULL) }}
                         <div class="table-max">
                         {{ Form::text('description[]', NULL,
                         array(
@@ -232,7 +232,7 @@ if ($edit) {
 
     $(".add-button").click(function(e){ //on add input button click
         e.preventDefault();
-            $(".custom-item-table").append('<div class="table-row"> <input name="id[]" type="hidden"> <div class="table-max"> <input class="form-control" placeholder="Item Description" name="description[]" type="text"> </div> <div class="table-set"> <input class="form-control" placeholder="Quantity" name="quantity[]" type="number"> </div> <div class="table-pound">£</div> <div class="table-set"> <input class="form-control" placeholder="Item Price" onchange="moneyInput(this)" name="price[]" type="text"> </div> <div class="table-delete"> <a href="#" class="delete-row" onclick="deleteCustomItem(this);return false;">Delete</a> </div> </div>'); //add input box
+            $(".custom-item-table").append('<div class="table-row"> <input name="cid[]" type="hidden"> <div class="table-max"> <input class="form-control" placeholder="Item Description" name="description[]" type="text"> </div> <div class="table-set"> <input class="form-control" placeholder="Quantity" name="quantity[]" type="number"> </div> <div class="table-pound">£</div> <div class="table-set"> <input class="form-control" placeholder="Item Price" onchange="moneyInput(this)" name="price[]" type="text"> </div> <div class="table-delete"> <a href="#" class="delete-row" onclick="deleteCustomItem(this);return false;">Delete</a> </div> </div>'); //add input box
     });
 
 function deleteCustomItem(row){

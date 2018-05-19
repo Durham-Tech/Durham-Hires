@@ -29,8 +29,8 @@ class NewBooking extends FormRequest
         return [
             //
             'name' => 'required',
-            'start' => 'required|date',
-            'end' => 'required|date|after:start',
+            'start' => 'nullable|date',
+            'end' => 'nullable|date|after:start',
             'discDays' => 'integer|min:0',
             'discType' => 'integer|min:0|max:1',
             'discValue' => 'numeric|min:0',
