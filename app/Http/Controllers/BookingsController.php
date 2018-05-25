@@ -54,16 +54,33 @@ class BookingsController extends Controller
         if (CAuth::checkAdmin()) {
             $data = Bookings::orderBy('start')
             ->where('site', $site->id)
-            ->where('internal', 0)
             ->where('template', 0)
             ->where('status', '<', 4)
             ->Where(
                 function ($query) {
                     $query->where('status', '>', 0)
+                        ->where('internal', 0)
                         ->orWhere('end', '>=', date('Y-m-d H:i:s'));
                 }
             )
                 ->get();
+        } else if (CAuth::checkAdmin(2)) {
+            $data = Bookings::orderBy('start', 'DESC')
+            ->where('site', $site->id)
+            ->where(
+                function ($query) {
+                    $query->where('email', '=', CAuth::user()->email)
+                        ->where('internal', 0)
+                        ->orWhere(
+                            function ($query) {
+                                $query->where('internal', 1)
+                                    ->where('end', '>=', date('Y-m-d H:i:s'));
+                            }
+                        );
+                }
+            )
+            ->where('template', 0)
+            ->get();
         } else {
             $data = Bookings::orderBy('start', 'DESC')
             ->where('site', $site->id)
