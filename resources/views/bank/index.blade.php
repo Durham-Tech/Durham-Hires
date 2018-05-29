@@ -18,7 +18,7 @@
 </div>
 @elseif ($success == 3)
 <div class="alert alert-warning">
-  The referance doesn't match-up. Please check and try again.
+  The reference doesn't match-up. Please check and try again.
 </div>
 @endif
 @elseif ($attempt > 2)
@@ -47,7 +47,7 @@
     @endif
 
   <div class="form-group form-inline">
-    {{ Form::label('ref', 'Bank Referance: ') }}
+    {{ Form::label('ref', 'Bank Reference: ') }}
     {{ Form::text('ref', $ref,
       array(
         'class' => 'form-control'

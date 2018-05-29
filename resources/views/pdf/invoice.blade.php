@@ -55,7 +55,7 @@
               {{ $booking->email }}
         </p>
         <p id='invoiceNo'>
-            <b>Invoice referance: </b>
+            <b>Invoice reference: </b>
               {{ $site->invoicePrefix . $booking->invoiceNum  }}
         </p>
       </td>

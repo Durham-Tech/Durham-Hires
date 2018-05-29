@@ -195,7 +195,7 @@ $active = 'style';
   </div>
 
   <div class='form-group form-inline'>
-    {{ Form::label('invoicePrefix', 'Payment referance prefix: ') }}
+    {{ Form::label('invoicePrefix', 'Payment reference prefix: ') }}
     {{ Form::text('invoicePrefix', $site->invoicePrefix,
     array(
         'class'=>'form-control',
