@@ -13,12 +13,13 @@ class DatabaseSeeder extends Seeder
     {
         DB::table('admins')->insert(
             [
-            'name' => 'Your name here',
-            'user' => 'Your CIS account here',
-            'email' => 'Your email here',
+            'name' => 'Your name',
+            'user' => 'Your CIS account',
+            'email' => 'Your email',
             'privileges' => '1',
-            'site' => 0
+            'site' => '0'
             ]
         );
+
     }
 }
