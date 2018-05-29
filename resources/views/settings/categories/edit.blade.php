@@ -59,7 +59,7 @@ $active = 'categories';
                 )) !!}
         {!! Form::close() !!}
         @if(isset($old))
-        {{ Form::open(['route' => ['categories.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['categories.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif

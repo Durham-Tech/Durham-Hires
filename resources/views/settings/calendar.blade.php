@@ -36,13 +36,15 @@ $active = 'calendar';
 
   $('#updateAuth').on('click', function(e){
       e.preventDefault();
-      var ajax = $.ajax({
-          url: "/{{ $site->slug }}/settings/calendar/refreshAuth",
-          type: 'post',
-          success: function(){
-            window.location.reload();
-          }
-      });
+      if (confirm('WARNING: This will disconnect anybody currently using this service. Do you want to continue?')){
+        var ajax = $.ajax({
+            url: "/{{ $site->slug }}/settings/calendar/refreshAuth",
+            type: 'post',
+            success: function(){
+              window.location.reload();
+            }
+        });
+      }
   });
   </script>
 @endsection

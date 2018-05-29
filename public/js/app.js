@@ -959,7 +959,6 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker__);
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -982,6 +981,17 @@ Vue.component('example', __webpack_require__(34));
 // const app = new Vue({
 //     el: '.app',
 // });
+
+
+// JQuery scripts
+$('.reqConfirm').submit(function () {
+  var text = $(this).data('confirm');
+  if (text == null) {
+    text = "Are you sure?";
+  }
+  var c = confirm(text);
+  return c; //you can just return c because it will be true or false
+});
 
 /***/ }),
 /* 10 */

@@ -43,7 +43,7 @@ $active = 'internal';
 
 {!! link_to_route('templates.edit', 'Edit', array($site->slug, $template->id), array('class' => 'btn btn-primary')) !!}
 
-{{ Form::open(['route' => ['templates.destroy', $site->slug, $template->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['templates.destroy', $site->slug, $template->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}
 {!! link_to_route('templates.index', 'Back', array($site->slug), array('class' => 'btn btn-primary')) !!}

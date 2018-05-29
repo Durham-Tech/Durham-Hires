@@ -52,7 +52,7 @@
 @endif
 
 
-{{ Form::open(['route' => ['internal.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+{{ Form::open(['route' => ['internal.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm', 'data-confirm' => 'Are you sure you want to delete?']) }}
   <button class="btn btn-primary" type="submit">Delete</button>
 {{ Form::close() }}
 

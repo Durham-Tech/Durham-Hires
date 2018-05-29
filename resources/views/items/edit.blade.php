@@ -19,6 +19,14 @@ const app = new Vue({
         fontNames: ['Raleway', 'Arial', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
       });
       $.ajaxSetup({ headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } });
+      $('.reqConfirm').submit(function() {
+        var text = $(this).data('confirm');
+        if (text == null) {
+          text = "Are you sure?";
+        }
+        var c = confirm(text);
+        return c; //you can just return c because it will be true or false
+      });
     }
 });
 
@@ -182,7 +190,7 @@ function fileInputChange(item){
                 @endif
         {!! Form::close() !!}
         @if(isset($old->id))
-        {{ Form::open(['route' => ['items.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['items.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm', 'data-confirm' => 'Are you sure you want to delete?']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif
