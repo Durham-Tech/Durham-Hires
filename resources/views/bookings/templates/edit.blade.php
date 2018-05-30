@@ -32,7 +32,7 @@ $active = 'internal';
             @endif
 
             <div class="form-group">
-                {{ Form::label('name', 'Name') }}
+                {{ Form::label('name', 'Name:') }}
                 {{ Form::text('name', NULL,
                 array(
                     'class'=>'form-control',

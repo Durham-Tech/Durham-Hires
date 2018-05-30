@@ -7,7 +7,7 @@ $active = 'calendar';
 @section('page')
 
     <div class='form-group'>
-        {{ Form::label('hires', 'Hires Calendar') }}
+        {{ Form::label('hires', 'Hires calendar:') }}
         {{ Form::text('hires', route('calendar', ['site' => $site->slug, 'auth' => $site->calAuth, 'type' => 'hires']),
         array(
             'readonly',
@@ -16,7 +16,7 @@ $active = 'calendar';
     </div>
 
     <div class='form-group'>
-        {{ Form::label('internal', 'Internal Events Calendar') }}
+        {{ Form::label('internal', 'Internal events calendar:') }}
         {{ Form::text('hires', route('calendar', ['site' => $site->slug, 'auth' => $site->calAuth, 'type' => 'internal']),
         array(
             'readonly',

@@ -58,7 +58,7 @@ if (isset($old)){
             @endif
 
             <div class="form-group">
-                {{ Form::label('name', 'Booking Name') }}
+                {{ Form::label('name', 'Booking name:') }}
                 {{ Form::text('name', NULL,
                 array(
                     'class'=>'form-control',
@@ -67,7 +67,7 @@ if (isset($old)){
             </div>
             @if (CAuth::checkAdmin())
               <div class="form-group">
-                  {{ Form::label('user', 'Hirer\'s Name') }}
+                  {{ Form::label('user', 'Hirer\'s name:') }}
                   {{ Form::text('user', NULL,
                   array(
                       'class'=>'form-control',
@@ -75,7 +75,7 @@ if (isset($old)){
                   )) }}
               </div>
               <div class="form-group">
-                  {{ Form::label('email', 'Email Address') }}
+                  {{ Form::label('email', 'Email address:') }}
                   {{ Form::text('email', NULL,
                   array(
                       'class'=>'form-control',
@@ -98,7 +98,7 @@ if (isset($old)){
 
             <!-- VAT Options -->
             <div class='form-group form-inline'>
-                {{ Form::label('vat', 'VAT Rate: ') }}
+                {{ Form::label('vat', 'VAT rate: ') }}
                 {{ Form::select('vat', [0 => '0% VAT', 1 => '20% VAT'], (isset($old)) ? $old->vat : '0',
                 array(
                     'class'=>'form-control',
@@ -109,7 +109,7 @@ if (isset($old)){
             @if (CAuth::checkAdmin(4))
             <!-- Set hire status -->
             <div class='form-group form-inline'>
-                {{ Form::label('status', 'Hire Status: ') }}
+                {{ Form::label('status', 'Hire status: ') }}
                 {{ Form::select('status', $statusArray, (isset($old)) ? $old->status : '2',
                 array(
                     'class'=>'form-control',
@@ -144,7 +144,7 @@ if (isset($old)){
                 )) }}
             </div>
             <div class='form-group form-inline'>
-                {{ Form::label('discValue', 'Discount Value: ') }}
+                {{ Form::label('discValue', 'Discount value: ') }}
                 <span v-text="(discountType == '0')?'£':''"></span>
                 {{ Form::text('discValue', NULL,
                 array(

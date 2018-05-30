@@ -83,7 +83,7 @@ function fileInputChange(item){
 </div>
 @endif
             <div class="form-group">
-                {{ Form::label('description', 'Description') }}
+                {{ Form::label('description', 'Description:') }}
                 {!! Form::text('description', null,
                 array(
                     'class'=>'form-control',
@@ -91,14 +91,14 @@ function fileInputChange(item){
                 )) !!}
             </div>
             <div class='form-group'>
-                {{ Form::label('category', 'Category') }}
+                {{ Form::label('category', 'Category:') }}
                 {{ Form::select('category', $cat, NULL,
                 array(
                     'class'=>'form-control',
                 )) }}
             </div>
             <div class="form-group">
-                {{ Form::label('details', 'Details') }}
+                {{ Form::label('details', 'Details:') }}
                 {!! Form::textarea('details', null,
                 array(
                     'class'=>'form-control',
@@ -107,7 +107,7 @@ function fileInputChange(item){
                 )) !!}
             </div>
             <div class='form-group'>
-                {{ Form::label('image', 'Image') }}
+                {{ Form::label('image', 'Image:') }}
                 <div>
                 @if (!empty($old->image))
                 {{ Html::image('images/catalog/thumb_' . $old->image,
@@ -149,7 +149,7 @@ function fileInputChange(item){
             </div>
 
             <div class='form-group form-inline number'>
-                {{ Form::label('quantity', 'Quantity avalible: ') }}
+                {{ Form::label('quantity', 'Quantity available: ') }}
                 {{ Form::number('quantity', NULL,
                 array(
                   'class' => 'form-control'

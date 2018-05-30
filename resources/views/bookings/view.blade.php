@@ -32,7 +32,7 @@ if ($booking->status < 4){
       {{ date('D jS M Y', strtotime($booking->end) )  }}
   </p>
   <p id='length'>
-      <b>Total Days: </b>
+      <b>Total days: </b>
       {{ $booking->days }}
       @if ($booking->discDays != 0)
       ({{$booking->discDays}} free)
@@ -58,7 +58,7 @@ if ($booking->status < 4){
         <tr>
           <th>Item</th>
           <th>Quantity</th>
-          <th>Unit price</th>
+          <th>Unit Price</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -92,15 +92,15 @@ if ($booking->status < 4){
         </tr>
         @endif
         <tr id="subTotal">
-          <td colspan="3"><b>Subtotal</b></td>
+          <td colspan="3"><b>Subtotal:</b></td>
           <td>£{{ number_format((float)$booking->subTotal, 2) }}</td>
         </tr>
         <tr id="vatRow">
-          <td colspan="3"><b>VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</b></td>
+          <td colspan="3"><b>VAT ({{ ($booking->vat == 1)? '20%':'0%' }}):</b></td>
           <td>£{{ number_format((float)$booking->vatValue, 2) }}</td>
         </tr>
         <tr id="totalRow">
-          <td colspan="3"><b>Total</b></td>
+          <td colspan="3"><b>Total:</b></td>
           <td><b>£{{ number_format((float)$booking->total, 2) }}</b></td>
         </tr>
       </tbody>
