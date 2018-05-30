@@ -40,7 +40,7 @@ if ($booking->status < 4){
   </p>
   <p id='status'>
       <b>Hire status: </b>
-      <span class="status" id="s{{ $booking->status }}">{{ $booking->status_string }}</span>
+      <span class="status s{{ $booking->status }}">{{ $booking->status_string }}</span>
   </p>
   @if ($booking->status >= 3)
   <p id='invoice'>
