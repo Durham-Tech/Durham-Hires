@@ -157,6 +157,13 @@ class StyleController extends Controller
             $site->flags = $site->flags & (~4);
         }
 
+        // PAT module
+        if ($request->enablePAT == 1) {
+            $site->flags |= 8;
+        } else {
+            $site->flags = $site->flags & (~8);
+        }
+
         // Enable custom hires email
         if ($request->customEmail == 1) {
             $site->flags |= 2;

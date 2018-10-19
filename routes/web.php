@@ -94,6 +94,14 @@ Route::get('{site}/logout', 'customAuth@logout')
           ->name('logout');
 
 
+// PAT Routes
+Route::get('{site}/pat/testing', 'patController@index')->name('pat.testing');
+Route::post('{site}/pat/testing', 'patController@add')->name('pat.add');
+Route::get('{site}/pat/testing/{item}', 'patController@recordIndex')->name('pat.newRecord');
+Route::post('{site}/pat/testing/record', 'patController@record')->name('pat.record');
+Route::get('{site}/pat/records', 'patController@exportCSV')->name('pat.records');
+
+
 
 // other routes
 Route::get('{site}/calendar/{auth}/{type}', 'CalendarController@downloadCalendar')
