@@ -7,7 +7,7 @@ $active = 'calendar';
 @section('page')
 
     <div class='form-group'>
-        {{ Form::label('hires', 'Hires Calendar') }}
+        {{ Form::label('hires', 'Hires calendar:') }}
         {{ Form::text('hires', route('calendar', ['site' => $site->slug, 'auth' => $site->calAuth, 'type' => 'hires']),
         array(
             'readonly',
@@ -16,7 +16,7 @@ $active = 'calendar';
     </div>
 
     <div class='form-group'>
-        {{ Form::label('internal', 'Internal Events Calendar') }}
+        {{ Form::label('internal', 'Internal events calendar:') }}
         {{ Form::text('hires', route('calendar', ['site' => $site->slug, 'auth' => $site->calAuth, 'type' => 'internal']),
         array(
             'readonly',
@@ -36,13 +36,15 @@ $active = 'calendar';
 
   $('#updateAuth').on('click', function(e){
       e.preventDefault();
-      var ajax = $.ajax({
-          url: "/{{ $site->slug }}/settings/calendar/refreshAuth",
-          type: 'post',
-          success: function(){
-            window.location.reload();
-          }
-      });
+      if (confirm('WARNING: This will disconnect anybody currently using this service. Do you want to continue?')){
+        var ajax = $.ajax({
+            url: "/{{ $site->slug }}/settings/calendar/refreshAuth",
+            type: 'post',
+            success: function(){
+              window.location.reload();
+            }
+        });
+      }
   });
   </script>
 @endsection

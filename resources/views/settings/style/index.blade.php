@@ -46,7 +46,12 @@ $active = 'style';
   </div>
 
   <div class='form-group'>
-      {{ Form::label('customEmail', 'Customize hires email:  ') }}
+      {{ Form::label('enablePAT', 'Enable PAT module (experimental):  ') }}
+      {{ Form::checkbox('enablePAT', 1, $site->flags & 8) }}
+  </div>
+
+  <div class='form-group'>
+      {{ Form::label('customEmail', 'Customise hires email:  ') }}
       {{ Form::checkbox('customEmail', 1, $site->flags & 2,
         array(
             'id' => 'hiresEmailCheck'
@@ -179,7 +184,7 @@ $active = 'style';
 
   <h3>Payment</h3>
   <div class='form-group form-inline'>
-    {{ Form::label('accountNumber', 'Account Number') }}
+    {{ Form::label('accountNumber', 'Account number:') }}
     {{ Form::text('accountNumber', $site->accountNumber,
     array(
         'class'=>'form-control',
@@ -187,7 +192,7 @@ $active = 'style';
   </div>
 
   <div class='form-group form-inline'>
-    {{ Form::label('sortCode', 'Sort Code') }}
+    {{ Form::label('sortCode', 'Sort code:') }}
     {{ Form::text('sortCode', $site->sortCode,
     array(
         'class'=>'form-control',
@@ -195,7 +200,7 @@ $active = 'style';
   </div>
 
   <div class='form-group form-inline'>
-    {{ Form::label('invoicePrefix', 'Payment referance prefix: ') }}
+    {{ Form::label('invoicePrefix', 'Payment reference prefix: ') }}
     {{ Form::text('invoicePrefix', $site->invoicePrefix,
     array(
         'class'=>'form-control',
@@ -215,7 +220,7 @@ $active = 'style';
 
   <h3>VAT</h3>
   <div class='form-group'>
-    {{ Form::label('vatName', 'VAT Name') }}
+    {{ Form::label('vatName', 'VAT name:') }}
     {{ Form::text('vatName', $site->vatName,
     array(
         'class'=>'form-control',
@@ -223,7 +228,7 @@ $active = 'style';
   </div>
 
   <div class='form-group form-inline'>
-    {{ Form::label('vatNumber', 'VAT Number') }}
+    {{ Form::label('vatNumber', 'VAT number:') }}
     {{ Form::text('vatNumber', $site->vatNumber,
     array(
         'class'=>'form-control',

@@ -32,7 +32,7 @@ if ($booking->status < 4){
       {{ date('D jS M Y', strtotime($booking->end) )  }}
   </p>
   <p id='length'>
-      <b>Total Days: </b>
+      <b>Total days: </b>
       {{ $booking->days }}
       @if ($booking->discDays != 0)
       ({{$booking->discDays}} free)
@@ -40,7 +40,7 @@ if ($booking->status < 4){
   </p>
   <p id='status'>
       <b>Hire status: </b>
-      <span class="status" id="s{{ $booking->status }}">{{ $booking->status_string }}</span>
+      <span class="status s{{ $booking->status }}">{{ $booking->status_string }}</span>
   </p>
   @if ($booking->status >= 3)
   <p id='invoice'>
@@ -58,7 +58,7 @@ if ($booking->status < 4){
         <tr>
           <th>Item</th>
           <th>Quantity</th>
-          <th>Unit price</th>
+          <th>Unit Price</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -92,15 +92,15 @@ if ($booking->status < 4){
         </tr>
         @endif
         <tr id="subTotal">
-          <td colspan="3"><b>Subtotal</b></td>
+          <td colspan="3"><b>Subtotal:</b></td>
           <td>£{{ number_format((float)$booking->subTotal, 2) }}</td>
         </tr>
         <tr id="vatRow">
-          <td colspan="3"><b>VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</b></td>
+          <td colspan="3"><b>VAT ({{ ($booking->vat == 1)? '20%':'0%' }}):</b></td>
           <td>£{{ number_format((float)$booking->vatValue, 2) }}</td>
         </tr>
         <tr id="totalRow">
-          <td colspan="3"><b>Total</b></td>
+          <td colspan="3"><b>Total:</b></td>
           <td><b>£{{ number_format((float)$booking->total, 2) }}</b></td>
         </tr>
       </tbody>
@@ -136,7 +136,7 @@ if ($booking->status < 4){
 
   <!-- Delete -->
   @if ($booking->status < 3)
-  {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm']) }}
+  {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm', 'data-confirm' => 'Are you sure you want to delete?']) }}
     <button class="btn btn-primary" type="submit">Delete</button>
   {{ Form::close() }}
   @endif
@@ -163,7 +163,7 @@ if ($booking->status < 4){
     {{ Form::close() }}
 
     <!-- Delete -->
-    {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm']) }}
+    {{ Form::open(['route' => ['bookings.destroy', $site->slug, $booking->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm', 'data-confirm' => 'Are you sure you want to delete?']) }}
       <button class="btn btn-primary" type="submit">Delete</button>
     {{ Form::close() }}
   @endif
@@ -174,13 +174,4 @@ if ($booking->status < 4){
   {!! link_to_route('bookings.index', 'Back', array($site->slug), array('class' => 'btn btn-primary')) !!}
 </div>
 
-@endsection
-
-@section('scripts')
-<script>
-$('.reqConfirm').submit(function() {
-    var c = confirm("Are you sure you want to delete?");
-    return c; //you can just return c because it will be true or false
-});
-</script>
 @endsection

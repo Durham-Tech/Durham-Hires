@@ -19,6 +19,14 @@ const app = new Vue({
         fontNames: ['Raleway', 'Arial', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
       });
       $.ajaxSetup({ headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } });
+      $('.reqConfirm').submit(function() {
+        var text = $(this).data('confirm');
+        if (text == null) {
+          text = "Are you sure?";
+        }
+        var c = confirm(text);
+        return c; //you can just return c because it will be true or false
+      });
     }
 });
 
@@ -75,7 +83,7 @@ function fileInputChange(item){
 </div>
 @endif
             <div class="form-group">
-                {{ Form::label('description', 'Description') }}
+                {{ Form::label('description', 'Description:') }}
                 {!! Form::text('description', null,
                 array(
                     'class'=>'form-control',
@@ -83,14 +91,14 @@ function fileInputChange(item){
                 )) !!}
             </div>
             <div class='form-group'>
-                {{ Form::label('category', 'Category') }}
+                {{ Form::label('category', 'Category:') }}
                 {{ Form::select('category', $cat, NULL,
                 array(
                     'class'=>'form-control',
                 )) }}
             </div>
             <div class="form-group">
-                {{ Form::label('details', 'Details') }}
+                {{ Form::label('details', 'Details:') }}
                 {!! Form::textarea('details', null,
                 array(
                     'class'=>'form-control',
@@ -99,7 +107,7 @@ function fileInputChange(item){
                 )) !!}
             </div>
             <div class='form-group'>
-                {{ Form::label('image', 'Image') }}
+                {{ Form::label('image', 'Image:') }}
                 <div>
                 @if (!empty($old->image))
                 {{ Html::image('images/catalog/thumb_' . $old->image,
@@ -141,7 +149,7 @@ function fileInputChange(item){
             </div>
 
             <div class='form-group form-inline number'>
-                {{ Form::label('quantity', 'Quantity avalible: ') }}
+                {{ Form::label('quantity', 'Quantity available: ') }}
                 {{ Form::number('quantity', NULL,
                 array(
                   'class' => 'form-control'
@@ -182,7 +190,7 @@ function fileInputChange(item){
                 @endif
         {!! Form::close() !!}
         @if(isset($old->id))
-        {{ Form::open(['route' => ['items.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;']) }}
+        {{ Form::open(['route' => ['items.destroy', $site->slug, $old->id], 'method' => 'delete', 'style' => 'display:inline;', 'class' => 'reqConfirm', 'data-confirm' => 'Are you sure you want to delete?']) }}
             <button class="btn btn-primary" type="submit">Delete</button>
         {{ Form::close() }}
         @endif

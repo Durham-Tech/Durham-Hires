@@ -97,8 +97,8 @@ a:focus {
     }
 
     > .open {
-      > a,
-      > a:focus {
+      > a:focus,
+      > a {
         @include linkOnBackground($navbar-text-colour);
       }
     }
@@ -283,21 +283,25 @@ a:focus {
 // Status styles
 
 .status {
-  &#s1 {
+  &.s1 {
     color: $statusBlue;
   }
 
-  &#s2 {
+  &.s2 {
     color: $statusGreen;
   }
 
-  &#s3 {
+  &.s3 {
     color: $statusAmber;
   }
 
-  &#s4,
-  &#s5 {
+  &.s4,
+  &.s5 {
     color: $statusGreen;
+  }
+
+  &.internal {
+    color: $statusInternal;
   }
 }
 // Home page styleing

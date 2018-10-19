@@ -79,11 +79,13 @@ if ($edit) {
                     @foreach($category->all as $item)
                     <tr>
                         <td class="itemImage">
-                        @if (!empty($item->image))
                           <a href='{!! action('ItemController@show', ['site' => $site->slug, 'items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">
+                        @if (!empty($item->image))
                             {{ Html::image('images/catalog/thumb_' . $item->image) }}
-                          </a>
+                        @else
+                            {{ Html::image('images/placeholder.png') }}
                         @endif
+                          </a>
                         </td>
                         <td class="itemTitle"><a href='{!! action('ItemController@show', ['site' => $site->slug, 'items' => $item->id]) !!}' data-toggle="modal" data-target="#myModal">{{ $item->description }}</a></td>
                         <td class="itemDayPrice">£{{ number_format($item->dayPrice,2) }}</td>

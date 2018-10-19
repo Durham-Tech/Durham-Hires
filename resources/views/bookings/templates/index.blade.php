@@ -18,7 +18,7 @@ $active = 'internal';
                 <thead>
                     <tr>
                         <th>Templates</th>
-                        <th>Duration (days)</th>
+                        <th>Duration (Days)</th>
                         <th></th>
                     </tr>
                 </thead>

@@ -8,7 +8,7 @@
       <ul class="nav nav-pills nav-stacked">
         <li class="{{ ($active == 'admin') ? 'active' : '' }}">{{ link_to_route('admin.index', 'Users', $site->slug) }}</li>
         <li class="{{ ($active == 'categories') ? 'active' : '' }}">{{ link_to_route('categories.index', 'Categories', $site->slug) }}</li>
-        <li class="{{ ($active == 'discounts') ? 'active' : '' }}">{{ link_to_route('discounts.index', 'Discount codes', $site->slug) }}</li>
+        <li class="{{ ($active == 'discounts') ? 'active' : '' }}">{{ link_to_route('discounts.index', 'Discount Codes', $site->slug) }}</li>
         <li class="{{ ($active == 'style') ? 'active' : '' }}">{{ link_to_route('style.index', 'Configure Site', $site->slug) }}</li>
         <li class="{{ ($active == 'content') ? 'active' : '' }}">{{ link_to_route('settings.content', 'Page Content', $site->slug) }}</li>
         <li class="{{ ($active == 'calendar') ? 'active' : '' }}">{{ link_to_route('settings.calendar', 'Internet Calendars', $site->slug) }}</li>

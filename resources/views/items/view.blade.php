@@ -15,6 +15,8 @@
     <div class="col-sm-5">
         @if (!empty($item->image))
             {{ Html::image('images/catalog/' . $item->image, $item->description, array( 'class' => 'img-responsive' )) }}
+        @else
+            {{ Html::image('images/placeholder.png', $item->description, array( 'class' => 'img-responsive' )) }}
         @endif
     </div>
     <div class="col-sm-7">

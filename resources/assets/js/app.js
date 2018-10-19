@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -8,7 +7,7 @@
 require('./bootstrap');
 import Datepicker from 'vuejs-datepicker';
 
-Vue.component('vue-datepicker', Datepicker );
+Vue.component('vue-datepicker', Datepicker);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,3 +20,14 @@ Vue.component('example', require('./components/Example.vue'));
 // const app = new Vue({
 //     el: '.app',
 // });
+
+
+// JQuery scripts
+$('.reqConfirm').submit(function() {
+  var text = $(this).data('confirm');
+  if (text == null) {
+    text = "Are you sure?";
+  }
+  var c = confirm(text);
+  return c; //you can just return c because it will be true or false
+});

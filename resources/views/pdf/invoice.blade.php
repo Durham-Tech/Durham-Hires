@@ -55,7 +55,7 @@
               {{ $booking->email }}
         </p>
         <p id='invoiceNo'>
-            <b>Invoice referance: </b>
+            <b>Invoice reference: </b>
               {{ $site->invoicePrefix . $booking->invoiceNum  }}
         </p>
       </td>
@@ -72,7 +72,7 @@
               <tr>
                 <th>Item</th>
                 <th>Quantity</th>
-                <th>Unit price</th>
+                <th>Unit Price</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -95,7 +95,7 @@
               @endforeach
               @if ($booking->discount != 0)
               <tr id="discRow">
-                <td colspan="3" class="tblBold">{{ empty($booking->discName) ? 'Discount' : $booking->discName }}</td>
+                <td colspan="3" class="tblBold">{{ empty($booking->discName) ? 'Discount:' : $booking->discName }}</td>
                 <td>-£{{ number_format((float)$booking->discount, 2) }}</td>
               </tr>
               @endif
@@ -106,15 +106,15 @@
               </tr>
               @endif
               <tr id="subTotal">
-                <td colspan="3" class="tblBold">Subtotal</td>
+                <td colspan="3" class="tblBold">Subtotal:</td>
                 <td>£{{ number_format((float)$booking->subTotal, 2) }}</td>
               </tr>
               <tr id="vatRow">
-                <td colspan="3" class="tblBold">VAT ({{ ($booking->vat == 1)? '20%':'0%' }})</td>
+                <td colspan="3" class="tblBold">VAT ({{ ($booking->vat == 1)? '20%':'0%' }}):</td>
                 <td>£{{ number_format((float)$booking->vatValue, 2) }}</td>
               </tr>
               <tr id="totalRow">
-                <td colspan="3" class="tblBold">Total</td>
+                <td colspan="3" class="tblBold">Grand Total:</td>
                 <td class="tblBold">£{{ number_format((float)$booking->total, 2) }}</td>
               </tr>
             </tbody>
@@ -136,8 +136,8 @@
   Please pay by bank transfer:
 </p>
   <ul>
-    <li>Sort Code: {{ $site->sortCode }}</li>
-    <li>Account Number: {{ $site->accountNumber }}</li>
+    <li>Sort code: {{ $site->sortCode }}</li>
+    <li>Account number: {{ $site->accountNumber }}</li>
     <li>Reference: {{ $site->invoicePrefix . $booking->invoiceNum }}</li>
   </ul>
 <p>
