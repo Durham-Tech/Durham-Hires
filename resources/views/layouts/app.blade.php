@@ -117,11 +117,27 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
                         @if (CAuth::check() && (($site->flags & 1) || CAuth::checkAdmin(6)))
                         <li>{{ link_to_route('bookings.index', 'Bookings', $site->slug) }}</li>
                         @endif
-                        @if (CAuth::checkAdmin())
-                        <li>{{ link_to_route('admin.index', 'Settings', $site->slug) }}</li>
-                        @endif
+
                         @if (CAuth::checkAdmin(1))
                         <li>{{ link_to_route('bank.index', 'Treasurer', $site->slug) }}</li>
+                        @endif
+
+                        @if (CAuth::checkAdmin())
+
+                        @if($site->flags & 8)
+                        <li role="presentation" class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            PAT <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li>{{ link_to_route('pat.testing', 'Test Equipment', $site->slug) }}</li>
+                            <li>{{ link_to_route('pat.records', 'Download Records', $site->slug) }}</li>
+                          </ul>
+                        </li>
+                        @endif
+
+                        <li>{{ link_to_route('admin.index', 'Settings', $site->slug) }}</li>
+
                         @endif
                         @if (count($files) == 1)
                         <li>{{ link_to_route('files.download', $files[0]->displayName, [$site->slug, $files[0]->id]) }}</li>

@@ -46,6 +46,11 @@ $active = 'style';
   </div>
 
   <div class='form-group'>
+      {{ Form::label('enablePAT', 'Enable PAT module (experimental):  ') }}
+      {{ Form::checkbox('enablePAT', 1, $site->flags & 8) }}
+  </div>
+
+  <div class='form-group'>
       {{ Form::label('customEmail', 'Customise hires email:  ') }}
       {{ Form::checkbox('customEmail', 1, $site->flags & 2,
         array(
