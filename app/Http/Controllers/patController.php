@@ -33,7 +33,14 @@ class patController extends Controller
     public function add(Request $request)
     {
         $this->validate($request, [
-          'id' => 'required|alpha_dash|max:255'
+          'id' => array(
+                    'nullable',
+                    'regex:/^[A-z1-9\-][A-z0-9\-]*$/',
+                    'max:255'
+                  )
+        ],
+        [
+          'id.regex' => 'Only numbers and letters are allowed & cannot start with zero.',
         ]);
 
         $site = Request()->get('_site');
@@ -42,11 +49,12 @@ class patController extends Controller
 
     public function recordIndex($s, $id){
       $site = Request()->get('_site');
-      $item = patItem::where('site', $site->id)->where('patID', $id)->first();
+      $patID = str_replace("-", "", strtoupper($id));
+      $item = patItem::where('site', $site->id)->where('patID', $patID)->first();
 
       if ($item == NULL){
         $item = new patItem();
-        $item->patID = $id;
+        $item->patID = $patID;
       }
 
       return view('pat.testing.record')
@@ -55,13 +63,21 @@ class patController extends Controller
 
     public function record(NewPatTest $request)
       {
+        $this->validate($request, [
+          'id' => array(
+                    'required',
+                    'regex:/^[A-Z1-9][A-Z0-9]*$/',
+                    'max:255'
+                  )
+        ]);
+
         $site = Request()->get('_site');
         $item = patItem::where('site', $site->id)->where('patID', $request->id)->first();
 
         if ($item == NULL){
           $item = new patItem;
           $item->site = $site->id;
-          $item->patID = $request->id;
+          $item->patID = strtoupper($request->id);
         }
 
         $item->description = $request->description;
