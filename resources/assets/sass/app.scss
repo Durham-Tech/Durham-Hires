@@ -97,8 +97,8 @@ a:focus {
     }
 
     > .open {
-      > a:focus,
-      > a {
+      > a,
+      > a:focus {
         @include linkOnBackground($navbar-text-colour);
       }
     }
@@ -116,6 +116,30 @@ a:focus {
 
 .btn {
   border-radius: 0;
+
+  &.btn-pass {
+    background-color: green;
+    border-color: green;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: darkgreen;
+      border-color: white;
+    }
+  }
+
+  &.btn-fail {
+    background-color: darkred;
+    border-color: darkred;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: #700000;
+      border-color: white;
+    }
+  }
 }
 
 .nav-pills,
