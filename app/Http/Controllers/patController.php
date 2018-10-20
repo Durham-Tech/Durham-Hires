@@ -44,7 +44,32 @@ class patController extends Controller
         ]);
 
         $site = Request()->get('_site');
-        return redirect()->route('pat.newRecord', ['site' => $site->slug, 'item' => $request->id]);
+
+        if ($request->id == NULL){
+          $currentItems = patItem::where('site', $site->id)->get();
+
+          $testNum = 1;
+          $found = False;
+          while(True){
+            $test = (string)$testNum;
+            foreach ($currentItems as $item) {
+              if ($item->patID == $test){
+                $found = True;
+                break;
+              }
+            }
+            if (!$found){
+              break;
+            } else {
+              $found = False;
+              $testNum++;
+            }
+          }
+
+          return redirect()->route('pat.newRecord', ['site' => $site->slug, 'item' => (string)$testNum]);
+        } else {
+          return redirect()->route('pat.newRecord', ['site' => $site->slug, 'item' => $request->id]);
+        }
     }
 
     public function recordIndex($s, $id){
@@ -108,7 +133,8 @@ class patController extends Controller
         $record->patID = $item->id;
         $record->save();
 
-        return redirect()->route('pat.testing', ['site' => $site->slug]);
+        return redirect()->route('pat.testing', ['site' => $site->slug])
+            ->with('successMsg', 'PAT record ' . $item->patID . ' successfully saved.');
     }
 
     public function exportCSV()
