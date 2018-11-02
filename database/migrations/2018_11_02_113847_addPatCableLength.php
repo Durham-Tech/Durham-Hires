@@ -15,7 +15,7 @@ class AddPatCableLength extends Migration
     {
         Schema::table(
             'pat_items', function (Blueprint $table) {
-                $table->float('cable_length', 255)->nullable();
+                $table->float('cable_length')->nullable();
             }
         );
     }
