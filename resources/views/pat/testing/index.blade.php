@@ -23,6 +23,12 @@
     </div>
     @endif
 
+    @if (session('successMsg'))
+    <div class="alert alert-success">
+      {{ session('successMsg') }}
+    </div>
+    @endif
+
   <div class="form-group form-inline">
     {{ Form::label('id', 'Item ID:') }}
     {{ Form::text('id', null,

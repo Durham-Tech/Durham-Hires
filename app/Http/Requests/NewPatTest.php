@@ -24,7 +24,11 @@ class NewPatTest extends FormRequest
     public function rules()
     {
         return [
-          'id' => 'required|max:255',
+          'id' => array(
+                    'required',
+                    'regex:/^[A-Z1-9][A-Z0-9]*$/',
+                    'max:255'
+                  ),
           'description' => 'required|max:255',
           'date' => 'required|date',
           'fuse' => 'nullable|integer',
