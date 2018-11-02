@@ -35,7 +35,7 @@ class patController extends Controller
         $this->validate($request, [
           'id' => array(
                     'nullable',
-                    'regex:/^[A-z1-9\-][A-z0-9\-]*$/',
+                    'regex:/^[A-z1-9\-][A-z0-9\-]*$|\d+\+/',
                     'max:255'
                   )
         ],
@@ -45,10 +45,16 @@ class patController extends Controller
 
         $site = Request()->get('_site');
 
+        if ($request->id != NULL && substr($request->id, -1) == "+"){
+          $testNum = (int)substr($request->id, 0, -1);
+          $request->id = NULL;
+        } else {
+          $testNum = 1;
+        }
+
         if ($request->id == NULL){
           $currentItems = patItem::where('site', $site->id)->get();
 
-          $testNum = 1;
           $found = False;
           while(True){
             $test = (string)$testNum;
