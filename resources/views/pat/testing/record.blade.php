@@ -63,11 +63,26 @@
             </div>
 
             <div class='form-group form-inline'>
+                {{ Form::label('cable_length', 'Cable length: ') }}
+                <div class="input-group">
+                {{ Form::text('cable_length', $item->cable_length,
+                array(
+                    'class'=>'form-control',
+                )) }}
+                <span class="input-group-addon">m</span>
+              </div>
+            </div>
+
+
+            <div class='form-group form-inline'>
                 {{ Form::label('test_current', 'Test Current: ') }}
+                <div class="input-group">
                 {{ Form::text('test_current', NULL,
                 array(
                     'class'=>'form-control',
                 )) }}
+                <span class="input-group-addon">A</span>
+              </div>
             </div>
 
             <div class='form-group form-inline'>
