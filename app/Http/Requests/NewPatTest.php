@@ -32,6 +32,8 @@ class NewPatTest extends FormRequest
           'description' => 'required|max:255',
           'date' => 'required|date',
           'fuse' => 'nullable|integer',
+          'cable_length' => 'nullable|numeric',
+          'test_current' => 'nullable|numeric',
         ];
     }
 }

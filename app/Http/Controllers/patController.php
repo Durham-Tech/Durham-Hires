@@ -107,6 +107,7 @@ class patController extends Controller
 
         $item->description = $request->description;
         $item->fuse = $request->fuse;
+        $item->cable_length = $request->cable_length;
         $item->last_test = $request->date;
 
         $record = new patRecord;
