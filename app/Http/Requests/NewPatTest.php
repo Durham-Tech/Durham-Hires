@@ -34,6 +34,12 @@ class NewPatTest extends FormRequest
           'fuse' => 'nullable|integer',
           'cable_length' => 'nullable|numeric',
           'test_current' => 'nullable|numeric',
+          'insulation_resistance' => 'nullable|numeric',
+          'earth_resistance' => 'nullable|numeric',
+          'touch_current' => 'nullable|numeric',
+          'load_current' => 'nullable|numeric',
+          'load_power' => 'nullable|numeric',
+          'leakage_current' => 'nullable|numeric',
         ];
     }
 }

@@ -21,6 +21,13 @@ a,
 a:focus {
   outline: none;
 }
+
+a.no-underline {
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+}
 // Settings
 
 .settings {
@@ -221,6 +228,10 @@ a:focus {
 .form-control {
   &:focus {
     box-shadow: none;
+  }
+
+  &[type="date"] {
+    padding: 0 5px;
   }
 }
 // Styling for custom number spinners
