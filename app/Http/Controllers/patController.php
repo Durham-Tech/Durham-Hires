@@ -180,7 +180,7 @@ class patController extends Controller
                 $details = patRecord::where('patID', $item->id)->orderBy('created_at', 'desc')->first();
                 if ($details != NULL){
                   fputcsv($file, array($item->patID,
-                        $item->description,
+                        $item->description . (($item->cable_length != NULL && $item->cable_length > 0) ? (" (" . $item->cable_length . "m)") : ""),
                         date('d/m/Y', strtotime($details->date)),
                         $details->pass ? "PASS" : "FAIL",
                         $details->test_current,
