@@ -152,7 +152,7 @@ class BookingsController extends Controller
         $booking->start = date("Y-m-d H:i:s", $start);
         $booking->end = date("Y-m-d H:i:s", $end);
         $booking->days = ($end - $start)/(86400);
-        $booking->vat = $request->vat;
+        $booking->vat = isset($request->vat) ? $request->vat : 1;
         $booking->site = $site->id;
 
         if (CAuth::checkAdmin(4)) {

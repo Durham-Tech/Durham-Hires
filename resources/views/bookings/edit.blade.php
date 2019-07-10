@@ -97,6 +97,7 @@ if (isset($old)){
             </div>
 
             <!-- VAT Options -->
+            @if (!($site->flags & 16) || (isset($old) && CAuth::checkAdmin(4)))
             <div class='form-group form-inline'>
                 {{ Form::label('vat', 'VAT rate: ') }}
                 {{ Form::select('vat', [0 => '0% VAT', 1 => '20% VAT'], (isset($old)) ? $old->vat : '0',
@@ -104,6 +105,7 @@ if (isset($old)){
                     'class'=>'form-control',
                 )) }}
             </div>
+            @endif
 
             <!-- Admin only options -->
             @if (CAuth::checkAdmin(4))
