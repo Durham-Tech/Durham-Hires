@@ -32,6 +32,10 @@ Route::post('admin/login', 'customAuth@checkAuth');
 Route::get('admin/logout', 'customAuth@logout')
           ->name('admin.logout');
 
+// Social logins
+Route::get('auth/{provider}', 'SocialAuth@redirectToProvider');
+Route::get('auth/{provider}/callback', 'SocialAuth@handleProviderCallback');
+
 // Resource routes
 Route::resource('{site}/settings/categories', 'CategoryController');
 Route::resource('{site}/items', 'ItemController');
@@ -113,7 +117,6 @@ Route::get('{site}/invoice_demo', 'AdminController@pdfTest')
 // Files routes
 Route::get('{site}/files/{file}', 'FilesController@download')->name('files.download');
 Route::delete('{site}/files/{file}', 'FilesController@destroy');
-
 
 
 Route::get('/', 'publicController@sitelessIndex');

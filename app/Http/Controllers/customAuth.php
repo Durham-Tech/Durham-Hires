@@ -38,9 +38,11 @@ class customAuth extends Controller
         $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
         curl_close($ch);
 
-        if ($status_code == 200) {
+        if ($status_code == 200 && $result != "false") {
+            $result = json_decode($result);
+            $result->isDurham = true;
             $request->session()->put('auth', '1');
-            $request->session()->put('user_data', $result);
+            $request->session()->put('user_data', json_encode($result));
             $privRows = DB::select('select site, privileges from admins where user = ?', [$request['user']]);
 
             if (!empty($privRows)) {
