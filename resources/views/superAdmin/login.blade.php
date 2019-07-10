@@ -92,6 +92,12 @@ Copyright © 2017 Jonathan Salmon (jonathan.salmon@hotmail.co.uk). All rights re
 
                         </div>
                       </form>
+
+                      <div class="or-seperator"><i>or</i></div>
+
+                      <div class="row social-login">
+                        <a href="/auth/google">{{ Html::image('images/social/btn_google_signin_dark_normal_web@2x.png', 'Google Login') }}</a>
+                      </div>
               </div>
             </div>
         </div>

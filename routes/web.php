@@ -14,6 +14,7 @@
 // Super admin routes
 Route::get('admin', 'SiteController@index');
 Route::resource('admin/users', 'SuperAdminController');
+Route::post('admin/users/socialStore', 'SuperAdminController@storeSocial')->name('superAdmin.storeSocial');
 
 Route::get('admin/email', 'SiteController@emailAll')->name('sites.email');
 Route::get('admin/sites/restore', 'SiteController@restoreIndex')->name('sites.restore');
@@ -45,6 +46,8 @@ Route::resource('{site}/templates', 'TemplateController');
 Route::resource('{site}/internal', 'InternalEventController');
 Route::resource('{site}/settings/style', 'StyleController');
 Route::resource('{site}/settings/discounts', 'DiscountController');
+
+Route::post('{site}/settings/admin/socialStore', 'AdminController@storeSocial')->name('admin.storeSocial');
 
 // Booking routes
 Route::get('{site}/bookings/index/complete', 'BookingsController@indexComplete')

@@ -59,7 +59,11 @@ class SocialAuth extends Controller
         if (empty($slug)){
           return redirect('/');
         } else {
-          return redirect()->route('home', $slug);
+          if ($slug == 'admin'){
+            return redirect("/admin");
+          } else {
+            return redirect()->route('home', $slug);
+          }
         }
       } else {
           session(['target' => '']);

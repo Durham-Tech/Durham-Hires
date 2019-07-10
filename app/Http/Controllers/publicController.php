@@ -34,6 +34,7 @@ class publicController extends Controller
             session(['site_slug' => $site->slug]);
             return view('login');
         } else {
+            session(['site_slug' => 'admin']);
             return view('superAdmin.login');
         }
     }
