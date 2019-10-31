@@ -16,7 +16,7 @@ $active = 'admin';
 
             @if (count($errors) > 0)
             <div class="alert alert-danger">
-                There were some problems adding the item.<br />
+                There were some problems adding the user.<br />
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
