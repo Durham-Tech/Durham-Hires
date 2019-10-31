@@ -152,7 +152,7 @@ class BookingsController extends Controller
         $booking->start = date("Y-m-d H:i:s", $start);
         $booking->end = date("Y-m-d H:i:s", $end);
         $booking->days = ($end - $start)/(86400);
-        $booking->vat = $request->vat;
+        $booking->vat = isset($request->vat) ? $request->vat : 1;
         $booking->site = $site->id;
 
         if (CAuth::checkAdmin(4)) {
@@ -174,8 +174,13 @@ class BookingsController extends Controller
             $booking->status = 0;
             $temp = CAuth::user();
             $booking->email = $temp->email;
-            $booking->isDurham = 1;
-            $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
+            if ($temp->isDurham){
+              $booking->isDurham = 1;
+              $booking->user = ucwords(strtolower(explode(',', $temp->firstnames)[0] . ' ' . $temp->surname));
+            } else {
+              $booking->user = $temp->name;
+              $booking->isDurham = 0;
+            }
 
             if ($request->discountCode != "") {
                 $discount = Discount::where('site', $site->id)
@@ -329,10 +334,9 @@ class BookingsController extends Controller
         }
         $booking->name = $request->name;
 
-        if ($request->status <= 3) {
+        if ($request->status <= 3 && isset($request->vat)) {
             $booking->vat = $request->vat;
         }
-        var_dump($request->end);
 
         // Only allow date change if no items are in the order
         $itemCount = booked_items::select('description', 'number', 'dayPrice', 'weekPrice')

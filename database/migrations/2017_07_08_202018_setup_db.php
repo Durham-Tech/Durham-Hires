@@ -18,7 +18,7 @@ class SetupDb extends Migration
             'admins', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name', 255);
-                $table->string('user', 20)->index();
+                $table->string('user', 20);
                 $table->string('email', 255);
                 $table->tinyInteger('privileges');
                 $table->integer('site');

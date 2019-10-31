@@ -46,6 +46,11 @@ $active = 'style';
   </div>
 
   <div class='form-group'>
+      {{ Form::label('enableVatFree', 'Offer 0% VAT option:  ') }}
+      {{ Form::checkbox('enableVatFree', 1, !($site->flags & 16)) }}
+  </div>
+
+  <div class='form-group'>
       {{ Form::label('enablePAT', 'Enable PAT module (experimental):  ') }}
       {{ Form::checkbox('enablePAT', 1, $site->flags & 8) }}
   </div>

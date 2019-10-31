@@ -19,7 +19,7 @@ class SuperAdminMiddleware
         $site = $request->get('_site');
         if (!CAuth::checkSuperAdmin()) {
             if (CAuth::check()) {
-                return redirect()->action('publicController@index');
+                return redirect("/");
             } else {
                 session(['target' => $request->path()]);
                 return redirect()->route('admin.login');
