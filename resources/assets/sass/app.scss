@@ -21,6 +21,13 @@ a,
 a:focus {
   outline: none;
 }
+
+a.no-underline {
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+}
 // Settings
 
 .settings {
@@ -116,6 +123,30 @@ a:focus {
 
 .btn {
   border-radius: 0;
+
+  &.btn-pass {
+    background-color: green;
+    border-color: green;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: darkgreen;
+      border-color: white;
+    }
+  }
+
+  &.btn-fail {
+    background-color: darkred;
+    border-color: darkred;
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: #700000;
+      border-color: white;
+    }
+  }
 }
 
 .nav-pills,
@@ -197,6 +228,10 @@ a:focus {
 .form-control {
   &:focus {
     box-shadow: none;
+  }
+
+  &[type="date"] {
+    padding: 0 5px;
   }
 }
 // Styling for custom number spinners
@@ -439,4 +474,28 @@ div#files {
   .discountName {
     font-weight: bold;
   }
+}
+// Login page
+
+.social-login {
+  text-align: center;
+
+  img {
+    max-height: 60px;
+  }
+}
+
+.or-seperator {
+  margin: 40px 0 10px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+}
+
+.or-seperator i {
+  padding: 0 16px;
+  background: #FFF;
+  font-size: 20px;
+  position: relative;
+  top: -18px;
+  z-index: 1;
 }

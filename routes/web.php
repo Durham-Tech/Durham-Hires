@@ -14,6 +14,7 @@
 // Super admin routes
 Route::get('admin', 'SiteController@index');
 Route::resource('admin/users', 'SuperAdminController');
+Route::post('admin/users/socialStore', 'SuperAdminController@storeSocial')->name('superAdmin.storeSocial');
 
 Route::get('admin/email', 'SiteController@emailAll')->name('sites.email');
 Route::get('admin/sites/restore', 'SiteController@restoreIndex')->name('sites.restore');
@@ -32,6 +33,10 @@ Route::post('admin/login', 'customAuth@checkAuth');
 Route::get('admin/logout', 'customAuth@logout')
           ->name('admin.logout');
 
+// Social logins
+Route::get('auth/{provider}', 'SocialAuth@redirectToProvider');
+Route::get('auth/{provider}/callback', 'SocialAuth@handleProviderCallback');
+
 // Resource routes
 Route::resource('{site}/settings/categories', 'CategoryController');
 Route::resource('{site}/items', 'ItemController');
@@ -41,6 +46,8 @@ Route::resource('{site}/templates', 'TemplateController');
 Route::resource('{site}/internal', 'InternalEventController');
 Route::resource('{site}/settings/style', 'StyleController');
 Route::resource('{site}/settings/discounts', 'DiscountController');
+
+Route::post('{site}/settings/admin/socialStore', 'AdminController@storeSocial')->name('admin.storeSocial');
 
 // Booking routes
 Route::get('{site}/bookings/index/complete', 'BookingsController@indexComplete')
@@ -113,7 +120,6 @@ Route::get('{site}/invoice_demo', 'AdminController@pdfTest')
 // Files routes
 Route::get('{site}/files/{file}', 'FilesController@download')->name('files.download');
 Route::delete('{site}/files/{file}', 'FilesController@destroy');
-
 
 
 Route::get('/', 'publicController@sitelessIndex');

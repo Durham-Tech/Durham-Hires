@@ -14,7 +14,7 @@
                 {{ csrf_field() }}
 
               <div class="login">
-                <h1>Login</h1>
+                <h1>Login via Durham</h1>
                 <div class="form-group">
                   <input placeholder="Durham Username" id="email" type="text" class="form-control" name="user" value="{{ session('user') }}" required autofocus>
                 </div>
@@ -29,5 +29,11 @@
 
               </div>
             </form>
+
+            <div class="or-seperator"><i>or</i></div>
+
+            <div class="row social-login">
+              <a href="/auth/google">{{ Html::image('images/social/btn_google_signin_dark_normal_web@2x.png', 'Google Login') }}</a>
+            </div>
     </div>
 @endsection

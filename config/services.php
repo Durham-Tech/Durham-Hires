@@ -34,5 +34,10 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    'google' => [
+        'client_id' =>  env('GOOGLE_APP_ID'),
+        'client_secret' =>  env('GOOGLE_APP_SECRET'),
+        'redirect' => 'http://localhost:8000/auth/google/callback',
+    ],
 
 ];

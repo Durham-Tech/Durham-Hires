@@ -31,8 +31,10 @@ class publicController extends Controller
     {
         $site = $request->get('_site');
         if(!is_null($site)) {
+            session(['site_slug' => $site->slug]);
             return view('login');
         } else {
+            session(['site_slug' => 'admin']);
             return view('superAdmin.login');
         }
     }

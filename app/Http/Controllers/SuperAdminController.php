@@ -7,6 +7,7 @@ use View;
 use App\Classes\Items;
 use App\Admin;
 use App\Http\Requests\newUser;
+use App\Http\Requests\NewSocialUser;
 use App\Classes\Common;
 use CAuth;
 
@@ -56,6 +57,25 @@ class SuperAdminController extends Controller
         $user->user = $userDetails->username;
         $user->privileges = 1;
         $user->name = $userDetails->name;
+        $user->site = 0;
+        $user->save();
+        return redirect()->route('users.index');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeSocial(NewSocialUser  $requestUser)
+    {
+        //
+        $user = new Admin;
+        $user->email = $requestUser->email;
+        $user->user = $requestUser->email;
+        $user->privileges = 1;
+        $user->name = $requestUser->name;
         $user->site = 0;
         $user->save();
         return redirect()->route('users.index');

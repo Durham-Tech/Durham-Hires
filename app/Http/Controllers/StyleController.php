@@ -164,6 +164,13 @@ class StyleController extends Controller
             $site->flags = $site->flags & (~8);
         }
 
+        // Disable 0% VAT
+        if ($request->enableVatFree == 1) {
+            $site->flags = $site->flags & (~16);
+        } else {
+            $site->flags |= 16;
+        }
+
         // Enable custom hires email
         if ($request->customEmail == 1) {
             $site->flags |= 2;

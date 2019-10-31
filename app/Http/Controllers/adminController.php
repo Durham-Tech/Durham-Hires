@@ -8,6 +8,7 @@ use App\Site;
 use CAuth;
 use Illuminate\Http\Request;
 use App\Http\Requests\newUser;
+use App\Http\Requests\NewSocialUser;
 use App\Classes\Common;
 use App\Classes\pdf;
 
@@ -60,6 +61,25 @@ class AdminController extends Controller
         $user->user = $userDetails->username;
         $user->privileges = 0;
         $user->name = $userDetails->name;
+        $user->site = $site->id;
+        $user->save();
+        return redirect()->route('admin.index', $site->slug);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeSocial(NewSocialUser $requestUser)
+    {
+        $site = Request()->get('_site');
+        $user = new Admin;
+        $user->email = $requestUser->email;
+        $user->user = $requestUser->email;
+        $user->name = $requestUser->name;
+        $user->privileges = 0;
         $user->site = $site->id;
         $user->save();
         return redirect()->route('admin.index', $site->slug);
