@@ -36,9 +36,6 @@ class NewSite extends FormRequest
     {
         $validator->after(
             function ($validator) {
-                if (!Common::getDetailsEmail($this->input(['email']))) {
-                    $validator->errors()->add('email', 'The email is not a valid durham email address.');
-                }
                 $slug = str_slug($this->input(['slug']), "-");
                 if ($slug == 'admin') {
                     $validator->errors()->add('email', 'This slug cannot be used.');

@@ -56,11 +56,10 @@ class AdminController extends Controller
         //
         $site = Request()->get('_site');
         $user = new Admin;
-        $userDetails = Common::getDetailsEmail($requestUser->email);
-        $user->email = $userDetails->email;
-        $user->user = $userDetails->username;
+        $user->email = $requestUser->email;
+        $user->user = $requestUser->username;
         $user->privileges = 0;
-        $user->name = $userDetails->name;
+        $user->name = $requestUser->name;
         $user->site = $site->id;
         $user->save();
         return redirect()->route('admin.index', $site->slug);

@@ -35,9 +35,6 @@ class newUser extends FormRequest
     {
         $validator->after(
             function ($validator) {
-                if (!Common::getDetailsEmail($this->input(['email']))) {
-                    $validator->errors()->add('email', 'The email is not a valid durham email address.');
-                }
                 $site = $this->site;
                 if (is_null($site)) {
                     $id = 0;

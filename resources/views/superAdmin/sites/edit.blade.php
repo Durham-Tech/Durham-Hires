@@ -45,8 +45,24 @@
 
             @if (!$old->id)
             <div class="form-group">
+                {{ Form::label('managername', 'Hire Manager Name') }}
+                {{ Form::text('managername', NULL,
+                array(
+                    'class'=>'form-control'
+                )) }}
+            </div>
+
+            <div class="form-group">
                 {{ Form::label('email', 'Hire Manager Durham Email') }}
                 {{ Form::text('email', NULL,
+                array(
+                    'class'=>'form-control'
+                )) }}
+            </div>
+
+            <div class="form-group">
+                {{ Form::label('username', 'Hire Manager Durham Username') }}
+                {{ Form::text('username', NULL,
                 array(
                     'class'=>'form-control'
                 )) }}
