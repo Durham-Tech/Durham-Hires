@@ -155,7 +155,7 @@ class BookingsController extends Controller
         $booking->vat = isset($request->vat) ? $request->vat : 1;
         $booking->site = $site->id;
 
-        if (CAuth::checkAdmin(4)) {
+        if (CAuth::checkAdmin(4)) { // if it's an admin making the booking
             $booking->status = $request->status;
             $this->validate(
                 $request, [
@@ -163,14 +163,13 @@ class BookingsController extends Controller
                 ]
             );
             $booking->email = $request->email;
-            $details = Common::getDetailsEmail($request->email);
-            if ($details) {
-                    $booking->user = $details->name;
+            $booking->user = $request->user;
+            if (strpos($request->email, '@durham.ac.uk') !== false) { // if email contains @durham.ac.uk
                     $booking->isDurham = 1;
             } else {
                     $booking->isDurham = 0;
             }
-        } else {
+        } else { // if not an admin making the booking
             $booking->status = 0;
             $temp = CAuth::user();
             $booking->email = $temp->email;
@@ -372,18 +371,12 @@ class BookingsController extends Controller
                     ]
                 );
                     $booking->email = $request->email;
-                    $details = Common::getDetailsEmail($request->email);
-                if ($details) {
-                    $booking->user = $details->name;
+                    $booking->user = $request->name;
+                if (strpos($request->email, '@durham.ac.uk') !== false) {
                     $booking->isDurham = 1;
                 } else {
                     $booking->isDurham = 0;
                 }
-                    // $details = Common::getDetailsEmail($request->email);
-                    // if ($details) {
-                    //     $booking->email = $request->email;
-                    //     $booking->user = $details->name;
-                    // }
             }
 
             $booking->discName = $request->discName;

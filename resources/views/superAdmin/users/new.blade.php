@@ -22,11 +22,29 @@
             @endif
 
             <div class="form-group">
+                {{ Form::label('name', Name') }}
+                {{ Form::text('name', NULL,
+                array(
+                    'class'=>'form-control',
+                    'placeholder'=>'Name'
+                )) }}
+            </div>
+
+            <div class="form-group">
                 {{ Form::label('email', 'Durham Email') }}
                 {{ Form::text('email', NULL,
                 array(
                     'class'=>'form-control',
                     'placeholder'=>'Durham Email'
+                )) }}
+            </div>
+
+            <div class="form-group">
+                {{ Form::label('username', 'Durham Username') }}
+                {{ Form::text('username', NULL,
+                array(
+                    'class'=>'form-control',
+                    'placeholder'=>'Durham Username'
                 )) }}
             </div>
 

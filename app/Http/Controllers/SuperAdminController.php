@@ -52,11 +52,10 @@ class SuperAdminController extends Controller
     {
         //
         $user = new Admin;
-        $userDetails = Common::getDetailsEmail($requestUser->email);
-        $user->email = $userDetails->email;
-        $user->user = $userDetails->username;
+        $user->email = $requestUser->email;
+        $user->user = $requestUser->username;
         $user->privileges = 1;
-        $user->name = $userDetails->name;
+        $user->name = $requestUser->name;
         $user->site = 0;
         $user->save();
         return redirect()->route('users.index');
