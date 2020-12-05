@@ -17,15 +17,15 @@ class customAuth extends Controller
         $site = $request->get('_site');
         $user = $request->input('user');
         $pass = $request->input('password');
-        $remote_url = 'https://community.dur.ac.uk/trevelyan.jcr/password/tech/auth.php';
+        $remote_url = 'https://api.dur.ac.uk/me';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $remote_url);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($ch, CURLOPT_USERPWD, "$user:$pass");
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
         if ($site == null) {

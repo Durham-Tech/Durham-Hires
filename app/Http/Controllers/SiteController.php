@@ -67,11 +67,10 @@ class SiteController extends Controller
         $site->invoicePrefix = "TechHire";
         $site->save();
 
-        $user = Common::getDetailsEmail($request->email);
         $admin = new Admin;
-        $admin->name = $user->name;
-        $admin->user = $user->username;
-        $admin->email = $user->email;
+        $admin->name = $request->managername;
+        $admin->user = $request->username;
+        $admin->email = $request->email;
         $admin->privileges = 5;
         $admin->site = $site->id;
         $admin->save();
@@ -177,11 +176,11 @@ class SiteController extends Controller
     {
         //
         $user = new Admin;
-        $userDetails = Common::getDetailsEmail($requestUser->email);
-        $user->email = $userDetails->email;
-        $user->user = $userDetails->username;
+        // $userDetails = Common::getDetailsEmail($requestUser->email);
+        $user->email = $requestUser->email;
+        $user->user = $requestUser->username;
         $user->privileges = 5;
-        $user->name = $userDetails->name;
+        $user->name = $requestUser->name;
         $user->site = $site->id;
         $user->save();
         return redirect()->route('sites.show', [$site->id]);
