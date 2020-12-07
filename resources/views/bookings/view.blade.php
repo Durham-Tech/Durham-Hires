@@ -25,11 +25,11 @@ if ($booking->status < 4){
   @endif
   <p id='start'>
       <b>Start date: </b>
-      {{ date('D jS M Y', strtotime($booking->start) )  }}
+      {{ date('D jS M Y H:i', strtotime($booking->start) )  }}
   </p>
   <p id='end'>
       <b>Return date: </b>
-      {{ date('D jS M Y', strtotime($booking->end) )  }}
+      {{ date('D jS M Y H:i', strtotime($booking->end) )  }}
   </p>
   <p id='length'>
       <b>Total days: </b>

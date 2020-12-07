@@ -50,6 +50,14 @@ $active = 'style';
       {{ Form::checkbox('enableVatFree', 1, !($site->flags & 16)) }}
   </div>
 
+  <div class="form-group">
+      {{ Form::label('changeoverTime', 'Day changes at') }}
+      {{ Form::time('changeoverTime', $site->changeoverTime,
+      array(
+          'class'=>'form-control'
+      )) }}
+  </div>
+
   <div class='form-group'>
       {{ Form::label('enablePAT', 'Enable PAT module (experimental):  ') }}
       {{ Form::checkbox('enablePAT', 1, $site->flags & 8) }}

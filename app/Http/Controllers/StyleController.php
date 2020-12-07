@@ -130,6 +130,7 @@ class StyleController extends Controller
         $site->vatNumber = $request->input('vatNumber');
         $site->sortCode = $request->input('sortCode');
         $site->accountNumber = $request->input('accountNumber');
+        $site->changeoverTime = $request->input('changeoverTime');
 
         if (!empty($request->logo)) {
             $imageName = $site->slug . '.' .
