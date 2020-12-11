@@ -134,7 +134,7 @@ class BookingsController extends Controller
         $this->validate(
             $request, [
             'start' => 'nullable|date',
-            'end' => 'nullable|date|after:start',
+            'end' => 'nullable|date',
             ]
         );
 
@@ -147,8 +147,13 @@ class BookingsController extends Controller
 
         $booking = new Bookings;
         $booking->name = $request->name;
-        $start = strtotime($request->start)+43200;
-        $end = strtotime($request->end)+43200;
+        $start = strtotime($request->start);
+        $end = strtotime($request->end);
+
+        // ignore time given and replace with $site->changeoverTime
+        $start = strtotime(date("Y-m-d", $start)) + strtotime("1970-01-01 $site->changeoverTime UTC");
+        $end = strtotime(date("Y-m-d", $end)) + strtotime("1970-01-01 $site->changeoverTime UTC");
+
         $booking->start = date("Y-m-d H:i:s", $start);
         $booking->end = date("Y-m-d H:i:s", $end);
         $booking->days = ($end - $start)/(86400);

@@ -26,8 +26,8 @@ $active = 'current';
                 @foreach($data as $key => $booking)
                     <tr>
                         <td><a href='{!! action( $booking->internal ? 'InternalEventController@show' : 'BookingsController@show', ['site' => $site->slug, 'booking' => $booking->id]) !!}'>{{ $booking->name }}</a></td>
-                        <td>{{ date('D jS M Y', strtotime($booking->start) )  }}</td>
-                        <td>{{ date('D jS M Y', strtotime($booking->end) )  }}</td>
+                        <td>{{ date('D jS M Y H:i', strtotime($booking->start) )  }}</td>
+                        <td>{{ date('D jS M Y H:i', strtotime($booking->end) )  }}</td>
                         <td class='status {{ $booking->internal ? "internal" : "s" . $booking->status }}'>
                           {{ $booking->internal ? "Internal" : $statusArray[$booking->status] }}
                         </td>

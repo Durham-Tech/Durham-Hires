@@ -86,14 +86,18 @@ if (isset($old)){
 
             <!-- Date pickers -->
             <!-- TODO: Display today's date on datepicker -->
+            <div class='alert alert-info'>
+              <b>Note:</b> Your booking will start and end at <b>{{ date("g:ia", strtotime($site->changeoverTime)) }}</b> on the dates that you choose. However, this does not dictate the collection and drop-off times, these should be arranged separately with the Hires Manager.
+            </div>
+
             <div class='form-group form-inline'>
                 {{ Form::label('start', 'Start date: ') }}
-                <vue-datepicker name="start" :highlighted="highlighted" :disabled="disabled" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="start"></vue-datepicker>
+                <vue-datepicker name="start" :highlighted="highlighted" :disabled="disabled" :format="'dd-MM-yyyy {{ $site->changeoverTime }}'" :input-class="'form-control'" v-model="start"></vue-datepicker>
             </div>
 
             <div class='form-group form-inline'>
                 {{ Form::label('end', 'Return date: ') }}
-                <vue-datepicker name="end" :highlighted="highlighted" :disabled="endDisabled" :format="'dd-MM-yyyy'" :input-class="'form-control'" v-model="end"></vue-datepicker>
+                <vue-datepicker name="end" :highlighted="highlighted" :disabled="endDisabled" :format="'dd-MM-yyyy {{ $site->changeoverTime }}'" :input-class="'form-control'" v-model="end"></vue-datepicker>
             </div>
 
             <!-- VAT Options -->
