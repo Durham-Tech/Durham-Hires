@@ -67,7 +67,8 @@ class StyleController extends Controller
             'name' => 'required|max:255',
             'hiresEmail' => 'email',
             'files.*' => 'file',
-            'fileNames.*' => 'string|nullable'
+            'fileNames.*' => 'string|nullable',
+            'changeoverTime' => 'date_format:H:i:s'
             ]
         );
         //
@@ -243,5 +244,17 @@ class StyleController extends Controller
         $site->styleSheet = "";
         $site->save();
         //
+    }
+
+    /**
+     * Custom messages for validation rules
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'changeoverTime.date_format' => "The changeover time must be in the format <hours>:<minutes>:<seconds>"
+        ];
     }
 }
