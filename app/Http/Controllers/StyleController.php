@@ -68,7 +68,7 @@ class StyleController extends Controller
             'hiresEmail' => 'email',
             'files.*' => 'file',
             'fileNames.*' => 'string|nullable',
-            'changeoverTime' => 'date_format:H:i:s'
+            'changeoverTime' => 'date_format:H:i'
             ]
         );
         //
@@ -254,7 +254,7 @@ class StyleController extends Controller
     public function messages()
     {
         return [
-            'changeoverTime.date_format' => "The changeover time must be in the format <hours>:<minutes>:<seconds>"
+            'changeoverTime.date_format' => "The changeover time must be in the format <hours>:<minutes>"
         ];
     }
 }
